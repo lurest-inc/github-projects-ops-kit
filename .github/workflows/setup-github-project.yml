@@ -3,10 +3,6 @@ name: Setup GitHub Project
 on:
   workflow_dispatch:
     inputs:
-      project_owner:
-        description: "Project を作成する Owner（ユーザー名または Organization 名）"
-        required: true
-        type: string
       project_title:
         description: "作成する Project のタイトル"
         required: true
@@ -25,7 +21,7 @@ jobs:
       - name: Setup GitHub Project
         env:
           GH_TOKEN: ${{ secrets.PROJECT_PAT }}
-          PROJECT_OWNER: ${{ inputs.project_owner }}
+          PROJECT_OWNER: ${{ github.repository_owner }}
           PROJECT_TITLE: ${{ inputs.project_title }}
         run: |
           chmod +x scripts/setup-github-project.sh
