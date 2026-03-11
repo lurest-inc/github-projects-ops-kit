@@ -1,0 +1,23 @@
+title: "[Q&A] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        質問がありましたらお気軽にどうぞ。
+
+  - type: textarea
+    id: question
+    attributes:
+      label: 質問内容
+      description: 質問したい内容を記述してください
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 補足情報
+      description: 環境情報や試したこと等があれば記述してください
+    validations:
+      required: false

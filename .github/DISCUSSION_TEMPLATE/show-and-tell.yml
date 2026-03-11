@@ -1,0 +1,15 @@
+title: "[Show & Tell] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        作ったものや活用事例をぜひ共有してください。
+
+  - type: textarea
+    id: content
+    attributes:
+      label: 内容
+      description: 共有したい内容を記述してください
+    validations:
+      required: true

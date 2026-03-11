@@ -1,0 +1,23 @@
+title: "[Idea] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        新しい機能やアイデアの提案をお待ちしています。
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: 概要
+      description: アイデアの概要を簡潔に記述してください
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 背景・動機
+      description: このアイデアに至った背景や動機を記述してください
+    validations:
+      required: false

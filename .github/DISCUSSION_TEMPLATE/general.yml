@@ -1,0 +1,15 @@
+title: ""
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        自由にディスカッションを始めてください。
+
+  - type: textarea
+    id: content
+    attributes:
+      label: 内容
+      description: 話したいことを自由に記述してください
+    validations:
+      required: true

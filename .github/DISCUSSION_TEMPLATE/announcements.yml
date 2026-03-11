@@ -1,0 +1,15 @@
+title: "[Announcement] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        メンテナーからのお知らせを投稿してください。
+
+  - type: textarea
+    id: content
+    attributes:
+      label: 内容
+      description: お知らせの内容を記述してください
+    validations:
+      required: true
