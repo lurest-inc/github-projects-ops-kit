@@ -7,6 +7,14 @@ on:
         description: "作成する Project のタイトル"
         required: true
         type: string
+      visibility:
+        description: "Project の公開範囲"
+        required: true
+        type: choice
+        default: "PRIVATE"
+        options:
+          - "PRIVATE"
+          - "PUBLIC"
 
 permissions:
   contents: read
@@ -23,6 +31,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PROJECT_PAT }}
           PROJECT_OWNER: ${{ github.repository_owner }}
           PROJECT_TITLE: ${{ inputs.project_title }}
+          PROJECT_VISIBILITY: ${{ inputs.visibility }}
         run: |
           chmod +x scripts/setup-github-project.sh
           bash scripts/setup-github-project.sh
