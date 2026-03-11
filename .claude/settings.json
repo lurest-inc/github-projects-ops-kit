@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "alwaysThinkingEnabled": true,
+  "cleanupPeriodDays": 30,
+  "enabledPlugins": {},
+  "env": {
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "false",
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": []
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": []
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": []
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": []
+      }
+    ]
+  },
+  "includeCoAuthoredBy": true,
+  "language": "japanese",
+  "model": "claude-opus-4-6",
+  "permissions": {
+    "allow": [
+      
+    ],
+    "ask": [
+      "Bash(git rm:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)"
+    ],
+    "defaultMode": "default",
+    "deny": [
+      
+    ]
+  },
+  "plansDirectory": ".claude/plans/",
+  "promptSuggestionEnabled": true,
+  "respectGitignore": true,
+  "spinnerTipsEnabled": false,
+  "teammateMode": "tmux"
+}
