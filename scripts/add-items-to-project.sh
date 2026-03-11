@@ -7,6 +7,8 @@ set -euo pipefail
 #   PROJECT_OWNER  - Project の所有者
 #   PROJECT_NUMBER - 対象 Project の Number
 #   TARGET_REPO    - 対象リポジトリ（owner/repo 形式）
+#   INCLUDE_ISSUES - Issue を追加対象にする（true/false、デフォルト: true）
+#   INCLUDE_PRS    - PR を追加対象にする（true/false、デフォルト: true）
 #   ITEM_STATE     - 取得するアイテムの状態（open/closed/all、デフォルト: open）
 #   ITEM_LABEL     - 絞り込みラベル（指定ラベルの Issue/PR のみ追加、省略可）
 
@@ -37,8 +39,15 @@ if [[ ! "${TARGET_REPO}" =~ ^[^/]+/[^/]+$ ]]; then
   exit 1
 fi
 
+INCLUDE_ISSUES="${INCLUDE_ISSUES:-true}"
+INCLUDE_PRS="${INCLUDE_PRS:-true}"
 ITEM_STATE="${ITEM_STATE:-open}"
 ITEM_LABEL="${ITEM_LABEL:-}"
+
+if [[ "${INCLUDE_ISSUES}" != "true" && "${INCLUDE_PRS}" != "true" ]]; then
+  echo "::error::INCLUDE_ISSUES と INCLUDE_PRS の少なくとも一方を true にしてください。"
+  exit 1
+fi
 
 if ! command -v jq &>/dev/null; then
   echo "::error::jq がインストールされていません。重複チェックに必要です。"
@@ -158,96 +167,106 @@ fi
 
 # --- Issue 取得・追加 ---
 
-echo ""
-echo "Issue を取得しています..."
-echo "  リポジトリ: ${TARGET_REPO}"
-echo "  状態: ${ITEM_STATE}"
-if [[ -n "${ITEM_LABEL}" ]]; then
-  echo "  ラベル: ${ITEM_LABEL}"
-fi
-
-ISSUE_LIST_ARGS=(--repo "${TARGET_REPO}" --state "${ITEM_STATE}" --limit 500 --json url --jq '.[].url')
-if [[ -n "${ITEM_LABEL}" ]]; then
-  ISSUE_LIST_ARGS+=(--label "${ITEM_LABEL}")
-fi
-
-if ! ISSUE_URLS=$(gh issue list "${ISSUE_LIST_ARGS[@]}" 2>&1); then
-  SAFE_OUTPUT=$(sanitize_for_workflow_command "${ISSUE_URLS}")
-  echo "::error::Issue の取得に失敗しました: ${SAFE_OUTPUT}"
-  exit 1
-fi
-
 ISSUE_ADDED=0
 ISSUE_SKIPPED=0
 ISSUE_FAILED=0
 
-if [[ -n "${ISSUE_URLS}" ]]; then
-  while IFS= read -r url; do
-    [[ -z "${url}" ]] && continue
+if [[ "${INCLUDE_ISSUES}" == "true" ]]; then
+  echo ""
+  echo "Issue を取得しています..."
+  echo "  リポジトリ: ${TARGET_REPO}"
+  echo "  状態: ${ITEM_STATE}"
+  if [[ -n "${ITEM_LABEL}" ]]; then
+    echo "  ラベル: ${ITEM_LABEL}"
+  fi
 
-    if [[ -n "${EXISTING_ITEMS}" ]] && echo "${EXISTING_ITEMS}" | grep -Fxq "${url}"; then
-      echo "  スキップ（追加済み）: ${url}"
-      ISSUE_SKIPPED=$((ISSUE_SKIPPED + 1))
-      continue
-    fi
+  ISSUE_LIST_ARGS=(--repo "${TARGET_REPO}" --state "${ITEM_STATE}" --limit 500 --json url --jq '.[].url')
+  if [[ -n "${ITEM_LABEL}" ]]; then
+    ISSUE_LIST_ARGS+=(--label "${ITEM_LABEL}")
+  fi
 
-    if gh project item-add "${PROJECT_NUMBER}" --owner "${PROJECT_OWNER}" --url "${url}" > /dev/null 2>&1; then
-      echo "  追加: ${url}"
-      ISSUE_ADDED=$((ISSUE_ADDED + 1))
-    else
-      echo "::warning::追加失敗: ${url}"
-      ISSUE_FAILED=$((ISSUE_FAILED + 1))
-    fi
+  if ! ISSUE_URLS=$(gh issue list "${ISSUE_LIST_ARGS[@]}" 2>&1); then
+    SAFE_OUTPUT=$(sanitize_for_workflow_command "${ISSUE_URLS}")
+    echo "::error::Issue の取得に失敗しました: ${SAFE_OUTPUT}"
+    exit 1
+  fi
 
-    sleep 1
-  done <<< "${ISSUE_URLS}"
+  if [[ -n "${ISSUE_URLS}" ]]; then
+    while IFS= read -r url; do
+      [[ -z "${url}" ]] && continue
+
+      if [[ -n "${EXISTING_ITEMS}" ]] && echo "${EXISTING_ITEMS}" | grep -Fxq "${url}"; then
+        echo "  スキップ（追加済み）: ${url}"
+        ISSUE_SKIPPED=$((ISSUE_SKIPPED + 1))
+        continue
+      fi
+
+      if gh project item-add "${PROJECT_NUMBER}" --owner "${PROJECT_OWNER}" --url "${url}" > /dev/null 2>&1; then
+        echo "  追加: ${url}"
+        ISSUE_ADDED=$((ISSUE_ADDED + 1))
+      else
+        echo "::warning::追加失敗: ${url}"
+        ISSUE_FAILED=$((ISSUE_FAILED + 1))
+      fi
+
+      sleep 1
+    done <<< "${ISSUE_URLS}"
+  fi
+
+  echo "  Issue 追加: ${ISSUE_ADDED} 件、スキップ: ${ISSUE_SKIPPED} 件、失敗: ${ISSUE_FAILED} 件"
+else
+  echo ""
+  echo "Issue の追加をスキップします（INCLUDE_ISSUES=false）"
 fi
-
-echo "  Issue 追加: ${ISSUE_ADDED} 件、スキップ: ${ISSUE_SKIPPED} 件、失敗: ${ISSUE_FAILED} 件"
 
 # --- Pull Request 取得・追加 ---
-
-echo ""
-echo "Pull Request を取得しています..."
-
-PR_LIST_ARGS=(--repo "${TARGET_REPO}" --state "${ITEM_STATE}" --limit 500 --json url --jq '.[].url')
-if [[ -n "${ITEM_LABEL}" ]]; then
-  PR_LIST_ARGS+=(--label "${ITEM_LABEL}")
-fi
-
-if ! PR_URLS=$(gh pr list "${PR_LIST_ARGS[@]}" 2>&1); then
-  SAFE_OUTPUT=$(sanitize_for_workflow_command "${PR_URLS}")
-  echo "::error::Pull Request の取得に失敗しました: ${SAFE_OUTPUT}"
-  exit 1
-fi
 
 PR_ADDED=0
 PR_SKIPPED=0
 PR_FAILED=0
 
-if [[ -n "${PR_URLS}" ]]; then
-  while IFS= read -r url; do
-    [[ -z "${url}" ]] && continue
+if [[ "${INCLUDE_PRS}" == "true" ]]; then
+  echo ""
+  echo "Pull Request を取得しています..."
 
-    if [[ -n "${EXISTING_ITEMS}" ]] && echo "${EXISTING_ITEMS}" | grep -Fxq "${url}"; then
-      echo "  スキップ（追加済み）: ${url}"
-      PR_SKIPPED=$((PR_SKIPPED + 1))
-      continue
-    fi
+  PR_LIST_ARGS=(--repo "${TARGET_REPO}" --state "${ITEM_STATE}" --limit 500 --json url --jq '.[].url')
+  if [[ -n "${ITEM_LABEL}" ]]; then
+    PR_LIST_ARGS+=(--label "${ITEM_LABEL}")
+  fi
 
-    if gh project item-add "${PROJECT_NUMBER}" --owner "${PROJECT_OWNER}" --url "${url}" > /dev/null 2>&1; then
-      echo "  追加: ${url}"
-      PR_ADDED=$((PR_ADDED + 1))
-    else
-      echo "::warning::追加失敗: ${url}"
-      PR_FAILED=$((PR_FAILED + 1))
-    fi
+  if ! PR_URLS=$(gh pr list "${PR_LIST_ARGS[@]}" 2>&1); then
+    SAFE_OUTPUT=$(sanitize_for_workflow_command "${PR_URLS}")
+    echo "::error::Pull Request の取得に失敗しました: ${SAFE_OUTPUT}"
+    exit 1
+  fi
 
-    sleep 1
-  done <<< "${PR_URLS}"
+  if [[ -n "${PR_URLS}" ]]; then
+    while IFS= read -r url; do
+      [[ -z "${url}" ]] && continue
+
+      if [[ -n "${EXISTING_ITEMS}" ]] && echo "${EXISTING_ITEMS}" | grep -Fxq "${url}"; then
+        echo "  スキップ（追加済み）: ${url}"
+        PR_SKIPPED=$((PR_SKIPPED + 1))
+        continue
+      fi
+
+      if gh project item-add "${PROJECT_NUMBER}" --owner "${PROJECT_OWNER}" --url "${url}" > /dev/null 2>&1; then
+        echo "  追加: ${url}"
+        PR_ADDED=$((PR_ADDED + 1))
+      else
+        echo "::warning::追加失敗: ${url}"
+        PR_FAILED=$((PR_FAILED + 1))
+      fi
+
+      sleep 1
+    done <<< "${PR_URLS}"
+  fi
+
+  echo "  PR 追加: ${PR_ADDED} 件、スキップ: ${PR_SKIPPED} 件、失敗: ${PR_FAILED} 件"
+else
+  echo ""
+  echo "Pull Request の追加をスキップします（INCLUDE_PRS=false）"
 fi
-
-echo "  PR 追加: ${PR_ADDED} 件、スキップ: ${PR_SKIPPED} 件、失敗: ${PR_FAILED} 件"
 
 # --- サマリー ---
 
