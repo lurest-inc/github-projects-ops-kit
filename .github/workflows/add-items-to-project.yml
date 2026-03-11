@@ -1,0 +1,48 @@
+name: Add Items to Project
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_number:
+        description: "対象 Project の Number"
+        required: true
+        type: number
+      target_repo:
+        description: "対象リポジトリ（owner/repo 形式）"
+        required: true
+        type: string
+      item_state:
+        description: "取得するアイテムの状態"
+        required: false
+        type: choice
+        options:
+          - open
+          - closed
+          - all
+        default: "open"
+      item_label:
+        description: "フィルタするラベル（省略可）"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  add-items:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: Add items to Project
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_PAT }}
+          PROJECT_OWNER: ${{ github.repository_owner }}
+          PROJECT_NUMBER: ${{ inputs.project_number }}
+          TARGET_REPO: ${{ inputs.target_repo }}
+          ITEM_STATE: ${{ inputs.item_state }}
+          ITEM_LABEL: ${{ inputs.item_label }}
+        run: |
+          chmod +x scripts/add-items-to-project.sh
+          bash scripts/add-items-to-project.sh
