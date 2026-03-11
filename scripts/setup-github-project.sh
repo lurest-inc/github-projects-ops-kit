@@ -24,18 +24,51 @@ if [[ -z "${PROJECT_TITLE:-}" ]]; then
   exit 1
 fi
 
+# --- オーナータイプ判定 ---
+
+echo "オーナータイプを判定しています..."
+
+if ! OWNER_INFO=$(gh api "users/${PROJECT_OWNER}" --jq '.type' 2>&1); then
+  echo "::error::オーナー情報の取得に失敗しました: ${OWNER_INFO}"
+  echo "::error::PROJECT_OWNER（${PROJECT_OWNER}）が正しいか確認してください。"
+  exit 1
+fi
+
+OWNER_TYPE="${OWNER_INFO}"
+echo "  オーナータイプ: ${OWNER_TYPE}"
+
+if [[ "${OWNER_TYPE}" == "User" ]]; then
+  echo ""
+  echo "個人アカウントとして検出されました。"
+  echo "必要な PAT 権限: Account permissions > Projects > Read and write"
+elif [[ "${OWNER_TYPE}" == "Organization" ]]; then
+  echo ""
+  echo "Organization として検出されました。"
+  echo "必要な PAT 権限: Organization permissions > Projects > Read and write"
+else
+  echo "::warning::不明なオーナータイプ: ${OWNER_TYPE}"
+fi
+
+echo ""
+
 # --- Project 作成 ---
 
 echo "GitHub Project を作成します..."
 echo "  Owner: ${PROJECT_OWNER}"
 echo "  Title: ${PROJECT_TITLE}"
+echo "  Type:  ${OWNER_TYPE}"
 
 if ! OUTPUT=$(gh project create --title "${PROJECT_TITLE}" --owner "${PROJECT_OWNER}" --format json 2>&1); then
   echo "::error::GitHub Project の作成に失敗しました。"
   echo "::error::詳細: ${OUTPUT}"
   echo ""
   echo "考えられる原因:"
-  echo "  - PAT に必要な権限（project スコープ）が付与されていない"
+  if [[ "${OWNER_TYPE}" == "User" ]]; then
+    echo "  - PAT に Account permissions > Projects > Read and write 権限が付与されていない"
+  elif [[ "${OWNER_TYPE}" == "Organization" ]]; then
+    echo "  - PAT に Organization permissions > Projects > Read and write 権限が付与されていない"
+    echo "  - Organization の Third-party access policy で PAT がブロックされている"
+  fi
   echo "  - Owner 名が正しくない"
   echo "  - ネットワークエラー"
   exit 1
@@ -62,6 +95,7 @@ if command -v jq &>/dev/null; then
         echo "| 項目 | 値 |"
         echo "|------|-----|"
         echo "| Owner | \`${PROJECT_OWNER}\` |"
+        echo "| Type | ${OWNER_TYPE} |"
         echo "| Title | ${PROJECT_TITLE} |"
         echo "| Number | ${PROJECT_NUMBER} |"
         echo "| URL | ${PROJECT_URL} |"
