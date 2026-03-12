@@ -47,3 +47,25 @@
 
 - **GitHub Actions Summary:** 実行結果のサマリーとプレビューが表示されます
 - **artifact:** エクスポートファイルが artifact としてダウンロード可能です（保持期間: 30日）
+
+## 処理フロー
+
+```mermaid
+flowchart LR
+    A["workflow_dispatch"] --> B["パラメータ取得"]
+    B --> C["GraphQL API で\nProject アイテム取得"]
+    C --> D["ページネーション\n（100件ずつ）"]
+    D --> D
+    D --> E["アイテム一覧"]
+
+    E --> F{"output_format"}
+    F -- markdown --> G[".md"]
+    F -- csv --> H[".csv"]
+    F -- tsv --> I[".tsv"]
+    F -- json --> J[".json"]
+
+    G & H & I & J --> K["ファイル出力"]
+
+    K --> L["Actions Summary\nにプレビュー表示"]
+    K --> M["Artifact として\nアップロード"]
+```
