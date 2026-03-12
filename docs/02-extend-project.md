@@ -16,26 +16,13 @@
 |------------|------|:----:|-----|
 | `project_number` | 対象 Project の Number | ✅ | `1` |
 
-## 処理シーケンス
+## 処理フロー
 
 ```mermaid
-sequenceDiagram
-    actor User as ユーザー
-    participant WF as 02-extend-project.yml
-    participant RW as _reusable-extend-project.yml
-    participant S2 as setup-project-fields.sh
-    participant S3 as setup-status-columns.sh
-    participant S4 as create-project-views.sh
-
-    User->>WF: workflow_dispatch（project_number）
-    Note over WF: extend-project ジョブ
-    Note over WF: ※ Project 作成ステップなし（既存 Project を使用）
-    WF->>RW: project_number を渡して呼び出し
-    RW->>S2: カスタムフィールドを作成
-    S2-->>RW: 完了
-    RW->>S3: ステータスカラムを設定
-    S3-->>RW: 完了
-    RW->>S4: View を作成
-    S4-->>RW: 完了
-    RW-->>WF: 完了
+flowchart TD
+    A["workflow_dispatch\n（project_number）"] --> B["extend-project ジョブ\n（_reusable-extend-project.yml）\n※ Project 作成ステップなし（既存 Project を使用）"]
+    B --> C["setup-project-fields.sh\nカスタムフィールドを作成"]
+    C --> D["setup-status-columns.sh\nステータスカラムを設定"]
+    D --> E["create-project-views.sh\nView を作成"]
+    E --> F["完了"]
 ```
