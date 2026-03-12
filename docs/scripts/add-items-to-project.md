@@ -18,4 +18,4 @@
 
 ## 使用ワークフロー
 
-- [③ Issue/PR 一括紐付け](../03-add-items-to-project.html)
+- [③ Issue/PR 一括紐付け](../03-add-items-to-project)

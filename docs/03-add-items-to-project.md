@@ -34,4 +34,4 @@
 
 | スクリプト | 概要 |
 |-----------|------|
-| [add-items-to-project.sh](scripts/add-items-to-project.html) | 指定リポジトリの Issue/PR を Project に一括追加する。追加済みアイテムは自動スキップ |
+| [add-items-to-project.sh](scripts/add-items-to-project) | 指定リポジトリの Issue/PR を Project に一括追加する。追加済みアイテムは自動スキップ |

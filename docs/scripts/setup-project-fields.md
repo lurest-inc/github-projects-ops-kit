@@ -22,5 +22,5 @@ Project にカスタムフィールドを自動作成するスクリプトです
 
 ## 使用ワークフロー
 
-- [① GitHub Project 新規作成](../01-create-project.html)
-- [② GitHub Project 拡張](../02-extend-project.html)
+- [① GitHub Project 新規作成](../01-create-project)
+- [② GitHub Project 拡張](../02-extend-project)
