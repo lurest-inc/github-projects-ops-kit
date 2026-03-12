@@ -6,9 +6,14 @@ set -euo pipefail
 #   GH_TOKEN       - GitHub PAT（Projects 操作権限が必要）
 #   PROJECT_OWNER  - Project の所有者
 #   PROJECT_NUMBER - 対象 Project の Number（数値）
-#   STATUS_OPTIONS - ステータスカラム定義（JSON配列）
-#                    例: [{"name":"Todo","color":"BLUE","description":"未着手"}]
-#                    対応カラー: GRAY, BLUE, GREEN, YELLOW, ORANGE, RED, PINK, PURPLE
+
+# --- ステータスカラム定義 ---
+
+STATUS_OPTIONS='[
+  {"name": "Todo", "color": "BLUE", "description": "未着手"},
+  {"name": "In Progress", "color": "YELLOW", "description": "作業中"},
+  {"name": "Done", "color": "GREEN", "description": "完了"}
+]'
 
 # --- ヘルパー関数 ---
 
@@ -44,26 +49,8 @@ if ! [[ "${PROJECT_NUMBER}" =~ ^[0-9]+$ ]]; then
   exit 1
 fi
 
-if [[ -z "${STATUS_OPTIONS:-}" ]]; then
-  echo "::error::STATUS_OPTIONS が指定されていません。JSON 配列で指定してください。"
-  echo "::error::例: [{\"name\":\"Todo\",\"color\":\"BLUE\",\"description\":\"未着手\"}]"
-  exit 1
-fi
-
 if ! command -v jq &>/dev/null; then
   echo "::error::jq がインストールされていません。JSON の解析に必要です。"
-  exit 1
-fi
-
-# STATUS_OPTIONS の JSON バリデーション
-if ! echo "${STATUS_OPTIONS}" | jq -e 'type == "array" and length > 0' >/dev/null 2>&1; then
-  echo "::error::STATUS_OPTIONS が有効な JSON 配列ではありません。"
-  exit 1
-fi
-
-# 各要素に必須フィールド（name, color）が存在するか確認
-if ! echo "${STATUS_OPTIONS}" | jq -e 'all(has("name") and has("color"))' >/dev/null 2>&1; then
-  echo "::error::STATUS_OPTIONS の各要素には name と color が必須です。"
   exit 1
 fi
 

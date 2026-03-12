@@ -6,9 +6,15 @@ set -euo pipefail
 #   GH_TOKEN          - GitHub PAT（Projects 操作権限が必要）
 #   PROJECT_OWNER     - Project の所有者
 #   PROJECT_NUMBER    - 対象 Project の Number（数値）
-#   FIELD_DEFINITIONS - フィールド定義（JSON配列）
-#                       例: [{"name":"Priority","dataType":"SINGLE_SELECT","options":["P0","P1","P2","P3"]}]
-#                       対応データ型: TEXT, SINGLE_SELECT, DATE, NUMBER
+
+# --- フィールド定義 ---
+
+FIELD_DEFINITIONS='[
+  {"name": "Priority", "dataType": "SINGLE_SELECT", "options": ["P0", "P1", "P2", "P3"]},
+  {"name": "Estimate", "dataType": "SINGLE_SELECT", "options": ["XS", "S", "M", "L", "XL"]},
+  {"name": "Category", "dataType": "SINGLE_SELECT", "options": ["Bug", "Feature", "Chore", "Spike"]},
+  {"name": "Due Date", "dataType": "DATE"}
+]'
 
 # --- ヘルパー関数 ---
 
@@ -44,39 +50,8 @@ if ! [[ "${PROJECT_NUMBER}" =~ ^[0-9]+$ ]]; then
   exit 1
 fi
 
-if [[ -z "${FIELD_DEFINITIONS:-}" ]]; then
-  echo "::error::FIELD_DEFINITIONS が指定されていません。JSON 配列で指定してください。"
-  echo "::error::例: [{\"name\":\"Priority\",\"dataType\":\"SINGLE_SELECT\",\"options\":[\"P0\",\"P1\",\"P2\",\"P3\"]}]"
-  exit 1
-fi
-
 if ! command -v jq &>/dev/null; then
   echo "::error::jq がインストールされていません。JSON の解析に必要です。"
-  exit 1
-fi
-
-# FIELD_DEFINITIONS の JSON バリデーション
-if ! echo "${FIELD_DEFINITIONS}" | jq -e 'type == "array" and length > 0' >/dev/null 2>&1; then
-  echo "::error::FIELD_DEFINITIONS が有効な JSON 配列ではありません。"
-  exit 1
-fi
-
-# 各要素に必須フィールド（name, dataType）が存在し、name が非空の文字列であるか確認
-if ! echo "${FIELD_DEFINITIONS}" | jq -e 'all(has("name") and has("dataType") and (.name | type == "string" and length > 0) and (.dataType | type == "string"))' >/dev/null 2>&1; then
-  echo "::error::FIELD_DEFINITIONS の各要素には name（非空の文字列）と dataType が必須です。"
-  exit 1
-fi
-
-# dataType の値を検証
-VALID_TYPES='["TEXT","SINGLE_SELECT","DATE","NUMBER"]'
-if ! echo "${FIELD_DEFINITIONS}" | jq -e --argjson valid "${VALID_TYPES}" 'all(.dataType as $t | $valid | index($t) != null)' >/dev/null 2>&1; then
-  echo "::error::dataType には TEXT, SINGLE_SELECT, DATE, NUMBER のいずれかを指定してください。"
-  exit 1
-fi
-
-# SINGLE_SELECT の場合は options が必須（各要素が非空の文字列であること）
-if ! echo "${FIELD_DEFINITIONS}" | jq -e 'all(if .dataType == "SINGLE_SELECT" then (.options | type == "array" and length > 0 and all(type == "string" and length > 0)) else true end)' >/dev/null 2>&1; then
-  echo "::error::dataType が SINGLE_SELECT のフィールドには options（配列）が必須です。"
   exit 1
 fi
 

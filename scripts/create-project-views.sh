@@ -6,9 +6,14 @@ set -euo pipefail
 #   GH_TOKEN          - GitHub PAT（Projects 操作権限が必要）
 #   PROJECT_OWNER     - Project の所有者
 #   PROJECT_NUMBER    - 対象 Project の Number（数値）
-#   VIEW_DEFINITIONS  - View 定義（JSON配列、省略時はデフォルト値を使用）
-#                       例: [{"name":"Table","layout":"TABLE_LAYOUT"}]
-#                       対応レイアウト: TABLE_LAYOUT, BOARD_LAYOUT, ROADMAP_LAYOUT
+
+# --- View 定義 ---
+
+VIEW_DEFINITIONS='[
+  {"name": "Table", "layout": "TABLE_LAYOUT"},
+  {"name": "Board", "layout": "BOARD_LAYOUT"},
+  {"name": "Roadmap", "layout": "ROADMAP_LAYOUT"}
+]'
 
 # --- ヘルパー関数 ---
 
@@ -51,44 +56,6 @@ fi
 
 if ! command -v jq &>/dev/null; then
   echo "::error::jq がインストールされていません。JSON の解析に必要です。"
-  exit 1
-fi
-
-# --- VIEW_DEFINITIONS のデフォルト値設定 ---
-
-if [[ -z "${VIEW_DEFINITIONS:-}" ]]; then
-  VIEW_DEFINITIONS='[
-    {"name": "Table", "layout": "TABLE_LAYOUT"},
-    {"name": "Board", "layout": "BOARD_LAYOUT"},
-    {"name": "Roadmap", "layout": "ROADMAP_LAYOUT"}
-  ]'
-  echo "VIEW_DEFINITIONS が未指定のため、デフォルト値を使用します。"
-fi
-
-# VIEW_DEFINITIONS の JSON バリデーション
-if ! echo "${VIEW_DEFINITIONS}" | jq -e 'type == "array" and length > 0' >/dev/null 2>&1; then
-  echo "::error::VIEW_DEFINITIONS が有効な JSON 配列ではありません。"
-  exit 1
-fi
-
-# 各要素に必須フィールド（name, layout）が存在し、name が非空の文字列であるか確認
-if ! echo "${VIEW_DEFINITIONS}" | jq -e 'all(has("name") and has("layout") and (.name | type == "string" and length > 0) and (.layout | type == "string"))' >/dev/null 2>&1; then
-  echo "::error::VIEW_DEFINITIONS の各要素には name（非空の文字列）と layout が必須です。"
-  exit 1
-fi
-
-# layout の値を検証
-VALID_LAYOUTS='["TABLE_LAYOUT","BOARD_LAYOUT","ROADMAP_LAYOUT"]'
-if ! echo "${VIEW_DEFINITIONS}" | jq -e --argjson valid "${VALID_LAYOUTS}" 'all(.layout as $l | $valid | index($l) != null)' >/dev/null 2>&1; then
-  echo "::error::layout には TABLE_LAYOUT, BOARD_LAYOUT, ROADMAP_LAYOUT のいずれかを指定してください。"
-  exit 1
-fi
-
-# VIEW_DEFINITIONS 内の name 重複チェック
-UNIQUE_NAMES=$(echo "${VIEW_DEFINITIONS}" | jq -r '[.[].name] | length')
-DISTINCT_NAMES=$(echo "${VIEW_DEFINITIONS}" | jq -r '[.[].name] | unique | length')
-if [[ "${UNIQUE_NAMES}" -ne "${DISTINCT_NAMES}" ]]; then
-  echo "::error::VIEW_DEFINITIONS 内に重複する name が含まれています。各 View 名は一意にしてください。"
   exit 1
 fi
 
