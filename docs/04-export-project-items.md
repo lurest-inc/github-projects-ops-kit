@@ -50,6 +50,9 @@
 
 ## 処理フロー
 
+<details>
+<summary>フローチャートを表示</summary>
+
 ```mermaid
 flowchart LR
     A["workflow_dispatch"] --> B["パラメータ取得"]
@@ -69,3 +72,5 @@ flowchart LR
     K --> L["Actions Summary\nにプレビュー表示"]
     K --> M["Artifact として\nアップロード"]
 ```
+
+</details>

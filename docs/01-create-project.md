@@ -19,30 +19,22 @@
 > **Note:** Project の Owner はリポジトリの Owner から自動取得されます。
 > カスタムフィールド・ステータスカラム・View の定義は各スクリプト内に固定されています。カスタマイズする場合はスクリプトを直接編集してください。
 
-## 処理シーケンス
+## 処理フロー
+
+<details>
+<summary>フローチャートを表示</summary>
 
 ```mermaid
-sequenceDiagram
-    actor User as ユーザー
-    participant WF as 01-create-project.yml
-    participant S1 as setup-github-project.sh
-    participant RW as _reusable-extend-project.yml
-    participant S2 as setup-project-fields.sh
-    participant S3 as setup-status-columns.sh
-    participant S4 as create-project-views.sh
+flowchart TD
+    A["workflow_dispatch\n（タイトル・公開範囲）"] --> B["create-project ジョブ"]
+    B --> C["setup-github-project.sh\nProject を作成"]
+    C --> D["project_number を出力"]
 
-    User->>WF: workflow_dispatch（タイトル・公開範囲）
-    Note over WF: create-project ジョブ
-    WF->>S1: Project を作成
-    S1-->>WF: project_number
-
-    Note over WF: extend-project ジョブ
-    WF->>RW: project_number を渡して呼び出し
-    RW->>S2: カスタムフィールドを作成
-    S2-->>RW: 完了
-    RW->>S3: ステータスカラムを設定
-    S3-->>RW: 完了
-    RW->>S4: View を作成
-    S4-->>RW: 完了
-    RW-->>WF: 完了
+    D --> E["extend-project ジョブ\n（_reusable-extend-project.yml）"]
+    E --> F["setup-project-fields.sh\nカスタムフィールドを作成"]
+    F --> G["setup-status-columns.sh\nステータスカラムを設定"]
+    G --> H["create-project-views.sh\nView を作成"]
+    H --> I["完了"]
 ```
+
+</details>

@@ -24,6 +24,9 @@
 
 ## 処理フロー
 
+<details>
+<summary>フローチャートを表示</summary>
+
 ```mermaid
 flowchart TD
     A["workflow_dispatch"] --> B["パラメータ取得"]
@@ -63,3 +66,5 @@ flowchart TD
 
     R -- "完了" --> N
 ```
+
+</details>
