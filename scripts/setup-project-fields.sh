@@ -61,9 +61,9 @@ if ! echo "${FIELD_DEFINITIONS}" | jq -e 'type == "array" and length > 0' >/dev/
   exit 1
 fi
 
-# 各要素に必須フィールド（name, dataType）が存在するか確認
-if ! echo "${FIELD_DEFINITIONS}" | jq -e 'all(has("name") and has("dataType"))' >/dev/null 2>&1; then
-  echo "::error::FIELD_DEFINITIONS の各要素には name と dataType が必須です。"
+# 各要素に必須フィールド（name, dataType）が存在し、name が非空の文字列であるか確認
+if ! echo "${FIELD_DEFINITIONS}" | jq -e 'all(has("name") and has("dataType") and (.name | type == "string" and length > 0) and (.dataType | type == "string"))' >/dev/null 2>&1; then
+  echo "::error::FIELD_DEFINITIONS の各要素には name（非空の文字列）と dataType が必須です。"
   exit 1
 fi
 
@@ -74,8 +74,8 @@ if ! echo "${FIELD_DEFINITIONS}" | jq -e --argjson valid "${VALID_TYPES}" 'all(.
   exit 1
 fi
 
-# SINGLE_SELECT の場合は options が必須
-if ! echo "${FIELD_DEFINITIONS}" | jq -e 'all(if .dataType == "SINGLE_SELECT" then (.options | type == "array" and length > 0) else true end)' >/dev/null 2>&1; then
+# SINGLE_SELECT の場合は options が必須（各要素が非空の文字列であること）
+if ! echo "${FIELD_DEFINITIONS}" | jq -e 'all(if .dataType == "SINGLE_SELECT" then (.options | type == "array" and length > 0 and all(type == "string" and length > 0)) else true end)' >/dev/null 2>&1; then
   echo "::error::dataType が SINGLE_SELECT のフィールドには options（配列）が必須です。"
   exit 1
 fi
@@ -115,7 +115,7 @@ query {
   ${OWNER_QUERY_FIELD}(login: "${PROJECT_OWNER}") {
     projectV2(number: ${PROJECT_NUMBER}) {
       id
-      fields(first: 50) {
+      fields(first: 250) {
         nodes {
           ... on ProjectV2Field {
             id
@@ -195,13 +195,14 @@ FAILED_COUNT=0
 for i in $(seq 0 $((FIELD_COUNT - 1))); do
   FIELD_NAME=$(echo "${FIELD_DEFINITIONS}" | jq -r ".[$i].name")
   FIELD_DATA_TYPE=$(echo "${FIELD_DEFINITIONS}" | jq -r ".[$i].dataType")
+  SAFE_FIELD_NAME=$(sanitize_for_workflow_command "${FIELD_NAME}")
 
   echo ""
-  echo "[$((i + 1))/${FIELD_COUNT}] フィールド: ${FIELD_NAME} (${FIELD_DATA_TYPE})"
+  echo "[$((i + 1))/${FIELD_COUNT}] フィールド: ${SAFE_FIELD_NAME} (${FIELD_DATA_TYPE})"
 
-  # 既存フィールドの重複チェック
-  if echo "${EXISTING_FIELDS}" | grep -qx "${FIELD_NAME}"; then
-    echo "  ::notice::フィールド '${FIELD_NAME}' は既に存在するためスキップします。"
+  # 既存フィールドの重複チェック（フィールド名は固定文字列として比較）
+  if echo "${EXISTING_FIELDS}" | grep -Fqx "${FIELD_NAME}"; then
+    echo "  ::notice::フィールド '${SAFE_FIELD_NAME}' は既に存在するためスキップします。"
     SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
     continue
   fi
@@ -219,12 +220,12 @@ for i in $(seq 0 $((FIELD_COUNT - 1))); do
 
   if ! CREATE_OUTPUT=$(gh "${CREATE_ARGS[@]}" 2>&1); then
     SAFE_OUTPUT=$(sanitize_for_workflow_command "${CREATE_OUTPUT}")
-    echo "  ::error::フィールド '${FIELD_NAME}' の作成に失敗しました: ${SAFE_OUTPUT}"
+    echo "  ::error::フィールド '${SAFE_FIELD_NAME}' の作成に失敗しました: ${SAFE_OUTPUT}"
     FAILED_COUNT=$((FAILED_COUNT + 1))
     continue
   fi
 
-  echo "  ::notice::フィールド '${FIELD_NAME}' を作成しました。"
+  echo "  ::notice::フィールド '${SAFE_FIELD_NAME}' を作成しました。"
   CREATED_COUNT=$((CREATED_COUNT + 1))
 done
 
