@@ -13,15 +13,16 @@ Project に View を自動作成するスクリプトです。
 
 ## 作成される View
 
-デフォルトの `VIEW_DEFINITIONS` で以下の View が作成されます:
+View 定義は `scripts/config/view-definitions.json` に外部化されています。
+デフォルトでは以下の View が作成されます:
 
-- `Table`（`table`）
-- `Board`（`board`）
-- `Roadmap`（`roadmap`）
+- `Table`（`table`）— フィルタ: `is:open`
+- `Board`（`board`）— フィルタ: `is:open is:issue`
+- `Roadmap`（`roadmap`）— フィルタ: `is:open`
 
 ### VIEW_DEFINITIONS の拡張フォーマット
 
-`VIEW_DEFINITIONS` は以下のパラメータをサポートします:
+`view-definitions.json` は以下のパラメータをサポートします:
 
 | パラメータ | 型 | 必須 | 説明 |
 |-----------|---|:----:|------|
@@ -41,11 +42,12 @@ Project に View を自動作成するスクリプトです。
   {
     "name": "Board",
     "layout": "board",
-    "filter": "is:issue"
+    "filter": "is:open is:issue"
   },
   {
     "name": "Roadmap",
-    "layout": "roadmap"
+    "layout": "roadmap",
+    "filter": "is:open"
   }
 ]
 ```
@@ -60,7 +62,8 @@ Project に View を自動作成するスクリプトです。
 flowchart TD
     A["開始"] --> B["環境変数バリデーション"]
     B --> C["オーナータイプ判定"]
-    C --> D["REST API で既存 View 一覧を取得\n（ページネーション対応）"]
+    C --> C2["View 定義ファイル読み込み\n（config/view-definitions.json）"]
+    C2 --> D["REST API で既存 View 一覧を取得\n（ページネーション対応）"]
     D --> E{"取得成功?"}
     E -- "No" --> F["エラー出力"]
     F --> G["異常終了"]
@@ -86,7 +89,8 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
-| REST API パス構築 | オーナータイプに応じて `orgs/{org}/projectsV2/{number}/views` または `users/{user}/projectsV2/{number}/views` を構築 | — |
+| View 定義ファイル読み込み | `scripts/config/view-definitions.json` から View 定義を読み込み | `cat` |
+| REST API パス構築 | オーナータイプに応じて `orgs/{org}/projectsV2/{number}/views` または `users/{username}/projectsV2/{number}/views` を構築 | — |
 | 既存 View 取得 | REST API で Project の全 View 名をページネーション付きで取得 | `gh api {path} --paginate` |
 | 重複チェック | 既存 View 名リストと定義済み View 名を `grep -Fqx` で完全一致比較 | — |
 | View 作成 | REST API で View を作成。`name`・`layout` に加え、任意で `filter`・`visible_fields` を送信 | `gh api {path} --method POST` |
