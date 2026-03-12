@@ -9,6 +9,7 @@ GitHub Projects の初期セットアップを GitHub Actions で自動実行す
 | Setup GitHub Project | GitHub Project を1件作成する | `workflow_dispatch`（手動実行） |
 | ~~Setup Status Columns~~ | ~~Project の Status カラムをテンプレートで設定する~~ | スクリプト直接実行 |
 | ~~Setup Project Fields~~ | ~~Project にカスタムフィールドを自動作成する~~ | スクリプト直接実行 |
+| ~~Create Project Views~~ | ~~Project に Table / Board / Roadmap の View を自動作成する~~ | スクリプト直接実行 |
 | Add Items to Project | リポジトリの Issue/PR を Project に一括追加する | `workflow_dispatch`（手動実行） |
 
 ## クイックスタート
@@ -107,6 +108,48 @@ bash scripts/setup-project-fields.sh
 
 > **Note:** 既に同名のフィールドが存在する場合は自動的にスキップされます。
 
+### View を作成する
+
+スクリプト `scripts/create-project-views.sh` を直接実行して、Project に Table / Board / Roadmap の View を自動作成できます。
+
+```bash
+export GH_TOKEN="your-pat"
+export PROJECT_OWNER="your-owner"
+export PROJECT_NUMBER="1"
+bash scripts/create-project-views.sh
+```
+
+View 名をカスタマイズする場合は `VIEW_DEFINITIONS` を指定します。
+
+```bash
+export GH_TOKEN="your-pat"
+export PROJECT_OWNER="your-owner"
+export PROJECT_NUMBER="1"
+export VIEW_DEFINITIONS='[
+  {"name": "Overview", "layout": "TABLE_LAYOUT"},
+  {"name": "Kanban", "layout": "BOARD_LAYOUT"},
+  {"name": "Timeline", "layout": "ROADMAP_LAYOUT"}
+]'
+bash scripts/create-project-views.sh
+```
+
+| 環境変数 | 説明 | 必須 |
+|----------|------|:----:|
+| `GH_TOKEN` | GitHub PAT（Projects 操作権限が必要） | ✅ |
+| `PROJECT_OWNER` | Project の所有者 | ✅ |
+| `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
+| `VIEW_DEFINITIONS` | View 定義（JSON 配列） | ❌（デフォルトあり） |
+
+**対応レイアウト:** `TABLE_LAYOUT`, `BOARD_LAYOUT`, `ROADMAP_LAYOUT`
+
+**デフォルト View:** `VIEW_DEFINITIONS` を省略した場合、以下の3件が作成されます。
+
+- `Table`（TABLE_LAYOUT）
+- `Board`（BOARD_LAYOUT）
+- `Roadmap`（ROADMAP_LAYOUT）
+
+> **Note:** 既に同名の View が存在する場合は自動的にスキップされます。GraphQL API を使用するため、PAT に Projects の Read and write 権限が必要です。
+
 ### Issue/PR を Project に一括追加する
 
 1. `Actions` タブを開く
@@ -137,6 +180,7 @@ scripts/
   ├── setup-github-project.sh     # Project 作成スクリプト
   ├── setup-status-columns.sh     # ステータスカラム設定スクリプト
   ├── setup-project-fields.sh     # カスタムフィールド作成スクリプト
+  ├── create-project-views.sh     # View 作成スクリプト
   └── add-items-to-project.sh     # アイテム一括追加スクリプト
 ```
 
