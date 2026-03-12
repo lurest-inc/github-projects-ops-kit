@@ -8,7 +8,7 @@ sanitize_for_workflow_command() {
   value="${value//'%'/'%25'}"
   value="${value//$'\n'/'%0A'}"
   value="${value//$'\r'/'%0D'}"
-  echo "${value}"
+  printf '%s\n' "${value}"
 }
 
 # 環境変数の存在チェック

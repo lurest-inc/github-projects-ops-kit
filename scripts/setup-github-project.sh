@@ -18,6 +18,7 @@ source "${SCRIPT_DIR}/lib/common.sh"
 require_env "GH_TOKEN" "Secrets に PROJECT_PAT を設定してください。"
 require_env "PROJECT_OWNER"
 require_env "PROJECT_TITLE"
+require_command "gh" "GitHub CLI (gh) が必要です。"
 require_command "jq" "Project 情報の抽出に必要です。"
 
 # PROJECT_VISIBILITY のデフォルト値設定とバリデーション

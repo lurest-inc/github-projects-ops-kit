@@ -22,6 +22,7 @@ source "${SCRIPT_DIR}/lib/common.sh"
 require_env "GH_TOKEN" "Secrets に PROJECT_PAT を設定してください。"
 require_env "PROJECT_OWNER"
 require_env "PROJECT_NUMBER"
+validate_project_number
 require_env "TARGET_REPO"
 
 if [[ ! "${TARGET_REPO}" =~ ^[^/]+/[^/]+$ ]]; then
@@ -39,6 +40,7 @@ if [[ "${INCLUDE_ISSUES}" != "true" && "${INCLUDE_PRS}" != "true" ]]; then
   exit 1
 fi
 
+require_command "gh" "GitHub CLI (gh) が必要です。PATH を確認してください。"
 require_command "jq" "重複チェックに必要です。"
 
 # --- ヘルパー関数 ---

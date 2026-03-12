@@ -27,6 +27,7 @@ require_env "GH_TOKEN" "Secrets に PROJECT_PAT を設定してください。"
 require_env "PROJECT_OWNER"
 require_env "PROJECT_NUMBER"
 validate_project_number
+require_command "gh" "GitHub CLI (gh) が必要です。PATH を確認してください。"
 require_command "jq" "JSON の解析に必要です。"
 
 # --- オーナータイプ判定 ---
