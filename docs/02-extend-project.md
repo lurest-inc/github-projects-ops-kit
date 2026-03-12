@@ -28,9 +28,8 @@
 
 ## スクリプト詳細
 
-このワークフローで使用されるスクリプトは [① GitHub Project 新規作成](01-create-project.md#スクリプト詳細) と共通です。
-詳細はそちらをご参照ください。
-
-- [setup-project-fields.sh](01-create-project.md#setup-project-fieldssh) — カスタムフィールド作成
-- [setup-status-columns.sh](01-create-project.md#setup-status-columnssh) — ステータスカラム設定
-- [create-project-views.sh](01-create-project.md#create-project-viewssh) — View 作成
+| スクリプト | 概要 |
+|-----------|------|
+| [setup-project-fields.sh](scripts/setup-project-fields.md) | Priority・Estimate・Category・Due Date のカスタムフィールドを作成する |
+| [setup-status-columns.sh](scripts/setup-status-columns.md) | Todo・In Progress・Done のステータスカラムを設定する |
+| [create-project-views.sh](scripts/create-project-views.md) | Table・Board・Roadmap の 3 種類の View を作成する |

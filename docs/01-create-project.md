@@ -33,70 +33,9 @@
 
 ## スクリプト詳細
 
-### setup-github-project.sh
-
-Project を新規作成します。
-
-| 環境変数 | 説明 | 必須 |
-|----------|------|:----:|
-| `GH_TOKEN` | GitHub PAT（Projects 操作権限が必要） | ✅ |
-| `PROJECT_OWNER` | Project の所有者 | ✅ |
-| `PROJECT_TITLE` | 作成する Project のタイトル | ✅ |
-| `PROJECT_VISIBILITY` | Project の公開範囲（`PUBLIC` / `PRIVATE`） | ❌（デフォルト: `PRIVATE`） |
-
-### setup-project-fields.sh
-
-Project にカスタムフィールドを自動作成します。
-
-| 環境変数 | 説明 | 必須 |
-|----------|------|:----:|
-| `GH_TOKEN` | GitHub PAT（Projects 操作権限が必要） | ✅ |
-| `PROJECT_OWNER` | Project の所有者 | ✅ |
-| `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
-
-**作成されるフィールド:**
-
-| フィールド名 | データ型 | 選択肢 |
-|-------------|---------|--------|
-| Priority | SINGLE_SELECT | P0, P1, P2, P3 |
-| Estimate | SINGLE_SELECT | XS, S, M, L, XL |
-| Category | SINGLE_SELECT | Bug, Feature, Chore, Spike |
-| Due Date | DATE | - |
-
-> **Note:** 既に同名のフィールドが存在する場合は自動的にスキップされます。
-
-### setup-status-columns.sh
-
-Project の Status カラムを設定します。
-
-| 環境変数 | 説明 | 必須 |
-|----------|------|:----:|
-| `GH_TOKEN` | GitHub PAT（Projects 操作権限が必要） | ✅ |
-| `PROJECT_OWNER` | Project の所有者 | ✅ |
-| `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
-
-**設定されるステータスカラム:**
-
-| カラム名 | カラー | 説明 |
-|---------|--------|------|
-| Todo | BLUE | 未着手 |
-| In Progress | YELLOW | 作業中 |
-| Done | GREEN | 完了 |
-
-### create-project-views.sh
-
-Project に View を自動作成します。
-
-| 環境変数 | 説明 | 必須 |
-|----------|------|:----:|
-| `GH_TOKEN` | GitHub PAT（Projects 操作権限が必要） | ✅ |
-| `PROJECT_OWNER` | Project の所有者 | ✅ |
-| `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
-
-**作成される View:**
-
-- `Table`（TABLE_LAYOUT）
-- `Board`（BOARD_LAYOUT）
-- `Roadmap`（ROADMAP_LAYOUT）
-
-> **Note:** 既に同名の View が存在する場合は自動的にスキップされます。
+| スクリプト | 概要 |
+|-----------|------|
+| [setup-github-project.sh](scripts/setup-github-project.md) | Owner 種別を自動判定し、Project を新規作成する |
+| [setup-project-fields.sh](scripts/setup-project-fields.md) | Priority・Estimate・Category・Due Date のカスタムフィールドを作成する |
+| [setup-status-columns.sh](scripts/setup-status-columns.md) | Todo・In Progress・Done のステータスカラムを設定する |
+| [create-project-views.sh](scripts/create-project-views.md) | Table・Board・Roadmap の 3 種類の View を作成する |
