@@ -13,6 +13,13 @@ GitHub Projects の初期セットアップを GitHub Actions で自動実行す
 
 ## クイックスタート
 
+```mermaid
+flowchart LR
+    A["1. Fork"] --> B["2. PAT 作成"]
+    B --> C["3. Secrets 設定"]
+    C --> D["4. ワークフロー実行"]
+```
+
 ### 1. リポジトリを fork する
 
 本リポジトリを自分のアカウントまたは Organization に fork してください。
