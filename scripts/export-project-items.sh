@@ -9,6 +9,9 @@ set -euo pipefail
 #   PROJECT_OWNER  - Project の所有者
 #   PROJECT_NUMBER - 対象 Project の Number
 #   OUTPUT_FORMAT  - 出力形式（markdown / csv / tsv / json、デフォルト: markdown）
+#   INCLUDE_ISSUES - Issue を対象にする（true / false、デフォルト: true）
+#   INCLUDE_PRS    - Pull Request を対象にする（true / false、デフォルト: true）
+#   ITEM_STATE     - 取得するアイテムの状態（open / closed / all、デフォルト: all）
 
 # --- 共通ライブラリ読み込み ---
 
@@ -21,6 +24,13 @@ validate_common_project_env
 
 OUTPUT_FORMAT="${OUTPUT_FORMAT:-markdown}"
 validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
+
+INCLUDE_ISSUES="${INCLUDE_ISSUES:-true}"
+INCLUDE_PRS="${INCLUDE_PRS:-true}"
+ITEM_STATE="${ITEM_STATE:-all}"
+validate_enum "INCLUDE_ISSUES" "${INCLUDE_ISSUES}" "true" "false"
+validate_enum "INCLUDE_PRS" "${INCLUDE_PRS}" "true" "false"
+validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
 
 # --- ヘルパー関数 ---
 
@@ -223,6 +233,32 @@ echo "Project #${PROJECT_NUMBER} のアイテムを取得しています..."
 PROJECT_TITLE=""
 ITEMS=$(fetch_project_items)
 
+TOTAL_BEFORE_FILTER=$(echo "${ITEMS}" | jq 'length')
+echo "  合計: ${TOTAL_BEFORE_FILTER} 件（フィルタ前）"
+
+# --- type / state フィルタリング ---
+
+# type / state フィルタを 1 回の jq 実行で適用
+ITEMS=$(echo "${ITEMS}" | jq \
+  --argjson includeIssues "$( [[ "${INCLUDE_ISSUES}" == "true" ]] && echo true || echo false )" \
+  --argjson includePRs "$( [[ "${INCLUDE_PRS}" == "true" ]] && echo true || echo false )" \
+  --arg itemState "${ITEM_STATE}" '
+  map(
+    select(
+      # type フィルタ
+      ( ($includeIssues or .type != "Issue")
+        and ($includePRs or .type != "PullRequest")
+      )
+      and
+      # state フィルタ（closed は CLOSED + MERGED を含む）
+      ( $itemState == "all"
+        or ($itemState == "open" and .state == "OPEN")
+        or ($itemState == "closed" and (.state == "CLOSED" or .state == "MERGED"))
+      )
+    )
+  )
+')
+
 TOTAL_COUNT=$(echo "${ITEMS}" | jq 'length')
 ISSUE_COUNT=$(echo "${ITEMS}" | jq '[.[] | select(.type == "Issue")] | length')
 PR_COUNT=$(echo "${ITEMS}" | jq '[.[] | select(.type == "PullRequest")] | length')
@@ -259,7 +295,10 @@ echo "ファイル出力: ${OUTPUT_FILE}"
 # --- コンソールサマリー ---
 
 print_summary "Project" "${PROJECT_TITLE} (#${PROJECT_NUMBER})" \
-  "形式" "${OUTPUT_FORMAT}" "Issue" "${ISSUE_COUNT} 件" \
+  "形式" "${OUTPUT_FORMAT}" \
+  "フィルタ(type)" "Issue=${INCLUDE_ISSUES}, PR=${INCLUDE_PRS}" \
+  "フィルタ(state)" "${ITEM_STATE}" \
+  "Issue" "${ISSUE_COUNT} 件" \
   "PR" "${PR_COUNT} 件" "合計" "${TOTAL_COUNT} 件" "出力先" "${OUTPUT_FILE}"
 
 echo ""

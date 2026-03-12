@@ -17,6 +17,25 @@ on:
           - tsv
           - json
         default: "markdown"
+      include_issues:
+        description: "Issue を対象にする"
+        required: true
+        type: boolean
+        default: true
+      include_prs:
+        description: "Pull Request を対象にする"
+        required: true
+        type: boolean
+        default: true
+      item_state:
+        description: "取得するアイテムの状態"
+        required: true
+        type: choice
+        options:
+          - open
+          - closed
+          - all
+        default: "all"
 
 permissions:
   contents: read
@@ -37,6 +56,9 @@ jobs:
       - name: Project アイテムをエクスポート
         env:
           OUTPUT_FORMAT: ${{ inputs.output_format }}
+          INCLUDE_ISSUES: ${{ inputs.include_issues }}
+          INCLUDE_PRS: ${{ inputs.include_prs }}
+          ITEM_STATE: ${{ inputs.item_state }}
         run: |
           chmod +x scripts/export-project-items.sh
           bash scripts/export-project-items.sh

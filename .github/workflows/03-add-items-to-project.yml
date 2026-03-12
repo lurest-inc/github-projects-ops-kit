@@ -23,7 +23,7 @@ on:
         default: true
       item_state:
         description: "取得するアイテムの状態"
-        required: false
+        required: true
         type: choice
         options:
           - open

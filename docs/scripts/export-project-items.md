@@ -11,19 +11,23 @@ DraftIssue は出力対象外となります。
 | `PROJECT_OWNER` | Project の所有者 | ✅ |
 | `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
 | `OUTPUT_FORMAT` | 出力形式（`markdown`/`csv`/`tsv`/`json`） | ❌（デフォルト: `markdown`） |
+| `INCLUDE_ISSUES` | Issue を対象にする（`true`/`false`） | ❌（デフォルト: `true`） |
+| `INCLUDE_PRS` | Pull Request を対象にする（`true`/`false`） | ❌（デフォルト: `true`） |
+| `ITEM_STATE` | 取得するアイテムの状態（`open`/`closed`/`all`） | ❌（デフォルト: `all`） |
 
 ## 処理フロー
 
 ```mermaid
 flowchart TD
-    A["開始"] --> B["環境変数バリデーション\nOUTPUT_FORMAT チェック"]
+    A["開始"] --> B["環境変数バリデーション\nOUTPUT_FORMAT / INCLUDE_ISSUES / INCLUDE_PRS / ITEM_STATE チェック"]
     B --> C["オーナータイプ判定"]
     C --> D["GraphQL で Project アイテム取得\n（100件ずつページネーション）"]
     D --> E{"次ページあり?"}
     E -- "Yes" --> D
     E -- "No" --> F["DraftIssue を除外\nアイテムを正規化"]
 
-    F --> G{"OUTPUT_FORMAT"}
+    F --> F2["type / state フィルタリング\n（INCLUDE_ISSUES, INCLUDE_PRS, ITEM_STATE）"]
+    F2 --> G{"OUTPUT_FORMAT"}
     G -- "markdown" --> H["Markdown テーブル形式\n（Issue / PR 別セクション）"]
     G -- "csv" --> I["CSV 形式\n（@csv フィルタ）"]
     G -- "tsv" --> J["TSV 形式\n（@tsv フィルタ）"]
@@ -40,6 +44,7 @@ flowchart TD
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
 | アイテム取得 | GraphQL クエリで Project の全アイテムをページネーション付きで取得（100件/ページ、最大 50 ページ）。Issue・PR の `number`・`title`・`url`・`state`・`author`・`assignees`・`labels` 等を取得 | `gh api graphql` — `projectV2.items(first: 100)` |
 | データ正規化 | `DraftIssue`（`__typename` が null）を除外し、各アイテムを統一フォーマットの JSON オブジェクトに変換 | `jq` |
+| type / state フィルタリング | `INCLUDE_ISSUES`・`INCLUDE_PRS` による種別フィルタ、`ITEM_STATE` による状態フィルタ（`closed` は `CLOSED` + `MERGED` を含む）を適用 | `jq` |
 | Markdown 出力 | Issue と PR を別セクションに分け、テーブル形式で出力。タイトル・ラベル・アサイン内の Markdown 特殊文字をエスケープ | `format_markdown` 関数 |
 | CSV / TSV 出力 | jq の `@csv` / `@tsv` フィルタで変換 | `format_csv` / `format_tsv` 関数 |
 | JSON 出力 | jq で整形して出力 | `format_json` 関数 |
