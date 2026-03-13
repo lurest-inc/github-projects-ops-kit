@@ -88,3 +88,38 @@ graph LR
 
 - **レビュー差し戻し**: In Review → In Progress に戻す
 - **Done後のバグ発覚**: 同Issueを戻さず、新しいバグIssueを起票する
+
+---
+
+## Q5. PAT にはどの権限が必要ですか？
+
+ワークフローごとに必要な権限が異なります。
+
+**Fine-grained token の場合:**
+
+| カテゴリ | 権限 | 必要なワークフロー |
+|---------|------|-------------------|
+| Organization permissions > Projects | Read and write | ①②③④ |
+| Account permissions > Projects | Read and write | ①②③④（個人アカウント） |
+| Repository permissions > Issues | Read | ③ |
+| Repository permissions > Pull requests | Read | ③ |
+
+**Classic token の場合:**
+
+| スコープ | 必要なワークフロー |
+|---------|-------------------|
+| `project` | ①②③④ |
+| `repo`（または `public_repo`） | ③（対象リポジトリが private の場合は `repo`） |
+
+> **Note:** ワークフロー ③（Issue/PR 一括紐付け）では対象リポジトリの Issue/PR を読み取るため、リポジトリの参照権限が追加で必要です。
+
+---
+
+## Q6. Fine-grained token の制約事項はありますか？
+
+Fine-grained token には以下の制約があります。
+
+- **組織の複数指定不可**: Fine-grained token はリソースオーナーとして 1 つの組織（またはユーザー）しか指定できない。複数組織のリポジトリを対象にする場合は、組織ごとに PAT を作成するか Classic token を使用する
+- **ユーザーと組織の横断不可**: ユーザー所有リポジトリと組織所有リポジトリを 1 つの Fine-grained token で横断できない
+
+> **注意:** 上記制約により、ワークフロー ③ で異なる組織のリポジトリを `target_repo` に指定する場合は、Classic token の使用を推奨します。
