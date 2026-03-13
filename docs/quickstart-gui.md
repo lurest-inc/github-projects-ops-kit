@@ -16,19 +16,29 @@ flowchart LR
 
 リポジトリページ右上の「Fork」ボタンをクリックします。
 
+<details>
+<summary>スクリーンショットを表示</summary>
+
 > **参考画像:** リポジトリページ右上に「Fork」ボタンが表示されています。
 >
 > <img src="images/quickstart-fork-button.png" alt="Fork ボタンの位置" width="30%">
 >
 > <img src="images/quickstart-fork-page.png" alt="Fork ボタンが表示されたリポジトリページ" width="80%">
 
+</details>
+
 ## 2. PAT を作成する
 
 GitHub の [Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens) から PAT を作成します。
 
+<details>
+<summary>スクリーンショットを表示</summary>
+
 > **参考画像:** Settings > Developer settings > Personal access tokens 画面
 >
 > <img src="images/quickstart-pat.png" alt="PAT 作成画面" width="80%">
+
+</details>
 
 必要な権限の詳細は [FAQ > Q5. PAT にはどの権限が必要ですか？](faq#q5-pat-にはどの権限が必要ですか) を参照してください。Fine-grained token の制約事項については [Q7](faq#q7-fine-grained-token-の制約事項はありますか) も合わせてご確認ください。
 
