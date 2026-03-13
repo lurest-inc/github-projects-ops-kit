@@ -47,7 +47,7 @@ runs:
           echo "| ワークフロー名 | \`$(escape_md "${{ github.workflow }}")\` |"
           echo "| ブランチ | \`$(escape_md "${{ github.ref_name }}")\` |"
           echo "| コミット | \`${GITHUB_SHA::7}\` |"
-          echo "| 実行者 | \`$(escape_md "${{ github.actor }}")\` |"
+          echo "| 実行者 | [$(escape_md "${{ github.actor }}") ](${{ github.server_url }}/${{ github.actor }}) |"
           echo "| 実行URL | [Actions Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |"
           echo "| gh バージョン | \`$(gh --version | head -1)\` |"
           echo "| jq バージョン | \`$(jq --version)\` |"
