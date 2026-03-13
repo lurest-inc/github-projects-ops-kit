@@ -67,3 +67,24 @@ gh issue list -R owner/repo
 # Pull Request 一覧
 gh pr list -R owner/repo
 ```
+
+---
+
+## Q4. カンバンのフローはどうなっていますか？
+
+```mermaid
+graph LR
+    Backlog["⚪ Backlog\n(GRAY)"]
+    Todo["🔵 Todo\n(BLUE)"]
+    InProgress["🟡 In Progress\n(YELLOW)"]
+    InReview["🟠 In Review\n(ORANGE)"]
+    Done["🟢 Done\n(GREEN)"]
+
+    Backlog --> Todo --> InProgress --> InReview --> Done
+    InReview -- "差し戻し" --> InProgress
+```
+
+### 手戻り時の運用ルール
+
+- **レビュー差し戻し**: In Review → In Progress に戻す
+- **Done後のバグ発覚**: 同Issueを戻さず、新しいバグIssueを起票する
