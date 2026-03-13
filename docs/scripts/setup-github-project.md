@@ -68,6 +68,10 @@ flowchart TD
 | GraphQL `createProjectV2` | Project 新規作成 | [createProjectV2 - GraphQL API](https://docs.github.com/en/graphql/reference/mutations#createprojectv2) |
 | GraphQL `updateProjectV2` | Visibility 設定 | [updateProjectV2 - GraphQL API](https://docs.github.com/en/graphql/reference/mutations#updateprojectv2) |
 
+### API バージョン要件
+
+REST API バージョン `2022-11-28` を使用します。共通ライブラリ（`lib/common.sh`）がオーナータイプ判定時に `X-GitHub-Api-Version: 2022-11-28` ヘッダを自動付与します。
+
 ## 使用ワークフロー
 
 - [① GitHub Project 新規作成](../workflows/01-create-project)

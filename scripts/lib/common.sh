@@ -4,6 +4,10 @@
 #
 # 各スクリプトから source して使用する
 
+# --- REST API バージョン ---
+
+REST_API_VERSION="2022-11-28"
+
 # GitHub Actions ワークフローコマンドインジェクションを防ぐためのサニタイズ関数
 sanitize_for_workflow_command() {
   local value="$1"
@@ -62,7 +66,9 @@ detect_owner_type() {
   echo "オーナータイプを判定しています..."
 
   local owner_json
-  if ! owner_json=$(gh api "users/${PROJECT_OWNER}" --jq '{type: .type, node_id: .node_id}' 2>&1); then
+  if ! owner_json=$(gh api "users/${PROJECT_OWNER}" \
+    -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
+    --jq '{type: .type, node_id: .node_id}' 2>&1); then
     local safe_owner_info safe_project_owner
     safe_owner_info=$(sanitize_for_workflow_command "${owner_json}")
     safe_project_owner=$(sanitize_for_workflow_command "${PROJECT_OWNER}")

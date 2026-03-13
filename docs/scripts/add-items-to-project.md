@@ -70,6 +70,10 @@ flowchart TD
 | `projectV2.fields` (GraphQL) | Status フィールド ID・Option ID の取得 | [ProjectV2SingleSelectField](https://docs.github.com/en/graphql/reference/objects#projectv2singleselectfield) |
 | `updateProjectV2ItemFieldValue` (GraphQL) | アイテムのステータス設定 | [updateProjectV2ItemFieldValue](https://docs.github.com/en/graphql/reference/mutations#updateprojectv2itemfieldvalue) |
 
+### API バージョン要件
+
+REST API バージョン `2022-11-28` を使用します。共通ライブラリ（`lib/common.sh`）がオーナータイプ判定時に `X-GitHub-Api-Version: 2022-11-28` ヘッダを自動付与します。
+
 ### パラメータ上限
 
 | パラメータ | 現在の値 | 備考 |

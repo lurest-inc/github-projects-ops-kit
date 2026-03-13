@@ -9,10 +9,6 @@ set -euo pipefail
 #   PROJECT_OWNER     - Project の所有者
 #   PROJECT_NUMBER    - 対象 Project の Number（数値）
 
-# --- REST API バージョン ---
-
-REST_API_VERSION="2022-11-28"
-
 # --- 共通ライブラリ読み込み ---
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

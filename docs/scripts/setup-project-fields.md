@@ -95,6 +95,10 @@ flowchart TD
 | `projectV2.fields` (GraphQL) | 既存フィールド一覧の取得 | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
 | `gh project field-create` | カスタムフィールドの作成 | [gh project field-create](https://cli.github.com/manual/gh_project_field-create) |
 
+### API バージョン要件
+
+REST API バージョン `2022-11-28` を使用します。共通ライブラリ（`lib/common.sh`）がオーナータイプ判定時に `X-GitHub-Api-Version: 2022-11-28` ヘッダを自動付与します。
+
 ### パラメータ上限
 
 | パラメータ | 現在の値 | 備考 |
