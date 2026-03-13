@@ -11,10 +11,10 @@
 
 ## パラメータ
 
-| パラメータ | 説明 | 必須 | 例 |
-|------------|------|:----:|-----|
-| `project_title` | Project のタイトル | ✅ | `My Project Board` |
-| `visibility` | Project の公開範囲 | ✅ | `PRIVATE`（デフォルト） / `PUBLIC` |
+| パラメータ | 説明 | 必須 | タイプ | 例 |
+|------------|------|:----:|--------|-----|
+| `project_title` | Project のタイトル | ✅ | `string` | `My Project Board` |
+| `visibility` | Project の公開範囲 | ✅ | `choice` | `PRIVATE`（デフォルト） / `PUBLIC` |
 
 ## 処理フロー
 

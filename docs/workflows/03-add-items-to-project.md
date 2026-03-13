@@ -11,14 +11,14 @@
 
 ## パラメータ
 
-| パラメータ | 説明 | 必須 | 例 |
-|------------|------|:----:|-----|
-| `project_number` | 対象 Project の Number | ✅ | `1` |
-| `target_repo` | 対象リポジトリ（owner/repo 形式） | ✅ | `myorg/myrepo` |
-| `include_issues` | Issue を追加対象にする | ✅ | `true`（デフォルト） |
-| `include_prs` | Pull Request を追加対象にする | ✅ | `true`（デフォルト） |
-| `item_state` | 取得するアイテムの状態 | ✅ | `open`（デフォルト） |
-| `item_label` | 絞り込みラベル（指定ラベルのみ追加） | - | `bug` |
+| パラメータ | 説明 | 必須 | タイプ | 例 |
+|------------|------|:----:|--------|-----|
+| `project_number` | 対象 Project の Number | ✅ | `string` | `1` |
+| `target_repo` | 対象リポジトリ（owner/repo 形式） | ✅ | `string` | `myorg/myrepo` |
+| `include_issues` | Issue を追加対象にする | ✅ | `boolean` | `true`（デフォルト） |
+| `include_prs` | Pull Request を追加対象にする | ✅ | `boolean` | `true`（デフォルト） |
+| `item_state` | 取得するアイテムの状態 | ✅ | `choice` | `open`（デフォルト） |
+| `item_label` | 絞り込みラベル（指定ラベルのみ追加） | - | `string` | `bug` |
 
 > **Note:** 既に Project に追加済みのアイテムは自動的にスキップされます。
 

@@ -11,13 +11,13 @@
 
 ## パラメータ
 
-| パラメータ | 説明 | 必須 | 例 |
-|------------|------|:----:|-----|
-| `project_number` | 対象 Project の Number | ✅ | `1` |
-| `output_format` | 出力形式 | ✅ | `markdown`（デフォルト） |
-| `include_issues` | Issue を対象にする | ✅ | `true`（デフォルト） |
-| `include_prs` | Pull Request を対象にする | ✅ | `true`（デフォルト） |
-| `item_state` | 取得するアイテムの状態 | ✅ | `all`（デフォルト） |
+| パラメータ | 説明 | 必須 | タイプ | 例 |
+|------------|------|:----:|--------|-----|
+| `project_number` | 対象 Project の Number | ✅ | `string` | `1` |
+| `output_format` | 出力形式 | ✅ | `choice` | `markdown`（デフォルト） |
+| `include_issues` | Issue を対象にする | ✅ | `boolean` | `true`（デフォルト） |
+| `include_prs` | Pull Request を対象にする | ✅ | `boolean` | `true`（デフォルト） |
+| `item_state` | 取得するアイテムの状態 | ✅ | `choice` | `all`（デフォルト） |
 
 ### 出力形式
 
