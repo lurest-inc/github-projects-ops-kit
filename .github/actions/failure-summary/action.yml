@@ -1,0 +1,43 @@
+name: 'Failure Summary'
+description: '失敗時の共通サマリー出力'
+inputs:
+  job-results:
+    description: '各ジョブの結果（JSON形式、複数ジョブ時に使用）'
+    required: false
+    default: ''
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        JOB_RESULTS: ${{ inputs.job-results }}
+      run: |
+        # Markdownテーブル用エスケープ: | を \| に、改行をスペースに置換
+        escape_md() {
+          printf '%s' "$1" | tr '\n' ' ' | sed 's/|/\\|/g'
+        }
+
+        {
+          echo "## :x: ワークフロー失敗レポート"
+          echo ""
+          echo "| 項目 | 値 |"
+          echo "|------|-----|"
+          echo "| ワークフロー名 | \`$(escape_md "${{ github.workflow }}")\` |"
+          echo "| ブランチ | \`$(escape_md "${{ github.ref_name }}")\` |"
+          echo "| コミット | \`${GITHUB_SHA::7}\` |"
+          echo "| 実行者 | \`$(escape_md "${{ github.actor }}")\` |"
+          echo "| 実行URL | [Actions Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |"
+
+          if [[ -n "${JOB_RESULTS}" ]]; then
+            echo ""
+            echo "### ジョブ結果"
+            echo ""
+            echo "| ジョブ名 | 結果 |"
+            echo "|----------|------|"
+            if command -v jq >/dev/null 2>&1 && echo "${JOB_RESULTS}" | jq empty 2>/dev/null; then
+              echo "${JOB_RESULTS}" | jq -r 'to_entries[] | "| \(.key) | \(.value) |"'
+            else
+              echo "| (解析不可) | ${JOB_RESULTS} |"
+            fi
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"

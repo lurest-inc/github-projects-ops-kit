@@ -59,3 +59,17 @@ jobs:
         run: |
           chmod +x scripts/add-items-to-project.sh
           bash scripts/add-items-to-project.sh
+
+  failure-summary:
+    needs: [add-items]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: 失敗サマリーを出力
+        uses: ./.github/actions/failure-summary
+        with:
+          job-results: |
+            {"add-items": "${{ needs.add-items.result }}"}

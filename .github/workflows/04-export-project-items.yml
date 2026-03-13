@@ -69,3 +69,17 @@ jobs:
           path: export-*
           if-no-files-found: ignore
           retention-days: 7
+
+  failure-summary:
+    needs: [export-items]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: 失敗サマリーを出力
+        uses: ./.github/actions/failure-summary
+        with:
+          job-results: |
+            {"export-items": "${{ needs.export-items.result }}"}

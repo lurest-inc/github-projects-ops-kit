@@ -18,3 +18,17 @@ jobs:
       project_number: ${{ inputs.project_number }}
     secrets:
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
+
+  failure-summary:
+    needs: [extend-project]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: 失敗サマリーを出力
+        uses: ./.github/actions/failure-summary
+        with:
+          job-results: |
+            {"extend-project": "${{ needs.extend-project.result }}"}
