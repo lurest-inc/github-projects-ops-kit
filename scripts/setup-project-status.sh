@@ -119,9 +119,13 @@ mutation($fieldId: ID!, $singleSelectOptions: [ProjectV2SingleSelectFieldOptionI
 GRAPHQL
 )
 
-UPDATE_RESULT=$(run_graphql "${UPDATE_MUTATION}" "ステータスカラムの更新" \
-  -f "fieldId=${STATUS_FIELD_ID}" \
-  -F "singleSelectOptions=${SINGLE_SELECT_OPTIONS}")
+# 変数を JSON オブジェクトとして構築（-F フラグでは JSON 配列を正しく渡せないため: Issue #127）
+VARIABLES_JSON=$(jq -n \
+  --arg fieldId "${STATUS_FIELD_ID}" \
+  --argjson singleSelectOptions "${SINGLE_SELECT_OPTIONS}" \
+  '{fieldId: $fieldId, singleSelectOptions: $singleSelectOptions}')
+
+UPDATE_RESULT=$(run_graphql_json "${UPDATE_MUTATION}" "ステータスカラムの更新" "${VARIABLES_JSON}")
 
 echo ""
 echo "::notice::ステータスカラムの更新に成功しました。"

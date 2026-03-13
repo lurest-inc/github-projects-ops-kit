@@ -127,6 +127,37 @@ run_graphql() {
   echo "${result}"
 }
 
+# GraphQL クエリ／ミューテーションを JSON 変数付きで実行し、エラーチェックを行う
+# -F フラグでは JSON 配列を正しく渡せない問題 (Issue #127) を回避するため、
+# 変数を JSON オブジェクトとして --input 経由で渡す
+# 使用例: RESULT=$(run_graphql_json "${MUTATION}" "フィールドの作成" "${VARIABLES_JSON}")
+run_graphql_json() {
+  local query="$1"
+  local context="${2:-GraphQL API の呼び出し}"
+  local variables="${3:-{\}}"
+
+  local request_body
+  request_body=$(jq -n --arg query "${query}" --argjson variables "${variables}" \
+    '{query: $query, variables: $variables}')
+
+  local result
+  if ! result=$(echo "${request_body}" | gh api graphql --input - 2>&1); then
+    local safe_result
+    safe_result=$(sanitize_for_workflow_command "${result}")
+    echo "::error::${context}に失敗しました: ${safe_result}" >&2
+    exit 1
+  fi
+
+  if echo "${result}" | jq -e '.errors and (.errors | length > 0)' >/dev/null 2>&1; then
+    local safe_errors
+    safe_errors=$(sanitize_for_workflow_command "$(echo "${result}" | jq -c '.errors')")
+    echo "::error::${context}中に GraphQL エラーが発生しました: ${safe_errors}" >&2
+    exit 1
+  fi
+
+  echo "${result}"
+}
+
 # 罫線付きコンソールサマリーを出力する
 # 使用例: print_summary "Owner" "${PROJECT_OWNER}" "Project" "#${PROJECT_NUMBER}" "作成" "${COUNT} 件"
 print_summary() {

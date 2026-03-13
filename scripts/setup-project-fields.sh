@@ -139,12 +139,23 @@ mutation($projectId: ID!, $name: String!, $dataType: ProjectV2CustomFieldType!, 
 GRAPHQL
   )
 
-  MUTATION_ARGS=(-f "projectId=${PROJECT_ID}" -f "name=${FIELD_NAME}" -f "dataType=${FIELD_DATA_TYPE}")
+  # 変数を JSON オブジェクトとして構築（-F フラグでは JSON 配列を正しく渡せないため: Issue #127）
   if [[ "${FIELD_DATA_TYPE}" == "SINGLE_SELECT" ]]; then
-    MUTATION_ARGS+=(-F "singleSelectOptions=${SINGLE_SELECT_OPTIONS}")
+    VARIABLES_JSON=$(jq -n \
+      --arg projectId "${PROJECT_ID}" \
+      --arg name "${FIELD_NAME}" \
+      --arg dataType "${FIELD_DATA_TYPE}" \
+      --argjson singleSelectOptions "${SINGLE_SELECT_OPTIONS}" \
+      '{projectId: $projectId, name: $name, dataType: $dataType, singleSelectOptions: $singleSelectOptions}')
+  else
+    VARIABLES_JSON=$(jq -n \
+      --arg projectId "${PROJECT_ID}" \
+      --arg name "${FIELD_NAME}" \
+      --arg dataType "${FIELD_DATA_TYPE}" \
+      '{projectId: $projectId, name: $name, dataType: $dataType}')
   fi
 
-  if ! CREATE_OUTPUT=$(run_graphql "${CREATE_MUTATION}" "フィールド '${SAFE_FIELD_NAME}' の作成" "${MUTATION_ARGS[@]}" 2>&1); then
+  if ! CREATE_OUTPUT=$(run_graphql_json "${CREATE_MUTATION}" "フィールド '${SAFE_FIELD_NAME}' の作成" "${VARIABLES_JSON}" 2>&1); then
     SAFE_OUTPUT=$(sanitize_for_workflow_command "${CREATE_OUTPUT}")
     echo "  ::error::フィールド '${SAFE_FIELD_NAME}' の作成に失敗しました: ${SAFE_OUTPUT}"
     FAILED_COUNT=$((FAILED_COUNT + 1))
