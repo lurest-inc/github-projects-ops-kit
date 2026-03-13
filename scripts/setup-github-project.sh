@@ -93,7 +93,7 @@ fi
 echo ""
 echo "Visibility を ${PROJECT_VISIBILITY} に設定します..."
 
-if ! EDIT_OUTPUT=$(gh project edit "${PROJECT_NUMBER}" --owner "${PROJECT_OWNER}" --visibility "${PROJECT_VISIBILITY}" 2>&1); then
+if ! EDIT_OUTPUT=$(gh project edit "${PROJECT_NUMBER}" --owner "${PROJECT_OWNER}" --visibility "${PROJECT_VISIBILITY}" --format json 2>&1); then
   SAFE_EDIT_OUTPUT=$(sanitize_for_workflow_command "${EDIT_OUTPUT}")
   echo "::error::Visibility の設定に失敗しました: ${SAFE_EDIT_OUTPUT}"
   echo "::error::Project は作成されましたが、Visibility はデフォルト（PRIVATE）のままです。"
@@ -101,7 +101,16 @@ if ! EDIT_OUTPUT=$(gh project edit "${PROJECT_NUMBER}" --owner "${PROJECT_OWNER}
   exit 1
 fi
 
-echo "::notice::Visibility を ${PROJECT_VISIBILITY} に設定しました。"
+# Visibility 設定結果の検証
+ACTUAL_VISIBILITY=$(echo "${EDIT_OUTPUT}" | jq -r '.visibility // empty')
+
+if [[ -z "${ACTUAL_VISIBILITY}" ]]; then
+  echo "::warning::Visibility の検証をスキップしました（レスポンスから visibility を取得できませんでした）。"
+elif [[ "${ACTUAL_VISIBILITY}" != "${PROJECT_VISIBILITY}" ]]; then
+  echo "::warning::Visibility の設定値が期待と異なります。期待: ${PROJECT_VISIBILITY}、実際: ${ACTUAL_VISIBILITY}"
+else
+  echo "::notice::Visibility を ${PROJECT_VISIBILITY} に設定し、検証に成功しました。"
+fi
 
 # --- サマリー出力 ---
 

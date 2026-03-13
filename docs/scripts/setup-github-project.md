@@ -35,7 +35,10 @@ flowchart TD
     N -- "No" --> O["エラー出力\n手動設定コマンド表示"]
     O --> K
 
-    N -- "Yes" --> P["GITHUB_OUTPUT に\nproject_number / url 出力"]
+    N -- "Yes" --> S{"Visibility 検証"}
+    S -- "不一致" --> T["警告出力"]
+    S -- "一致" --> U["検証成功通知"]
+    T & U --> P["GITHUB_OUTPUT に\nproject_number / url 出力"]
     P --> Q["Step Summary 出力"]
     Q --> R["完了"]
 ```
@@ -48,7 +51,8 @@ flowchart TD
 | オーナータイプ判定 | GitHub REST API でオーナーの `.type` を取得し、User / Organization を判別 | `gh api users/{owner} --jq '.type'` |
 | Project 作成 | GitHub CLI の Project 作成コマンドを実行 | `gh project create --title --owner --format json` |
 | 情報抽出 | 作成結果の JSON から `number` と `url` を取得 | `jq -r '.number'`・`jq -r '.url'` |
-| Visibility 設定 | 作成した Project の公開範囲を指定値に変更 | `gh project edit {number} --owner --visibility` |
+| Visibility 設定 | 作成した Project の公開範囲を指定値に変更 | `gh project edit {number} --owner --visibility --format json` |
+| Visibility 検証 | レスポンス JSON の `visibility` が期待値と一致するか確認 | `jq -r '.visibility'` |
 | サマリー出力 | `GITHUB_OUTPUT` へ後続ステップ連携用の値を設定、`GITHUB_STEP_SUMMARY` にテーブル出力 | — |
 
 ## API リファレンス
