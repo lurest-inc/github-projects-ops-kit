@@ -46,35 +46,22 @@ graph LR
 ## 処理フロー
 
 ```mermaid
-sequenceDiagram
-    participant Script as setup-project-status.sh
-    participant FS as ファイルシステム
-    participant GH as GitHub GraphQL API
+flowchart TD
+    A["開始"] --> B["環境変数バリデーション"]
+    B --> C["オーナータイプ判定"]
+    C --> D["ステータス定義ファイル読み込み\n（config/status-options.json）"]
+    D --> E["GraphQL で Project の\nStatus フィールドを取得"]
 
-    Script->>Script: 環境変数バリデーション
-    Script->>GH: オーナータイプ判定（REST API）
-    GH-->>Script: User / Organization
+    E --> F{"Status フィールド\nが見つかる?"}
+    F -- "No" --> F2["エラー終了"]
+    F -- "Yes" --> G["設定するカラム定義を構築\n（Backlog, Todo, In Progress,\nIn Review, Done）"]
 
-    Script->>FS: ステータス定義ファイル読み込み（config/status-options.json）
-    FS-->>Script: STATUS_OPTIONS
-
-    Script->>GH: Project の Status フィールド取得（query）
-    GH-->>Script: Project ID / Status Field ID / 現在のカラム一覧
-
-    alt Status フィールドが見つからない
-        Script->>Script: エラー終了
-    end
-
-    Script->>Script: 設定するカラム定義を構築（Backlog, Todo, In Progress, In Review, Done）
-    Script->>GH: updateProjectV2Field（mutation）
-    GH-->>Script: 更新後のカラム一覧
-
-    alt GraphQL エラー発生
-        Script->>Script: エラー終了
-    end
-
-    Script->>Script: 更新後のカラムを表示
-    Script->>Script: サマリー出力
+    G --> H["updateProjectV2Field\nで一括更新"]
+    H --> I{"GraphQL エラー?"}
+    I -- "Yes" --> I2["エラー終了"]
+    I -- "No" --> J["更新後のカラムを表示"]
+    J --> K["サマリー出力"]
+    K --> L["完了"]
 ```
 
 ## 処理詳細
