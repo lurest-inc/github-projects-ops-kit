@@ -102,64 +102,59 @@ echo "  Title:      ${PROJECT_TITLE}"
 echo "  Type:       ${OWNER_TYPE}"
 echo "  Visibility: ${PROJECT_VISIBILITY}"
 
-if ! OUTPUT=$(gh project create --title "${PROJECT_TITLE}" --owner "${PROJECT_OWNER}" --format json 2>&1); then
-  SAFE_OUTPUT=$(sanitize_for_workflow_command "${OUTPUT}")
-  echo "::error::GitHub Project の作成に失敗しました。"
-  echo "::error::詳細: ${SAFE_OUTPUT}"
-  echo ""
-  echo "考えられる原因:"
-  if [[ "${OWNER_TYPE}" == "User" ]]; then
-    echo "  - PAT に Account permissions > Projects > Read and write 権限が付与されていない"
-  elif [[ "${OWNER_TYPE}" == "Organization" ]]; then
-    echo "  - PAT に Organization permissions > Projects > Read and write 権限が付与されていない"
-    echo "  - Organization の Third-party access policy で PAT がブロックされている"
-  else
-    echo "  - PAT に Projects > Read and write 権限が付与されていない"
-  fi
-  echo "  - Owner 名が正しくない"
-  echo "  - ネットワークエラー"
+CREATE_MUTATION='mutation($ownerId: ID!, $title: String!) {
+  createProjectV2(input: {ownerId: $ownerId, title: $title}) {
+    projectV2 { id number url }
+  }
+}'
+OUTPUT=$(run_graphql "${CREATE_MUTATION}" "GitHub Project の作成" -f ownerId="${OWNER_NODE_ID}" -f title="${PROJECT_TITLE}")
+
+# --- Project 情報の抽出 ---
+
+PROJECT_V2=$(echo "${OUTPUT}" | jq -c '.data.createProjectV2.projectV2 // empty' 2>/dev/null)
+
+if [[ -z "${PROJECT_V2}" || "${PROJECT_V2}" == "null" ]]; then
+  echo "::error::Project 情報を抽出できませんでした。GraphQL レスポンスを確認してください。"
+  SAFE_OUTPUT=$(sanitize_for_workflow_command "$(echo "${OUTPUT}" | head -5)")
+  echo "::error::出力: ${SAFE_OUTPUT}"
+  exit 1
+fi
+
+IFS=$'\t' read -r PROJECT_ID PROJECT_NUMBER PROJECT_URL < <(echo "${PROJECT_V2}" | jq -r '[.id, .number, .url] | @tsv')
+
+if [[ -z "${PROJECT_ID}" || -z "${PROJECT_NUMBER}" ]]; then
+  echo "::error::Project ID または Number を抽出できませんでした。GraphQL レスポンスを確認してください。"
+  SAFE_OUTPUT=$(sanitize_for_workflow_command "$(echo "${OUTPUT}" | head -5)")
+  echo "::error::出力: ${SAFE_OUTPUT}"
   exit 1
 fi
 
 echo "::notice::GitHub Project の作成に成功しました。"
-echo "${OUTPUT}" | jq '.' 2>/dev/null || echo "${OUTPUT}"
-
-# --- Project 情報の抽出 ---
-
-if ! PROJECT_NUMBER=$(echo "${OUTPUT}" | jq -r '.number // empty'); then
-  echo "::error::jq による Project Number の取得に失敗しました。"
-  exit 1
-fi
-PROJECT_URL=$(echo "${OUTPUT}" | jq -r '.url // empty')
-
-if [[ -z "${PROJECT_NUMBER}" ]]; then
-  echo "::error::Project Number を抽出できませんでした。gh project create の出力を確認してください。"
-  OUTPUT_HEAD=$(echo "${OUTPUT}" | head -5)
-  SAFE_OUTPUT_HEAD=$(sanitize_for_workflow_command "${OUTPUT_HEAD}")
-  echo "::error::出力: ${SAFE_OUTPUT_HEAD}"
-  exit 1
-fi
+echo "${PROJECT_V2}" | jq '.' 2>/dev/null || echo "${PROJECT_V2}"
 
 # --- Visibility 設定 ---
 
 echo ""
 echo "Visibility を ${PROJECT_VISIBILITY} に設定します..."
 
-if ! EDIT_OUTPUT=$(gh project edit "${PROJECT_NUMBER}" --owner "${PROJECT_OWNER}" --visibility "${PROJECT_VISIBILITY}" --format json 2>&1); then
-  SAFE_EDIT_OUTPUT=$(sanitize_for_workflow_command "${EDIT_OUTPUT}")
-  echo "::error::Visibility の設定に失敗しました: ${SAFE_EDIT_OUTPUT}"
-  echo "::error::Project は作成されましたが、Visibility はデフォルト（PRIVATE）のままです。"
-  echo "手動で設定してください: gh project edit ${PROJECT_NUMBER} --owner ${PROJECT_OWNER} --visibility ${PROJECT_VISIBILITY}"
-  exit 1
+IS_PUBLIC="false"
+if [[ "${PROJECT_VISIBILITY}" == "PUBLIC" ]]; then
+  IS_PUBLIC="true"
 fi
+UPDATE_MUTATION="mutation {
+  updateProjectV2(input: {projectId: \"${PROJECT_ID}\", public: ${IS_PUBLIC}}) {
+    projectV2 { public }
+  }
+}"
+EDIT_OUTPUT=$(run_graphql "${UPDATE_MUTATION}" "Visibility の設定")
 
 # Visibility 設定結果の検証
-ACTUAL_VISIBILITY=$(echo "${EDIT_OUTPUT}" | jq -r '.visibility // empty')
+ACTUAL_PUBLIC=$(echo "${EDIT_OUTPUT}" | jq '.data.updateProjectV2.projectV2.public')
 
-if [[ -z "${ACTUAL_VISIBILITY}" ]]; then
+if [[ "${ACTUAL_PUBLIC}" == "null" ]]; then
   echo "::warning::Visibility の検証をスキップしました（レスポンスから visibility を取得できませんでした）。"
-elif [[ "${ACTUAL_VISIBILITY}" != "${PROJECT_VISIBILITY}" ]]; then
-  echo "::warning::Visibility の設定値が期待と異なります。期待: ${PROJECT_VISIBILITY}、実際: ${ACTUAL_VISIBILITY}"
+elif [[ "${ACTUAL_PUBLIC}" == "true" && "${PROJECT_VISIBILITY}" != "PUBLIC" ]] || [[ "${ACTUAL_PUBLIC}" == "false" && "${PROJECT_VISIBILITY}" != "PRIVATE" ]]; then
+  echo "::warning::Visibility の設定値が期待と異なります。期待: ${PROJECT_VISIBILITY}、実際: public=${ACTUAL_PUBLIC}"
 else
   echo "::notice::Visibility を ${PROJECT_VISIBILITY} に設定し、検証に成功しました。"
 fi
