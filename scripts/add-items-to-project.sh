@@ -234,7 +234,7 @@ fetch_and_add_items() {
   local label="$1"
   local gh_command="$2"
   local done_states="$3"
-  local added=0 skipped=0 failed=0
+  local added=0 skipped=0 failed=0 safe_output
 
   echo "" >&2
   echo "${label} を取得しています..." >&2
@@ -253,8 +253,8 @@ fetch_and_add_items() {
   fi
 
   local items_output
-  if ! items_output=$(gh "${gh_command}" list "${list_args[@]}" 2>&1); then
-    SAFE_OUTPUT=$(sanitize_for_workflow_command "${items_output}")
+    safe_output=$(sanitize_for_workflow_command "${items_output}")
+    echo "::error::${label} の取得に失敗しました: ${safe_output}" >&2
     echo "::error::${label} の取得に失敗しました: ${SAFE_OUTPUT}" >&2
     exit 1
   fi
@@ -283,8 +283,8 @@ fetch_and_add_items() {
             echo "    ステータス: ${INITIAL_STATUS}" >&2
           fi
         fi
-      else
-        SAFE_OUTPUT=$(sanitize_for_workflow_command "${add_result}")
+        safe_output=$(sanitize_for_workflow_command "${add_result}")
+        echo "::warning::追加失敗: ${url} — ${safe_output}" >&2
         echo "::warning::追加失敗: ${url} — ${SAFE_OUTPUT}" >&2
         failed=$((failed + 1))
       fi
