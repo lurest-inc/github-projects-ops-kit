@@ -6,7 +6,7 @@ on:
       project_number:
         description: "対象 Project の Number"
         required: true
-        type: number
+        type: string
     secrets:
       PROJECT_PAT:
         description: "GitHub PAT（Projects 操作権限が必要）"
