@@ -29,6 +29,10 @@ flowchart LR
 
 - GitHub: [mabubu0203/github-projects-starter-kit](https://github.com/mabubu0203/github-projects-starter-kit)
 
+## よくある質問
+
+ワークフローの利用でお困りの際は [FAQ](faq) をご覧ください。
+
 ## 開発者へ
 
 ワークフローの内部構成やスクリプトの詳細については [開発者向けドキュメント](developers) をご参照ください。
