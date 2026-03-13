@@ -57,20 +57,22 @@ validate_project_number() {
 }
 
 # オーナータイプ判定
-# 成功時: OWNER_TYPE と OWNER_QUERY_FIELD をグローバルに設定
+# 成功時: OWNER_TYPE, OWNER_QUERY_FIELD, OWNER_NODE_ID をグローバルに設定
 detect_owner_type() {
   echo "オーナータイプを判定しています..."
 
-  if ! OWNER_INFO=$(gh api "users/${PROJECT_OWNER}" --jq '.type' 2>&1); then
+  local owner_json
+  if ! owner_json=$(gh api "users/${PROJECT_OWNER}" --jq '{type: .type, node_id: .node_id}' 2>&1); then
     local safe_owner_info safe_project_owner
-    safe_owner_info=$(sanitize_for_workflow_command "${OWNER_INFO}")
+    safe_owner_info=$(sanitize_for_workflow_command "${owner_json}")
     safe_project_owner=$(sanitize_for_workflow_command "${PROJECT_OWNER}")
     echo "::error::オーナー情報の取得に失敗しました: ${safe_owner_info}"
     echo "::error::PROJECT_OWNER=${safe_project_owner} が正しいか確認してください。"
     exit 1
   fi
 
-  OWNER_TYPE="${OWNER_INFO}"
+  OWNER_TYPE=$(echo "${owner_json}" | jq -r '.type')
+  OWNER_NODE_ID=$(echo "${owner_json}" | jq -r '.node_id')
   echo "  オーナータイプ: ${OWNER_TYPE}"
 
   if [[ "${OWNER_TYPE}" == "User" ]]; then

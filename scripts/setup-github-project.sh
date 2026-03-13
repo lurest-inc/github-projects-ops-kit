@@ -102,38 +102,23 @@ echo "  Title:      ${PROJECT_TITLE}"
 echo "  Type:       ${OWNER_TYPE}"
 echo "  Visibility: ${PROJECT_VISIBILITY}"
 
-if ! OUTPUT=$(gh project create --title "${PROJECT_TITLE}" --owner "${PROJECT_OWNER}" --format json 2>&1); then
-  SAFE_OUTPUT=$(sanitize_for_workflow_command "${OUTPUT}")
-  echo "::error::GitHub Project の作成に失敗しました。"
-  echo "::error::詳細: ${SAFE_OUTPUT}"
-  echo ""
-  echo "考えられる原因:"
-  if [[ "${OWNER_TYPE}" == "User" ]]; then
-    echo "  - PAT に Account permissions > Projects > Read and write 権限が付与されていない"
-  elif [[ "${OWNER_TYPE}" == "Organization" ]]; then
-    echo "  - PAT に Organization permissions > Projects > Read and write 権限が付与されていない"
-    echo "  - Organization の Third-party access policy で PAT がブロックされている"
-  else
-    echo "  - PAT に Projects > Read and write 権限が付与されていない"
-  fi
-  echo "  - Owner 名が正しくない"
-  echo "  - ネットワークエラー"
-  exit 1
-fi
+CREATE_MUTATION='mutation($ownerId: ID!, $title: String!) {
+  createProjectV2(input: {ownerId: $ownerId, title: $title}) {
+    projectV2 { number url }
+  }
+}'
+OUTPUT=$(run_graphql "${CREATE_MUTATION}" "GitHub Project の作成" -f ownerId="${OWNER_NODE_ID}" -f title="${PROJECT_TITLE}")
 
 echo "::notice::GitHub Project の作成に成功しました。"
-echo "${OUTPUT}" | jq '.' 2>/dev/null || echo "${OUTPUT}"
+echo "${OUTPUT}" | jq '.data.createProjectV2.projectV2' 2>/dev/null || echo "${OUTPUT}"
 
 # --- Project 情報の抽出 ---
 
-if ! PROJECT_NUMBER=$(echo "${OUTPUT}" | jq -r '.number // empty'); then
-  echo "::error::jq による Project Number の取得に失敗しました。"
-  exit 1
-fi
-PROJECT_URL=$(echo "${OUTPUT}" | jq -r '.url // empty')
+PROJECT_NUMBER=$(echo "${OUTPUT}" | jq -r '.data.createProjectV2.projectV2.number // empty')
+PROJECT_URL=$(echo "${OUTPUT}" | jq -r '.data.createProjectV2.projectV2.url // empty')
 
 if [[ -z "${PROJECT_NUMBER}" ]]; then
-  echo "::error::Project Number を抽出できませんでした。gh project create の出力を確認してください。"
+  echo "::error::Project Number を抽出できませんでした。GraphQL レスポンスを確認してください。"
   OUTPUT_HEAD=$(echo "${OUTPUT}" | head -5)
   SAFE_OUTPUT_HEAD=$(sanitize_for_workflow_command "${OUTPUT_HEAD}")
   echo "::error::出力: ${SAFE_OUTPUT_HEAD}"
