@@ -26,7 +26,9 @@ flowchart LR
 
 GitHub の [Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens) から PAT を作成します。
 
-<!-- TODO: PAT 作成画面のスクリーンショットを追加 (quickstart-pat.png) -->
+> **参考画像:** Settings > Developer settings > Personal access tokens 画面
+>
+> <img src="images/quickstart-pat.png" alt="PAT 作成画面" width="80%">
 
 必要な権限の詳細は [FAQ > Q5. PAT にはどの権限が必要ですか？](faq#q5-pat-にはどの権限が必要ですか) を参照してください。Fine-grained token の制約事項については [Q7](faq#q7-fine-grained-token-の制約事項はありますか) も合わせてご確認ください。
 
