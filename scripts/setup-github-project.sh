@@ -109,22 +109,28 @@ CREATE_MUTATION='mutation($ownerId: ID!, $title: String!) {
 }'
 OUTPUT=$(run_graphql "${CREATE_MUTATION}" "GitHub Project の作成" -f ownerId="${OWNER_NODE_ID}" -f title="${PROJECT_TITLE}")
 
-echo "::notice::GitHub Project の作成に成功しました。"
-echo "${OUTPUT}" | jq '.data.createProjectV2.projectV2' 2>/dev/null || echo "${OUTPUT}"
-
 # --- Project 情報の抽出 ---
 
-PROJECT_ID=$(echo "${OUTPUT}" | jq -r '.data.createProjectV2.projectV2.id // empty')
-PROJECT_NUMBER=$(echo "${OUTPUT}" | jq -r '.data.createProjectV2.projectV2.number // empty')
-PROJECT_URL=$(echo "${OUTPUT}" | jq -r '.data.createProjectV2.projectV2.url // empty')
+PROJECT_V2=$(echo "${OUTPUT}" | jq -c '.data.createProjectV2.projectV2 // empty' 2>/dev/null)
 
-if [[ -z "${PROJECT_NUMBER}" ]]; then
-  echo "::error::Project Number を抽出できませんでした。GraphQL レスポンスを確認してください。"
-  OUTPUT_HEAD=$(echo "${OUTPUT}" | head -5)
-  SAFE_OUTPUT_HEAD=$(sanitize_for_workflow_command "${OUTPUT_HEAD}")
-  echo "::error::出力: ${SAFE_OUTPUT_HEAD}"
+if [[ -z "${PROJECT_V2}" || "${PROJECT_V2}" == "null" ]]; then
+  echo "::error::Project 情報を抽出できませんでした。GraphQL レスポンスを確認してください。"
+  SAFE_OUTPUT=$(sanitize_for_workflow_command "$(echo "${OUTPUT}" | head -5)")
+  echo "::error::出力: ${SAFE_OUTPUT}"
   exit 1
 fi
+
+IFS=$'\t' read -r PROJECT_ID PROJECT_NUMBER PROJECT_URL < <(echo "${PROJECT_V2}" | jq -r '[.id, .number, .url] | @tsv')
+
+if [[ -z "${PROJECT_ID}" || -z "${PROJECT_NUMBER}" ]]; then
+  echo "::error::Project ID または Number を抽出できませんでした。GraphQL レスポンスを確認してください。"
+  SAFE_OUTPUT=$(sanitize_for_workflow_command "$(echo "${OUTPUT}" | head -5)")
+  echo "::error::出力: ${SAFE_OUTPUT}"
+  exit 1
+fi
+
+echo "::notice::GitHub Project の作成に成功しました。"
+echo "${PROJECT_V2}" | jq '.' 2>/dev/null || echo "${PROJECT_V2}"
 
 # --- Visibility 設定 ---
 

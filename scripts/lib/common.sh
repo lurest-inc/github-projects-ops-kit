@@ -71,8 +71,13 @@ detect_owner_type() {
     exit 1
   fi
 
-  OWNER_TYPE=$(echo "${owner_json}" | jq -r '.type')
-  OWNER_NODE_ID=$(echo "${owner_json}" | jq -r '.node_id')
+  IFS=$'\t' read -r OWNER_TYPE OWNER_NODE_ID < <(echo "${owner_json}" | jq -r '[.type, .node_id] | @tsv')
+
+  if [[ -z "${OWNER_NODE_ID}" || "${OWNER_NODE_ID}" == "null" ]]; then
+    echo "::error::オーナーの node_id を取得できませんでした。PAT の権限を確認してください。"
+    exit 1
+  fi
+
   echo "  オーナータイプ: ${OWNER_TYPE}"
 
   if [[ "${OWNER_TYPE}" == "User" ]]; then
