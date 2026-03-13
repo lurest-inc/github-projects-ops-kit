@@ -16,6 +16,13 @@
 | `project_title` | Project のタイトル | ✅ | `string` | `My Project Board` |
 | `visibility` | Project の公開範囲 | ✅ | `choice` | `PRIVATE`（デフォルト） / `PUBLIC` |
 
+### 公開範囲
+
+| 選択肢 | 説明 |
+|--------|------|
+| `PRIVATE` | 自分のみ閲覧可能 |
+| `PUBLIC` | 誰でも閲覧可能 |
+
 ## 処理フロー
 
 ```mermaid
