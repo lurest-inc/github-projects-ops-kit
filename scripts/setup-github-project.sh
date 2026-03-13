@@ -46,15 +46,38 @@ echo ""
 
 echo "同名の Project が既に存在するか確認します..."
 
-if ! EXISTING_PROJECTS=$(gh project list --owner "${PROJECT_OWNER}" --format json); then
-  echo "::error::既存 Project の一覧取得に失敗しました。重複チェックを実行できません。"
-  exit 1
-fi
+EXISTING_PROJECT=""
+HAS_NEXT_PAGE="true"
+END_CURSOR=""
 
-if ! EXISTING_PROJECT=$(echo "${EXISTING_PROJECTS}" | jq -e -r --arg title "${PROJECT_TITLE}" '[.projects[] | select(.title == $title)] | first // empty'); then
-  echo "::error::Project 一覧の JSON 解析に失敗しました。"
-  exit 1
-fi
+while [[ "${HAS_NEXT_PAGE}" == "true" ]]; do
+  AFTER_CLAUSE=""
+  if [[ -n "${END_CURSOR}" ]]; then
+    AFTER_CLAUSE=", after: \"${END_CURSOR}\""
+  fi
+
+  EXISTING_QUERY="query {
+    ${OWNER_QUERY_FIELD}(login: \"${PROJECT_OWNER}\") {
+      projectsV2(first: 100${AFTER_CLAUSE}) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        nodes { title number url }
+      }
+    }
+  }"
+  EXISTING_PROJECTS=$(run_graphql "${EXISTING_QUERY}" "既存 Project の一覧取得")
+
+  EXISTING_PROJECT=$(echo "${EXISTING_PROJECTS}" | jq -r --arg owner "${OWNER_QUERY_FIELD}" --arg title "${PROJECT_TITLE}" '[.data.[($owner)].projectsV2.nodes[] | select(.title == $title)] | first // ""')
+
+  if [[ -n "${EXISTING_PROJECT}" ]]; then
+    break
+  fi
+
+  HAS_NEXT_PAGE=$(echo "${EXISTING_PROJECTS}" | jq -r ".data.${OWNER_QUERY_FIELD}.projectsV2.pageInfo.hasNextPage" 2>/dev/null || echo "false")
+  END_CURSOR=$(echo "${EXISTING_PROJECTS}" | jq -r ".data.${OWNER_QUERY_FIELD}.projectsV2.pageInfo.endCursor // empty" 2>/dev/null || true)
+done
 
 if [[ -n "${EXISTING_PROJECT}" ]]; then
   EXISTING_NUMBER=$(echo "${EXISTING_PROJECT}" | jq -r '.number // empty')

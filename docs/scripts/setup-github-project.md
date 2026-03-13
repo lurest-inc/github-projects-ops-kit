@@ -24,7 +24,7 @@ flowchart TD
     D -- "Organization" --> F["Organization 用\n権限ガイド表示"]
     D -- "その他" --> G["警告を出力"]
 
-    E & F & G --> H["gh project list\nで既存 Project チェック"]
+    E & F & G --> H["GraphQL projectsV2\nで既存 Project チェック\n（ページネーション対応）"]
     H --> I{"同名 Project\n存在する?"}
     I -- "Yes" --> J["警告出力\n重複防止で正常終了"]
     I -- "No" --> K["gh project create\nで Project 作成"]
@@ -52,7 +52,7 @@ flowchart TD
 |---------|---------|-------------------|
 | バリデーション | `GH_TOKEN`・`PROJECT_OWNER`・`PROJECT_TITLE` の存在確認、`PROJECT_VISIBILITY` の値チェック | `require_env`・`require_command` |
 | オーナータイプ判定 | GitHub REST API でオーナーの `.type` を取得し、User / Organization を判別 | `gh api users/{owner} --jq '.type'` |
-| 重複チェック | 同一 Owner 配下に同名タイトルの Project が存在するか確認し、存在する場合は警告を出して正常終了 | `gh project list --owner --format json`・`jq 'select(.title == ...)'` |
+| 重複チェック | 同一 Owner 配下に同名タイトルの Project が存在するか確認し、存在する場合は警告を出して正常終了（ページネーションで全件走査） | GraphQL `projectsV2(first: 100)` + `pageInfo`・`jq 'select(.title == ...)'` |
 | Project 作成 | GitHub CLI の Project 作成コマンドを実行 | `gh project create --title --owner --format json` |
 | 情報抽出 | 作成結果の JSON から `number` と `url` を取得 | `jq -r '.number'`・`jq -r '.url'` |
 | Visibility 設定 | 作成した Project の公開範囲を指定値に変更 | `gh project edit {number} --owner --visibility --format json` |
@@ -64,7 +64,7 @@ flowchart TD
 | API / コマンド | 用途 | リファレンス |
 |---------------|------|-------------|
 | `gh api users/{owner}` | オーナータイプ判定 | [Get a user - REST API](https://docs.github.com/en/rest/users/users#get-a-user) |
-| `gh project list` | 既存 Project の一覧取得（重複チェック） | [gh project list](https://cli.github.com/manual/gh_project_list) |
+| GraphQL `projectsV2` | 既存 Project の一覧取得（重複チェック） | [ProjectV2 - GraphQL API](https://docs.github.com/en/graphql/reference/objects#projectv2) |
 | `gh project create` | Project 新規作成 | [gh project create](https://cli.github.com/manual/gh_project_create) |
 | `gh project edit` | Visibility 設定 | [gh project edit](https://cli.github.com/manual/gh_project_edit) |
 
