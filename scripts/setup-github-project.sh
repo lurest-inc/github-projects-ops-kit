@@ -42,6 +42,29 @@ fi
 
 echo ""
 
+# --- 既存 Project チェック ---
+
+echo "同名の Project が既に存在するか確認します..."
+
+if EXISTING_PROJECTS=$(gh project list --owner "${PROJECT_OWNER}" --format json 2>&1); then
+  EXISTING_PROJECT=$(echo "${EXISTING_PROJECTS}" | jq -r --arg title "${PROJECT_TITLE}" '.projects[] | select(.title == $title)' 2>/dev/null)
+
+  if [[ -n "${EXISTING_PROJECT}" ]]; then
+    EXISTING_NUMBER=$(echo "${EXISTING_PROJECT}" | jq -r '.number // empty')
+    EXISTING_URL=$(echo "${EXISTING_PROJECT}" | jq -r '.url // empty')
+    echo "::warning::同名の Project が既に存在します。"
+    echo "::warning::Project Number: ${EXISTING_NUMBER}"
+    echo "::warning::Project URL: ${EXISTING_URL}"
+    echo ""
+    echo "重複作成を防止するため、スクリプトを終了します。"
+    echo "既存 Project を削除してから再実行するか、タイトルを変更してください。"
+    exit 0
+  fi
+fi
+
+echo "同名の Project は見つかりませんでした。作成を続行します。"
+echo ""
+
 # --- Project 作成 ---
 
 echo "GitHub Project を作成します..."
