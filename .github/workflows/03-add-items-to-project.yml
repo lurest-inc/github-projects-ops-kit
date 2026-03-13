@@ -33,6 +33,17 @@ on:
         description: "絞り込みラベル（指定ラベルの Issue/PR のみ追加、省略可）"
         required: false
         type: string
+      initial_status:
+        description: "追加時に付与するステータス（open アイテム用、closed/merged は自動で Done）"
+        required: true
+        type: choice
+        options:
+          - Backlog
+          - Todo
+          - In Progress
+          - In Review
+          - Done
+        default: "Backlog"
 
 permissions:
   contents: read
@@ -56,6 +67,7 @@ jobs:
           ITEM_TYPE: ${{ inputs.item_type }}
           ITEM_STATE: ${{ inputs.item_state }}
           ITEM_LABEL: ${{ inputs.item_label }}
+          INITIAL_STATUS: ${{ inputs.initial_status }}
         run: |
           chmod +x scripts/add-items-to-project.sh
           bash scripts/add-items-to-project.sh
