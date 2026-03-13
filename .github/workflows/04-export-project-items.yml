@@ -82,6 +82,8 @@ jobs:
         uses: ./.github/actions/workflow-summary
         with:
           status: failure
+          project-owner: ${{ github.repository_owner }}
+          project-number: ${{ inputs.project_number }}
           job-results: |
             {"export-items": "${{ needs.export-items.result }}"}
 
@@ -97,5 +99,7 @@ jobs:
         uses: ./.github/actions/workflow-summary
         with:
           status: success
+          project-owner: ${{ github.repository_owner }}
+          project-number: ${{ inputs.project_number }}
           job-results: |
             {"export-items": "${{ needs.export-items.result }}"}

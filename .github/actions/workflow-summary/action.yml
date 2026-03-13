@@ -8,6 +8,14 @@ inputs:
     description: '各ジョブの結果（JSON形式、複数ジョブ時に使用）'
     required: false
     default: ''
+  project-owner:
+    description: 'Project の所有者（省略可）'
+    required: false
+    default: ''
+  project-number:
+    description: '対象 Project の Number（省略可）'
+    required: false
+    default: ''
 runs:
   using: composite
   steps:
@@ -15,6 +23,8 @@ runs:
       env:
         STATUS: ${{ inputs.status }}
         JOB_RESULTS: ${{ inputs.job-results }}
+        PROJECT_OWNER: ${{ inputs.project-owner }}
+        PROJECT_NUMBER: ${{ inputs.project-number }}
       run: |
         # Markdownテーブル用エスケープ: | を \| に、改行をスペースに置換
         escape_md() {
@@ -41,6 +51,12 @@ runs:
           echo "| 実行URL | [Actions Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) |"
           echo "| gh バージョン | \`$(gh --version | head -1)\` |"
           echo "| jq バージョン | \`$(jq --version)\` |"
+          if [[ -n "${PROJECT_OWNER}" ]]; then
+            echo "| Project Owner | \`$(escape_md "${PROJECT_OWNER}")\` |"
+          fi
+          if [[ -n "${PROJECT_NUMBER}" ]]; then
+            echo "| Project Number | ${PROJECT_NUMBER} |"
+          fi
 
           if [[ -n "${JOB_RESULTS}" ]]; then
             echo ""
