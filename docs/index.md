@@ -2,15 +2,6 @@
 
 GitHub Projects の初期セットアップを GitHub Actions で自動実行するための **スターターキット** です。
 
-## ワークフロー一覧
-
-| ワークフロー | 説明 | トリガー |
-|------------|------|---------|
-| [① GitHub Project 新規作成](workflows/01-create-project) | Project の作成・フィールド・ステータス・View を一括セットアップ | `workflow_dispatch`（手動実行） |
-| [② GitHub Project 拡張](workflows/02-extend-project) | 既存 Project にフィールド・ステータス・View を追加 | `workflow_dispatch`（手動実行） |
-| [③ Issue/PR 一括紐付け](workflows/03-add-items-to-project) | リポジトリの Issue/PR を Project に一括追加 | `workflow_dispatch`（手動実行） |
-| [④ Project アイテム エクスポート](workflows/04-export-project-items) | Project の Issue/PR 一覧をエクスポート | `workflow_dispatch`（手動実行） |
-
 ## クイックスタート
 
 ```mermaid
@@ -20,39 +11,19 @@ flowchart LR
     C --> D["4. ワークフロー実行"]
 ```
 
-### 1. リポジトリを fork する
+セットアップ手順は 2 種類用意しています。お好みの方法をお選びください。
 
-本リポジトリを自分のアカウントまたは Organization に fork してください。
+- [GUI版（Web UI）](quickstart-gui) — GitHub の画面操作で進める方法
+- [コマンド版（CLI）](quickstart-cli) — `gh` CLI でターミナルから進める方法（生成AIへのヒントとしても活用可能）
 
-### 2. PAT を作成する
+## ワークフロー一覧
 
-GitHub の [Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens) から PAT を作成します。
-
-**Fine-grained token の場合:**
-
-- `Organization permissions` > `Projects` > `Read and write`（Organization）
-- `Account permissions` > `Projects` > `Read and write`（個人）
-
-**Classic token の場合:**
-
-- `project` スコープ
-
-### 3. Secrets を設定する
-
-fork 先リポジトリの `Settings > Secrets and variables > Actions` で以下を追加します。
-
-| Secret 名 | 説明 |
-|------------|------|
-| `PROJECT_PAT` | 作成した PAT |
-
-### 4. ワークフローを実行する
-
-各ワークフローの詳細は個別ページをご参照ください。
-
-- [① GitHub Project 新規作成](workflows/01-create-project)
-- [② GitHub Project 拡張](workflows/02-extend-project)
-- [③ Issue/PR 一括紐付け](workflows/03-add-items-to-project)
-- [④ Project アイテム エクスポート](workflows/04-export-project-items)
+| ワークフロー | 説明 | トリガー |
+|------------|------|---------|
+| [① GitHub Project 新規作成](workflows/01-create-project) | Project の作成・フィールド・ステータス・View を一括セットアップ | `workflow_dispatch`（手動実行） |
+| [② GitHub Project 拡張](workflows/02-extend-project) | 既存 Project にフィールド・ステータス・View を追加 | `workflow_dispatch`（手動実行） |
+| [③ Issue/PR 一括紐付け](workflows/03-add-items-to-project) | リポジトリの Issue/PR を Project に一括追加 | `workflow_dispatch`（手動実行） |
+| [④ Project アイテム エクスポート](workflows/04-export-project-items) | Project の Issue/PR 一覧をエクスポート | `workflow_dispatch`（手動実行） |
 
 ## リポジトリ
 
