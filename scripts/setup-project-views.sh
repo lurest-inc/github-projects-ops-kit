@@ -9,10 +9,6 @@ set -euo pipefail
 #   PROJECT_OWNER     - Project の所有者
 #   PROJECT_NUMBER    - 対象 Project の Number（数値）
 
-# --- REST API バージョン ---
-
-REST_API_VERSION="2026-03-10"
-
 # --- 共通ライブラリ読み込み ---
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -31,29 +27,40 @@ if [[ ! -f "${VIEW_DEFINITIONS_FILE}" ]]; then
 fi
 VIEW_DEFINITIONS=$(cat "${VIEW_DEFINITIONS_FILE}")
 
-# --- REST API パス構築 ---
-
-if [[ "${OWNER_TYPE}" == "Organization" ]]; then
-  VIEWS_API_PATH="orgs/${PROJECT_OWNER}/projectsV2/${PROJECT_NUMBER}/views"
-elif [[ "${OWNER_TYPE}" == "User" ]]; then
-  VIEWS_API_PATH="users/${PROJECT_OWNER}/projectsV2/${PROJECT_NUMBER}/views"
-fi
-
-# --- 既存 View 情報の取得（ページネーション対応） ---
+# --- GraphQL で既存 View 情報の取得 ---
 
 echo ""
 echo "Project #${PROJECT_NUMBER} の既存 View を取得しています..."
 
-if ! ALL_VIEW_NODES=$(gh api "${VIEWS_API_PATH}" \
-  -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
-  --paginate \
-  --jq '.[].name' 2>&1); then
-  SAFE_RESULT=$(sanitize_for_workflow_command "${ALL_VIEW_NODES}")
-  echo "::error::既存 View の取得に失敗しました: ${SAFE_RESULT}"
+VIEW_QUERY=$(cat <<GRAPHQL
+query {
+  ${OWNER_QUERY_FIELD}(login: "${PROJECT_OWNER}") {
+    projectV2(number: ${PROJECT_NUMBER}) {
+      id
+      views(first: 100) {
+        nodes {
+          id
+          name
+          layout
+        }
+      }
+    }
+  }
+}
+GRAPHQL
+)
+
+VIEW_RESULT=$(run_graphql "${VIEW_QUERY}" "既存 View の取得")
+
+# Project ID を取得
+PROJECT_ID=$(echo "${VIEW_RESULT}" | jq -r --arg owner "${OWNER_QUERY_FIELD}" '.data.[($owner)].projectV2.id // empty')
+if [[ -z "${PROJECT_ID}" ]]; then
+  echo "::error::Project ID を取得できませんでした。Project #${PROJECT_NUMBER} が存在するか確認してください。"
   exit 1
 fi
+echo "  Project ID: ${PROJECT_ID}"
 
-EXISTING_VIEWS="${ALL_VIEW_NODES}"
+EXISTING_VIEWS=$(echo "${VIEW_RESULT}" | jq -r --arg owner "${OWNER_QUERY_FIELD}" '.data.[($owner)].projectV2.views.nodes[].name // empty' 2>/dev/null)
 
 echo ""
 echo "既存の View:"
@@ -70,18 +77,29 @@ fi
 echo ""
 echo "View を作成します..."
 
+# view-definitions.json の layout 値を GraphQL の ProjectV2ViewLayout enum にマッピング
+map_layout_to_graphql() {
+  local layout="$1"
+  case "${layout}" in
+    table)       echo "TABLE_LAYOUT" ;;
+    board)       echo "BOARD_LAYOUT" ;;
+    roadmap)     echo "ROADMAP_LAYOUT" ;;
+    *)           echo "${layout}" ;;
+  esac
+}
+
 VIEW_COUNT=$(echo "${VIEW_DEFINITIONS}" | jq -r 'length')
 CREATED_COUNT=0
 SKIPPED_COUNT=0
 FAILED_COUNT=0
 
 for i in $(seq 0 $((VIEW_COUNT - 1))); do
-  read -r VIEW_NAME VIEW_LAYOUT VIEW_FILTER < <(echo "${VIEW_DEFINITIONS}" | jq -r ".[$i] | [.name, .layout, (.filter // \"\")] | @tsv")
-  VIEW_VISIBLE_FIELDS=$(echo "${VIEW_DEFINITIONS}" | jq -c ".[$i].visible_fields // empty")
+  IFS=$'\t' read -r VIEW_NAME VIEW_LAYOUT < <(echo "${VIEW_DEFINITIONS}" | jq -r ".[$i] | [.name, .layout] | @tsv")
   SAFE_VIEW_NAME=$(sanitize_for_workflow_command "${VIEW_NAME}")
+  GRAPHQL_LAYOUT=$(map_layout_to_graphql "${VIEW_LAYOUT}")
 
   echo ""
-  echo "[$((i + 1))/${VIEW_COUNT}] View: ${SAFE_VIEW_NAME} (${VIEW_LAYOUT})"
+  echo "[$((i + 1))/${VIEW_COUNT}] View: ${SAFE_VIEW_NAME} (${VIEW_LAYOUT} → ${GRAPHQL_LAYOUT})"
 
   # 既存 View の重複チェック（View 名は固定文字列として比較）
   if echo "${EXISTING_VIEWS}" | grep -Fqx "${VIEW_NAME}"; then
@@ -90,33 +108,35 @@ for i in $(seq 0 $((VIEW_COUNT - 1))); do
     continue
   fi
 
-  # リクエストボディの構築（単一 jq 呼び出し）
-  vf_arg="null"
-  if [[ -n "${VIEW_VISIBLE_FIELDS}" && "${VIEW_VISIBLE_FIELDS}" != "null" ]]; then
-    vf_arg="${VIEW_VISIBLE_FIELDS}"
-  fi
-  REQUEST_BODY=$(jq -n \
-    --arg name "${VIEW_NAME}" \
-    --arg layout "${VIEW_LAYOUT}" \
-    --arg filter "${VIEW_FILTER}" \
-    --argjson visible_fields "${vf_arg}" \
-    '{name: $name, layout: $layout}
-     + (if $filter != "" then {filter: $filter} else {} end)
-     + (if $visible_fields != null then {visible_fields: $visible_fields} else {} end)'
+  # GraphQL mutation で View を作成
+  CREATE_MUTATION=$(cat <<'GRAPHQL'
+mutation($projectId: ID!, $name: String!, $layout: ProjectV2ViewLayout) {
+  createProjectV2View(input: {
+    projectId: $projectId
+    name: $name
+    layout: $layout
+  }) {
+    projectV2View {
+      id
+      name
+      layout
+    }
+  }
+}
+GRAPHQL
   )
 
-  # REST API で View を作成
-  if ! CREATE_RESULT=$(gh api "${VIEWS_API_PATH}" \
-    -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
-    --method POST \
-    --input - <<< "${REQUEST_BODY}" 2>&1); then
+  if ! CREATE_RESULT=$(run_graphql "${CREATE_MUTATION}" "View '${SAFE_VIEW_NAME}' の作成" \
+    -f "projectId=${PROJECT_ID}" \
+    -f "name=${VIEW_NAME}" \
+    -f "layout=${GRAPHQL_LAYOUT}" 2>&1); then
     SAFE_RESULT=$(sanitize_for_workflow_command "${CREATE_RESULT}")
     echo "  ::error::View '${SAFE_VIEW_NAME}' の作成に失敗しました: ${SAFE_RESULT}"
     FAILED_COUNT=$((FAILED_COUNT + 1))
     continue
   fi
 
-  CREATED_VIEW_ID=$(echo "${CREATE_RESULT}" | jq -r '.id // empty')
+  CREATED_VIEW_ID=$(echo "${CREATE_RESULT}" | jq -r '.data.createProjectV2View.projectV2View.id // empty')
   echo "  ::notice::View '${SAFE_VIEW_NAME}' を作成しました。(ID: ${CREATED_VIEW_ID})"
   CREATED_COUNT=$((CREATED_COUNT + 1))
 
