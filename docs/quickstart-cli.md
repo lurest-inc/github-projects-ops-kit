@@ -8,7 +8,8 @@
 flowchart LR
     A["1. Fork"] --> B["2. PAT 作成"]
     B --> C["3. Secrets 設定"]
-    C --> D["4. ワークフロー実行"]
+    C --> D["4. Actions 有効化"]
+    D --> E["5. ワークフロー実行"]
 ```
 
 ## 前提条件
@@ -39,7 +40,20 @@ gh secret set PROJECT_PAT --repo <owner>/github-projects-starter-kit
 
 実行するとプロンプトが表示されるので、作成した PAT を入力してください。
 
-## 4. ワークフローを実行する
+## 4. GitHub Actions を有効化する
+
+フォークしたリポジトリでは GitHub Actions がデフォルトで無効になっています。
+
+```bash
+gh api repos/<owner>/github-projects-starter-kit/actions/permissions \
+  --method PUT \
+  --field enabled=true \
+  --field allowed_actions="all"
+```
+
+> **Note:** 詳しくは [FAQ > Q7. フォーク後に GitHub Actions が動きません](faq#q7-フォーク後に-github-actions-が動きません) を参照してください。
+
+## 5. ワークフローを実行する
 
 ### ① GitHub Project 新規作成
 

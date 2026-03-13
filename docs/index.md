@@ -8,7 +8,8 @@ GitHub Projects の初期セットアップを GitHub Actions で自動実行す
 flowchart LR
     A["1. Fork"] --> B["2. PAT 作成"]
     B --> C["3. Secrets 設定"]
-    C --> D["4. ワークフロー実行"]
+    C --> D["4. Actions 有効化"]
+    D --> E["5. ワークフロー実行"]
 ```
 
 セットアップ手順は 2 種類用意しています。お好みの方法をお選びください。
