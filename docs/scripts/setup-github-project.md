@@ -24,26 +24,26 @@ flowchart TD
     D -- "Organization" --> F["Organization 用\n権限ガイド表示"]
     D -- "その他" --> G["警告を出力"]
 
-    E & F & G --> X["gh project list\nで既存 Project チェック"]
-    X --> Y{"同名 Project\n存在する?"}
-    Y -- "Yes" --> Z["警告出力\n重複防止で正常終了"]
-    Y -- "No" --> H["gh project create\nで Project 作成"]
-    H --> I{"作成成功?"}
-    I -- "No" --> J["エラー出力\n原因候補を表示"]
-    J --> K["異常終了"]
+    E & F & G --> H["gh project list\nで既存 Project チェック"]
+    H --> I{"同名 Project\n存在する?"}
+    I -- "Yes" --> J["警告出力\n重複防止で正常終了"]
+    I -- "No" --> K["gh project create\nで Project 作成"]
+    K --> L{"作成成功?"}
+    L -- "No" --> M["エラー出力\n原因候補を表示"]
+    M --> N["異常終了"]
 
-    I -- "Yes" --> L["project_number / url を抽出"]
-    L --> M["gh project edit\nで Visibility 設定"]
-    M --> N{"設定成功?"}
-    N -- "No" --> O["エラー出力\n手動設定コマンド表示"]
-    O --> K
+    L -- "Yes" --> O["project_number / url を抽出"]
+    O --> P["gh project edit\nで Visibility 設定"]
+    P --> Q{"設定成功?"}
+    Q -- "No" --> R["エラー出力\n手動設定コマンド表示"]
+    R --> N
 
-    N -- "Yes" --> S{"Visibility 検証"}
+    Q -- "Yes" --> S{"Visibility 検証"}
     S -- "不一致" --> T["警告出力"]
     S -- "一致" --> U["検証成功通知"]
-    T & U --> P["GITHUB_OUTPUT に\nproject_number / url 出力"]
-    P --> Q["Step Summary 出力"]
-    Q --> R["完了"]
+    T & U --> V["GITHUB_OUTPUT に\nproject_number / url 出力"]
+    V --> W["Step Summary 出力"]
+    W --> X["完了"]
 ```
 
 ## 処理詳細

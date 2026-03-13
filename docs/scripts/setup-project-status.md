@@ -31,18 +31,18 @@ flowchart TD
     A["開始"] --> B["環境変数バリデーション"]
     B --> C["オーナータイプ判定"]
     C --> D["ステータス定義ファイル読み込み\n（config/status-options.json）"]
-    D --> E["GraphQL で Project の\nStatus フィールドを取得"]
+    D --> E["GraphQL で Project ID・\nStatus フィールド ID を一括取得"]
 
     E --> F{"Status フィールド\nが見つかる?"}
-    F -- "No" --> F2["エラー終了"]
-    F -- "Yes" --> G["設定するカラム定義を構築\n（Backlog, Todo, In Progress,\nIn Review, Done）"]
+    F -- "No" --> G["エラー終了"]
+    F -- "Yes" --> H["設定するカラム定義を構築\n（Backlog, Todo, In Progress,\nIn Review, Done）"]
 
-    G --> H["updateProjectV2Field\nで一括更新"]
-    H --> I{"GraphQL エラー?"}
-    I -- "Yes" --> I2["エラー終了"]
-    I -- "No" --> J["更新後のカラムを表示"]
-    J --> K["サマリー出力"]
-    K --> L["完了"]
+    H --> I["updateProjectV2Field\nで一括更新"]
+    I --> J{"GraphQL エラー?"}
+    J -- "Yes" --> G
+    J -- "No" --> K["更新後のカラムを表示"]
+    K --> L["サマリー出力"]
+    L --> M["完了"]
 ```
 
 ## 処理詳細
@@ -51,7 +51,7 @@ flowchart TD
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
 | ステータス定義ファイル読み込み | `scripts/config/status-options.json` からステータスカラム定義を読み込み | `cat` |
-| Status フィールド取得 | GraphQL クエリで Project の `SingleSelectField` から `Status` を検索し、Field ID と現在のカラム一覧を取得 | `gh api graphql` — `projectV2.fields(first: 50)` |
+| Status フィールド取得 | GraphQL クエリで Project ID と Status フィールド ID を一括取得し、現在のカラム一覧を表示 | `gh api graphql` — `projectV2.fields(first: 50)` |
 | カラム更新 | `singleSelectOptions` に Backlog（GRAY）・Todo（BLUE）・In Progress（YELLOW）・In Review（ORANGE）・Done（GREEN）を指定して一括更新 | `gh api graphql` — `updateProjectV2Field` mutation |
 | サマリー出力 | カラム構成（`Backlog → Todo → In Progress → In Review → Done`）をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
 

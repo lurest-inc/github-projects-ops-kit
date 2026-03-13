@@ -21,38 +21,31 @@
 flowchart TD
     A["開始"] --> B["環境変数バリデーション"]
     B --> C["オーナータイプ判定"]
-    C --> C2["GraphQL で Project ID・\nStatus フィールド ID・\nOption ID を取得"]
-    C2 --> D["GraphQL で Project の\n既存アイテム URL 一覧を取得\n（ページネーション対応）"]
+    C --> D["GraphQL で Project ID・\nStatus フィールド ID・\nOption ID を一括取得"]
+    D --> E["GraphQL で Project の\n既存アイテム URL 一覧を取得\n（ページネーション対応）"]
 
-    D --> E{"ITEM_TYPE = all or issues?"}
-    E -- "Yes" --> F["gh issue list で\nIssue URL 一覧を取得"]
-    F --> G["各 Issue をループ"]
-    G --> H{"既存アイテムに\n含まれる?"}
-    H -- "Yes" --> I["スキップ"]
-    H -- "No" --> J["gh project item-add\nで追加"]
-    J --> J2{"closed?"}
-    J2 -- "Yes" --> J3["ステータス: Done"]
-    J2 -- "No" --> J4["ステータス: Backlog"]
-    I & J3 & J4 --> K{"次の Issue\nあり?"}
-    K -- "Yes" --> G
-    K -- "No" --> L{"ITEM_TYPE = all or prs?"}
+    E --> F{"ITEM_TYPE に\nIssue を含む?"}
+    F -- "Yes" --> G["fetch_and_add_items\n（Issue）"]
+    F -- "No" --> H{"ITEM_TYPE に\nPR を含む?"}
+    G --> H
 
-    E -- "No" --> L
+    H -- "Yes" --> I["fetch_and_add_items\n（PR）"]
+    H -- "No" --> J["サマリー出力"]
+    I --> J
+    J --> K["完了"]
 
-    L -- "Yes" --> M["gh pr list で\nPR URL 一覧を取得"]
-    M --> N["各 PR をループ"]
-    N --> O{"既存アイテムに\n含まれる?"}
-    O -- "Yes" --> P["スキップ"]
-    O -- "No" --> Q["gh project item-add\nで追加"]
-    Q --> Q2{"closed/merged?"}
-    Q2 -- "Yes" --> Q3["ステータス: Done"]
-    Q2 -- "No" --> Q4["ステータス: Backlog"]
-    P & Q3 & Q4 --> R{"次の PR\nあり?"}
-    R -- "Yes" --> N
-    R -- "No" --> S["サマリー出力"]
-
-    L -- "No" --> S
-    S --> T["完了"]
+    subgraph L["fetch_and_add_items 関数"]
+        M["gh issue/pr list で\nアイテム一覧を取得"] --> N["各アイテムをループ"]
+        N --> O{"既存アイテムに\n含まれる?"}
+        O -- "Yes" --> P["スキップ"]
+        O -- "No" --> Q["gh project item-add\nで追加"]
+        Q --> R{"Done 対象の\nstate?"}
+        R -- "Yes" --> S["ステータス: Done"]
+        R -- "No" --> T["ステータス: Backlog"]
+        P & S & T --> U{"次のアイテム\nあり?"}
+        U -- "Yes" --> N
+        U -- "No" --> V["件数サマリー出力"]
+    end
 ```
 
 ## 処理詳細
@@ -60,12 +53,9 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
-| Status フィールド取得 | GraphQL で Project ID・Status フィールド ID・各ステータスの Option ID を取得 | `gh api graphql` — `projectV2.fields` |
+| Status フィールド取得 | GraphQL で Project ID・Status フィールド ID・各ステータスの Option ID を一括抽出 | `gh api graphql` — `projectV2.fields` |
 | 既存アイテム取得 | GraphQL クエリで Project に紐づく全アイテムの URL をページネーション付きで取得。重複防止に使用 | `gh api graphql` — `projectV2.items(first: 100)` |
-| Issue 取得 | `ITEM_STATE`・`ITEM_LABEL` で絞り込んで Issue 一覧を取得（最大 500 件） | `gh issue list --repo --state --limit 500 --json url,state` |
-| PR 取得 | Issue と同様のフィルタで PR 一覧を取得 | `gh pr list --repo --state --limit 500 --json url,state` |
-| 重複チェック | 既存アイテム URL リストと各 Issue/PR の URL を `grep -Fxq` で完全一致比較 | — |
-| アイテム追加 | 重複していない各 Issue/PR を Project に追加（1件ごとに 1秒の sleep を挟みレート制限を回避） | `gh project item-add {number} --owner --url --format json` |
+| アイテム取得・追加 | `fetch_and_add_items` 関数で Issue / PR を共通処理。`ITEM_STATE`・`ITEM_LABEL` で絞り込んで一覧を取得し、重複チェック・追加・ステータス設定を実行（最大 500 件、1件ごとに 1秒の sleep） | `gh issue list` / `gh pr list`・`gh project item-add`・`updateProjectV2ItemFieldValue` |
 | ステータス設定 | 追加したアイテムにステータスを自動付与。open → Backlog、closed/merged → Done | `gh api graphql` — `updateProjectV2ItemFieldValue` |
 | サマリー出力 | Issue・PR それぞれの追加・スキップ・失敗件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
 

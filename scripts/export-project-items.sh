@@ -29,8 +29,8 @@ ITEM_STATE="${ITEM_STATE:-all}"
 validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
 validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
 
-INCLUDE_ISSUES=$( [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "issues" ]] && echo "true" || echo "false" )
-INCLUDE_PRS=$( [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "prs" ]] && echo "true" || echo "false" )
+should_include_issues() { [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "issues" ]]; }
+should_include_prs() { [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "prs" ]]; }
 
 # --- ヘルパー関数 ---
 
@@ -168,8 +168,7 @@ GRAPHQL
 format_markdown() {
   local items="$1"
   local issue_count pr_count
-  issue_count=$(echo "${items}" | jq '[.[] | select(.type == "Issue")] | length')
-  pr_count=$(echo "${items}" | jq '[.[] | select(.type == "PullRequest")] | length')
+  read -r issue_count pr_count < <(echo "${items}" | jq -r '[([.[] | select(.type == "Issue")] | length), ([.[] | select(.type == "PullRequest")] | length)] | @tsv')
 
   # Markdown テーブルセル用エスケープ関数（jq 内で使用）
   # パイプ文字および Markdown 特殊文字（\, `, *, _, [, ], <, >, ~）をバックスラッシュでエスケープ
@@ -240,8 +239,8 @@ echo "  合計: ${TOTAL_BEFORE_FILTER} 件（フィルタ前）"
 
 # type / state フィルタを 1 回の jq 実行で適用
 ITEMS=$(echo "${ITEMS}" | jq \
-  --argjson includeIssues "$( [[ "${INCLUDE_ISSUES}" == "true" ]] && echo true || echo false )" \
-  --argjson includePRs "$( [[ "${INCLUDE_PRS}" == "true" ]] && echo true || echo false )" \
+  --argjson includeIssues "$( should_include_issues && echo true || echo false )" \
+  --argjson includePRs "$( should_include_prs && echo true || echo false )" \
   --arg itemState "${ITEM_STATE}" '
   map(
     select(
@@ -259,9 +258,7 @@ ITEMS=$(echo "${ITEMS}" | jq \
   )
 ')
 
-TOTAL_COUNT=$(echo "${ITEMS}" | jq 'length')
-ISSUE_COUNT=$(echo "${ITEMS}" | jq '[.[] | select(.type == "Issue")] | length')
-PR_COUNT=$(echo "${ITEMS}" | jq '[.[] | select(.type == "PullRequest")] | length')
+read -r TOTAL_COUNT ISSUE_COUNT PR_COUNT < <(echo "${ITEMS}" | jq -r '[length, ([.[] | select(.type == "Issue")] | length), ([.[] | select(.type == "PullRequest")] | length)] | @tsv')
 
 echo "  合計: ${TOTAL_COUNT} 件（Issue: ${ISSUE_COUNT}, PR: ${PR_COUNT}）"
 

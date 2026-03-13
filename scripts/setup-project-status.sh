@@ -59,16 +59,18 @@ GRAPHQL
 
 FIELD_RESULT=$(run_graphql "${FIELD_QUERY}" "Project 情報の取得")
 
-# Project ID の取得
-PROJECT_ID=$(echo "${FIELD_RESULT}" | jq -r ".data.${OWNER_QUERY_FIELD}.projectV2.id // empty")
+# Project ID と Status フィールド ID を一括取得
+IFS=$'\t' read -r PROJECT_ID STATUS_FIELD_ID < <(
+  echo "${FIELD_RESULT}" | jq -r --arg owner "${OWNER_QUERY_FIELD}" '
+    .data.[($owner)].projectV2 as $proj |
+    [($proj.id // ""), ([$proj.fields.nodes[] | select(.name == "Status") | .id] | first // "")] | @tsv
+  '
+)
 if [[ -z "${PROJECT_ID}" ]]; then
   echo "::error::Project ID を取得できませんでした。Project #${PROJECT_NUMBER} が存在するか確認してください。"
   exit 1
 fi
 echo "  Project ID: ${PROJECT_ID}"
-
-# Status フィールドの検索
-STATUS_FIELD_ID=$(echo "${FIELD_RESULT}" | jq -r ".data.${OWNER_QUERY_FIELD}.projectV2.fields.nodes[] | select(.name == \"Status\") | .id // empty")
 if [[ -z "${STATUS_FIELD_ID}" ]]; then
   echo "::error::Status フィールドが見つかりませんでした。"
   echo "::error::Project にビルトインの Status フィールドが存在するか確認してください。"

@@ -25,15 +25,15 @@ flowchart TD
     E -- "Yes" --> D
     E -- "No" --> F["DraftIssue を除外\nアイテムを正規化"]
 
-    F --> F2["type / state フィルタリング\n（ITEM_TYPE, ITEM_STATE）"]
-    F2 --> G{"OUTPUT_FORMAT"}
-    G -- "markdown" --> H["Markdown テーブル形式\n（Issue / PR 別セクション）"]
-    G -- "csv" --> I["CSV 形式\n（@csv フィルタ）"]
-    G -- "tsv" --> J["TSV 形式\n（@tsv フィルタ）"]
-    G -- "json" --> K["JSON 形式\n（整形出力）"]
+    F --> G["type / state フィルタリング\n（ITEM_TYPE, ITEM_STATE）"]
+    G --> H{"OUTPUT_FORMAT"}
+    H -- "markdown" --> I["Markdown テーブル形式\n（Issue / PR 別セクション）"]
+    H -- "csv" --> J["CSV 形式\n（@csv フィルタ）"]
+    H -- "tsv" --> K["TSV 形式\n（@tsv フィルタ）"]
+    H -- "json" --> L["JSON 形式\n（整形出力）"]
 
-    H & I & J & K --> L["ファイルに出力\nexport-{number}-items.{ext}"]
-    L --> M["完了"]
+    I & J & K & L --> M["ファイルに出力\nexport-{number}-items.{ext}"]
+    M --> N["完了"]
 ```
 
 ## 処理詳細

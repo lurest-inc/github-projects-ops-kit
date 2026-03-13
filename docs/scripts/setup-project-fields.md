@@ -55,26 +55,26 @@ graph TD
 flowchart TD
     A["開始"] --> B["環境変数バリデーション"]
     B --> C["オーナータイプ判定"]
-    C --> C2["フィールド定義ファイル読み込み\n（config/field-definitions.json）"]
-    C2 --> D["GraphQL で既存フィールド一覧を取得"]
-    D --> E{"取得成功?"}
-    E -- "No" --> F["エラー出力"]
-    F --> G["異常終了"]
+    C --> D["フィールド定義ファイル読み込み\n（config/field-definitions.json）"]
+    D --> E["GraphQL で既存フィールド一覧を取得"]
+    E --> F{"取得成功?"}
+    F -- "No" --> G["エラー出力"]
+    G --> H["異常終了"]
 
-    E -- "Yes" --> H["フィールド定義をループ"]
-    H --> I{"同名フィールド\n既に存在?"}
-    I -- "Yes" --> J["スキップ"]
-    I -- "No" --> K["gh project field-create\nでフィールド作成"]
-    K --> L{"作成成功?"}
-    L -- "Yes" --> M["作成カウント +1"]
-    L -- "No" --> N["失敗カウント +1"]
+    F -- "Yes" --> I["フィールド定義をループ"]
+    I --> J{"同名フィールド\n既に存在?"}
+    J -- "Yes" --> K["スキップ"]
+    J -- "No" --> L["gh project field-create\nでフィールド作成"]
+    L --> M{"作成成功?"}
+    M -- "Yes" --> N["作成カウント +1"]
+    M -- "No" --> O["失敗カウント +1"]
 
-    J & M & N --> O{"次のフィールド\nあり?"}
-    O -- "Yes" --> H
-    O -- "No" --> P["サマリー出力"]
-    P --> Q{"失敗あり?"}
-    Q -- "Yes" --> G
-    Q -- "No" --> R["完了"]
+    K & N & O --> P{"次のフィールド\nあり?"}
+    P -- "Yes" --> I
+    P -- "No" --> Q["サマリー出力"]
+    Q --> R{"失敗あり?"}
+    R -- "Yes" --> H
+    R -- "No" --> S["完了"]
 ```
 
 ## 処理詳細
@@ -83,7 +83,7 @@ flowchart TD
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別し、GraphQL クエリのフィールド名を決定 | `gh api users/{owner}` |
 | フィールド定義ファイル読み込み | `scripts/config/field-definitions.json` からフィールド定義を読み込み | `cat` |
-| 既存フィールド取得 | GraphQL クエリで Project の全フィールド（名前・データ型・選択肢）を取得 | `gh api graphql` — `projectV2.fields(first: 250)` |
+| 既存フィールド取得 | GraphQL クエリで Project ID と全フィールド（名前・データ型・選択肢）を一括取得 | `gh api graphql` — `projectV2.fields(first: 250)` |
 | 重複チェック | 既存フィールド名リストと定義済みフィールド名を `grep -Fqx` で完全一致比較 | — |
 | フィールド作成 | `SINGLE_SELECT` の場合は `--single-select-options` で選択肢を付与して作成 | `gh project field-create {number} --owner --name --data-type` |
 | サマリー出力 | 作成・スキップ・失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |

@@ -76,9 +76,7 @@ SKIPPED_COUNT=0
 FAILED_COUNT=0
 
 for i in $(seq 0 $((VIEW_COUNT - 1))); do
-  VIEW_NAME=$(echo "${VIEW_DEFINITIONS}" | jq -r ".[$i].name")
-  VIEW_LAYOUT=$(echo "${VIEW_DEFINITIONS}" | jq -r ".[$i].layout")
-  VIEW_FILTER=$(echo "${VIEW_DEFINITIONS}" | jq -r ".[$i].filter // empty")
+  read -r VIEW_NAME VIEW_LAYOUT VIEW_FILTER < <(echo "${VIEW_DEFINITIONS}" | jq -r ".[$i] | [.name, .layout, (.filter // \"\")] | @tsv")
   VIEW_VISIBLE_FIELDS=$(echo "${VIEW_DEFINITIONS}" | jq -c ".[$i].visible_fields // empty")
   SAFE_VIEW_NAME=$(sanitize_for_workflow_command "${VIEW_NAME}")
 
@@ -92,17 +90,20 @@ for i in $(seq 0 $((VIEW_COUNT - 1))); do
     continue
   fi
 
-  # リクエストボディの構築
-  REQUEST_BODY=$(jq -n --arg name "${VIEW_NAME}" --arg layout "${VIEW_LAYOUT}" \
-    '{name: $name, layout: $layout}')
-
-  if [[ -n "${VIEW_FILTER}" ]]; then
-    REQUEST_BODY=$(echo "${REQUEST_BODY}" | jq --arg filter "${VIEW_FILTER}" '. + {filter: $filter}')
-  fi
-
+  # リクエストボディの構築（単一 jq 呼び出し）
+  vf_arg="null"
   if [[ -n "${VIEW_VISIBLE_FIELDS}" && "${VIEW_VISIBLE_FIELDS}" != "null" ]]; then
-    REQUEST_BODY=$(echo "${REQUEST_BODY}" | jq --argjson visible_fields "${VIEW_VISIBLE_FIELDS}" '. + {visible_fields: $visible_fields}')
+    vf_arg="${VIEW_VISIBLE_FIELDS}"
   fi
+  REQUEST_BODY=$(jq -n \
+    --arg name "${VIEW_NAME}" \
+    --arg layout "${VIEW_LAYOUT}" \
+    --arg filter "${VIEW_FILTER}" \
+    --argjson visible_fields "${vf_arg}" \
+    '{name: $name, layout: $layout}
+     + (if $filter != "" then {filter: $filter} else {} end)
+     + (if $visible_fields != null then {visible_fields: $visible_fields} else {} end)'
+  )
 
   # REST API で View を作成
   if ! CREATE_RESULT=$(gh api "${VIEWS_API_PATH}" \

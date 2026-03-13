@@ -68,16 +68,15 @@ GRAPHQL
 
 FIELD_RESULT=$(run_graphql "${FIELD_QUERY}" "Project 情報の取得")
 
-# Project ID の取得
-PROJECT_ID=$(echo "${FIELD_RESULT}" | jq -r ".data.${OWNER_QUERY_FIELD}.projectV2.id // empty")
+# Project ID と既存フィールド名を一括取得
+PROJECT_ID=$(echo "${FIELD_RESULT}" | jq -r --arg owner "${OWNER_QUERY_FIELD}" '.data.[($owner)].projectV2.id // empty')
 if [[ -z "${PROJECT_ID}" ]]; then
   echo "::error::Project ID を取得できませんでした。Project #${PROJECT_NUMBER} が存在するか確認してください。"
   exit 1
 fi
 echo "  Project ID: ${PROJECT_ID}"
 
-# 既存フィールド名のリストを取得
-EXISTING_FIELDS=$(echo "${FIELD_RESULT}" | jq -r ".data.${OWNER_QUERY_FIELD}.projectV2.fields.nodes[].name // empty" 2>/dev/null)
+EXISTING_FIELDS=$(echo "${FIELD_RESULT}" | jq -r --arg owner "${OWNER_QUERY_FIELD}" '.data.[($owner)].projectV2.fields.nodes[].name // empty' 2>/dev/null)
 
 echo ""
 echo "既存のフィールド:"
@@ -96,8 +95,7 @@ SKIPPED_COUNT=0
 FAILED_COUNT=0
 
 for i in $(seq 0 $((FIELD_COUNT - 1))); do
-  FIELD_NAME=$(echo "${FIELD_DEFINITIONS}" | jq -r ".[$i].name")
-  FIELD_DATA_TYPE=$(echo "${FIELD_DEFINITIONS}" | jq -r ".[$i].dataType")
+  IFS=$'\t' read -r FIELD_NAME FIELD_DATA_TYPE < <(echo "${FIELD_DEFINITIONS}" | jq -r ".[$i] | [.name, .dataType] | @tsv")
   SAFE_FIELD_NAME=$(sanitize_for_workflow_command "${FIELD_NAME}")
 
   echo ""
