@@ -89,17 +89,21 @@ done
 echo ""
 echo "カスタムフィールドを作成します..."
 
-FIELD_COUNT=$(echo "${FIELD_DEFINITIONS}" | jq -r 'length')
+# ループ前にフィールド定義を1回の jq で事前解析する（Issue #122）
+# 各行: name\tdataType\tsingleSelectOptions(JSON)
+PARSED_FIELDS=$(echo "${FIELD_DEFINITIONS}" | jq -r '.[] | [.name, .dataType, (if .options then ([.options[] | {name: ., color: "GRAY", description: ""}] | tojson) else "" end)] | @tsv')
+FIELD_COUNT=$(echo "${PARSED_FIELDS}" | wc -l | tr -d ' ')
 CREATED_COUNT=0
 SKIPPED_COUNT=0
 FAILED_COUNT=0
 
-for i in $(seq 0 $((FIELD_COUNT - 1))); do
-  IFS=$'\t' read -r FIELD_NAME FIELD_DATA_TYPE < <(echo "${FIELD_DEFINITIONS}" | jq -r ".[$i] | [.name, .dataType] | @tsv")
+FIELD_INDEX=0
+while IFS=$'\t' read -r FIELD_NAME FIELD_DATA_TYPE SINGLE_SELECT_OPTIONS; do
+  FIELD_INDEX=$((FIELD_INDEX + 1))
   SAFE_FIELD_NAME=$(sanitize_for_workflow_command "${FIELD_NAME}")
 
   echo ""
-  echo "[$((i + 1))/${FIELD_COUNT}] フィールド: ${SAFE_FIELD_NAME} (${FIELD_DATA_TYPE})"
+  echo "[${FIELD_INDEX}/${FIELD_COUNT}] フィールド: ${SAFE_FIELD_NAME} (${FIELD_DATA_TYPE})"
 
   # 既存フィールドの重複チェック（フィールド名は固定文字列として比較）
   if echo "${EXISTING_FIELDS}" | grep -Fqx "${FIELD_NAME}"; then
@@ -137,7 +141,6 @@ GRAPHQL
 
   MUTATION_ARGS=(-f "projectId=${PROJECT_ID}" -f "name=${FIELD_NAME}" -f "dataType=${FIELD_DATA_TYPE}")
   if [[ "${FIELD_DATA_TYPE}" == "SINGLE_SELECT" ]]; then
-    SINGLE_SELECT_OPTIONS=$(echo "${FIELD_DEFINITIONS}" | jq -c "[.[$i].options[] | {name: ., color: \"GRAY\", description: \"\"}]")
     MUTATION_ARGS+=(-F "singleSelectOptions=${SINGLE_SELECT_OPTIONS}")
   fi
 
@@ -150,7 +153,7 @@ GRAPHQL
 
   echo "  ::notice::フィールド '${SAFE_FIELD_NAME}' を作成しました。"
   CREATED_COUNT=$((CREATED_COUNT + 1))
-done
+done <<< "${PARSED_FIELDS}"
 
 # --- サマリー出力 ---
 
