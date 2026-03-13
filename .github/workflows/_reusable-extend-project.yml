@@ -32,10 +32,10 @@ jobs:
 
       - name: ステータスカラムを設定
         run: |
-          chmod +x scripts/setup-status-columns.sh
-          bash scripts/setup-status-columns.sh
+          chmod +x scripts/setup-project-status.sh
+          bash scripts/setup-project-status.sh
 
       - name: View を作成
         run: |
-          chmod +x scripts/create-project-views.sh
-          bash scripts/create-project-views.sh
+          chmod +x scripts/setup-project-views.sh
+          bash scripts/setup-project-views.sh

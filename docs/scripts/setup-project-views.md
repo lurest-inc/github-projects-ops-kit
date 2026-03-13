@@ -1,4 +1,4 @@
-# create-project-views.sh
+# setup-project-views.sh
 
 Project に View を自動作成するスクリプトです。
 既に同名の View が存在する場合は自動的にスキップされます。

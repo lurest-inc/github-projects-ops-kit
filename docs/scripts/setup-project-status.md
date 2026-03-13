@@ -1,4 +1,4 @@
-# setup-status-columns.sh
+# setup-project-status.sh
 
 Project の Status フィールドにカラムを設定するスクリプトです。
 既存の Status フィールドに対して、定義済みのカラムを追加・更新します。
@@ -37,7 +37,7 @@ graph LR
 
 ```mermaid
 sequenceDiagram
-    participant Script as setup-status-columns.sh
+    participant Script as setup-project-status.sh
     participant FS as ファイルシステム
     participant GH as GitHub GraphQL API
 

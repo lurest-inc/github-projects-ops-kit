@@ -16,8 +16,8 @@ flowchart TD
     subgraph scripts ["スクリプト層"]
         S1["setup-github-project.sh"]
         S2["setup-project-fields.sh"]
-        S3["setup-status-columns.sh"]
-        S4["create-project-views.sh"]
+        S3["setup-project-status.sh"]
+        S4["setup-project-views.sh"]
         S5["add-items-to-project.sh"]
         S6["export-project-items.sh"]
         SL["lib/common.sh"]
@@ -50,8 +50,8 @@ scripts/
   │   └── common.sh                # 共通関数ライブラリ
   ├── setup-github-project.sh      # Project 作成スクリプト
   ├── setup-project-fields.sh      # カスタムフィールド作成スクリプト
-  ├── setup-status-columns.sh      # ステータスカラム設定スクリプト
-  ├── create-project-views.sh      # View 作成スクリプト
+  ├── setup-project-status.sh      # ステータスカラム設定スクリプト
+  ├── setup-project-views.sh      # View 作成スクリプト
   ├── add-items-to-project.sh      # アイテム一括追加スクリプト
   └── export-project-items.sh      # アイテムエクスポートスクリプト
 ```
@@ -66,8 +66,8 @@ scripts/
   │   └── scripts/setup-github-project.sh   # Project 作成
   └── extend-project ジョブ（_reusable-extend-project.yml）
       ├── scripts/setup-project-fields.sh    # カスタムフィールド作成
-      ├── scripts/setup-status-columns.sh    # ステータスカラム設定
-      └── scripts/create-project-views.sh    # View 作成
+      ├── scripts/setup-project-status.sh    # ステータスカラム設定
+      └── scripts/setup-project-views.sh    # View 作成
 ```
 
 ### ② GitHub Project 拡張
@@ -76,8 +76,8 @@ scripts/
 02-extend-project.yml
   └── extend-project ジョブ（_reusable-extend-project.yml）
       ├── scripts/setup-project-fields.sh    # カスタムフィールド作成
-      ├── scripts/setup-status-columns.sh    # ステータスカラム設定
-      └── scripts/create-project-views.sh    # View 作成
+      ├── scripts/setup-project-status.sh    # ステータスカラム設定
+      └── scripts/setup-project-views.sh    # View 作成
 ```
 
 ### ③ Issue/PR 一括紐付け
@@ -103,7 +103,7 @@ scripts/
 |-----------|------|
 | [setup-github-project.sh](scripts/setup-github-project) | Owner 種別を自動判定し、Project を新規作成する |
 | [setup-project-fields.sh](scripts/setup-project-fields) | Priority・Estimate・Category・Due Date のカスタムフィールドを作成する |
-| [setup-status-columns.sh](scripts/setup-status-columns) | Todo・In Progress・Done のステータスカラムを設定する |
-| [create-project-views.sh](scripts/create-project-views) | Table・Board・Roadmap の 3 種類の View を作成する |
+| [setup-project-status.sh](scripts/setup-project-status) | Todo・In Progress・Done のステータスカラムを設定する |
+| [setup-project-views.sh](scripts/setup-project-views) | Table・Board・Roadmap の 3 種類の View を作成する |
 | [add-items-to-project.sh](scripts/add-items-to-project) | 指定リポジトリの Issue/PR を Project に一括追加する。追加済みアイテムは自動スキップ |
 | [export-project-items.sh](scripts/export-project-items) | 指定 Project の Issue/PR 一覧を取得し、指定形式でエクスポートする |
