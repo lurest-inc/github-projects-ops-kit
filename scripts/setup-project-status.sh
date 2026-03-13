@@ -97,9 +97,8 @@ echo "${STATUS_OPTIONS}" | jq -r '.[] | "  - \(.name) (\(.color))\(if .descripti
 SINGLE_SELECT_OPTIONS=$(echo "${STATUS_OPTIONS}" | jq -c '[.[] | {name: .name, color: .color, description: (.description // "")}]')
 
 UPDATE_MUTATION=$(cat <<'GRAPHQL'
-mutation($projectId: ID!, $fieldId: ID!, $singleSelectOptions: [ProjectV2SingleSelectFieldOptionInput!]!) {
+mutation($fieldId: ID!, $singleSelectOptions: [ProjectV2SingleSelectFieldOptionInput!]!) {
   updateProjectV2Field(input: {
-    projectId: $projectId
     fieldId: $fieldId
     singleSelectOptions: $singleSelectOptions
   }) {
@@ -121,7 +120,6 @@ GRAPHQL
 )
 
 UPDATE_RESULT=$(run_graphql "${UPDATE_MUTATION}" "ステータスカラムの更新" \
-  -f "projectId=${PROJECT_ID}" \
   -f "fieldId=${STATUS_FIELD_ID}" \
   -F "singleSelectOptions=${SINGLE_SELECT_OPTIONS}")
 
