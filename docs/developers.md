@@ -122,7 +122,7 @@ scripts/
 | スクリプト | 概要 |
 |-----------|------|
 | [setup-github-project.sh](scripts/setup-github-project) | Owner 種別を自動判定し、Project を新規作成する |
-| [setup-project-fields.sh](scripts/setup-project-fields) | Priority・Estimate・Category・Due Date のカスタムフィールドを作成する |
+| [setup-project-fields.sh](scripts/setup-project-fields) | 見積もり工数・開始予定・終了予定・実績工数・開始実績・終了実績・終了期日・依頼元 のカスタムフィールドを作成する |
 | [setup-project-status.sh](scripts/setup-project-status) | Todo・In Progress・Done のステータスカラムを設定する |
 | [setup-project-views.sh](scripts/setup-project-views) | Table・Board・Roadmap の 3 種類の View を作成する |
 | [add-items-to-project.sh](scripts/add-items-to-project) | 指定リポジトリの Issue/PR を Project に一括追加する。追加済みアイテムは自動スキップ |

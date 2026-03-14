@@ -18,35 +18,27 @@ Project にカスタムフィールドを自動作成するスクリプトです
 
 | フィールド名 | データ型 | 選択肢 |
 |-------------|---------|--------|
-| Priority | SINGLE_SELECT | P0, P1, P2, P3 |
-| Estimate | SINGLE_SELECT | XS, S, M, L, XL |
-| Category | SINGLE_SELECT | Bug, Feature, Chore, Spike |
-| Due Date | DATE | - |
+| 見積もり工数(h) | NUMBER | - |
+| 開始予定 | DATE | - |
+| 終了予定 | DATE | - |
+| 実績工数(h) | NUMBER | - |
+| 開始実績 | DATE | - |
+| 終了実績 | DATE | - |
+| 終了期日 | DATE | - |
+| 依頼元 | TEXT | - |
 
 ## フィールド構成図
 
 ```mermaid
 graph TD
-    Project["Project"] --> Priority["Priority\n(SINGLE_SELECT)"]
-    Project --> Estimate["Estimate\n(SINGLE_SELECT)"]
-    Project --> Category["Category\n(SINGLE_SELECT)"]
-    Project --> DueDate["Due Date\n(DATE)"]
-
-    Priority --> P0["P0"]
-    Priority --> P1["P1"]
-    Priority --> P2["P2"]
-    Priority --> P3["P3"]
-
-    Estimate --> XS["XS"]
-    Estimate --> S["S"]
-    Estimate --> M["M"]
-    Estimate --> L["L"]
-    Estimate --> XL["XL"]
-
-    Category --> Bug["Bug"]
-    Category --> Feature["Feature"]
-    Category --> Chore["Chore"]
-    Category --> Spike["Spike"]
+    Project["Project"] --> EstimateHours["見積もり工数(h)\n(NUMBER)"]
+    Project --> StartPlanned["開始予定\n(DATE)"]
+    Project --> EndPlanned["終了予定\n(DATE)"]
+    Project --> ActualHours["実績工数(h)\n(NUMBER)"]
+    Project --> StartActual["開始実績\n(DATE)"]
+    Project --> EndActual["終了実績\n(DATE)"]
+    Project --> Deadline["終了期日\n(DATE)"]
+    Project --> Requester["依頼元\n(TEXT)"]
 ```
 
 ## 処理フロー
@@ -85,7 +77,7 @@ flowchart TD
 | フィールド定義ファイル読み込み | `scripts/config/field-definitions.json` からフィールド定義を読み込み | `cat` |
 | 既存フィールド取得 | GraphQL クエリで Project ID と全フィールド（名前・データ型・選択肢）を一括取得 | `gh api graphql` — `projectV2.fields(first: 100)` |
 | 重複チェック | 既存フィールド名リストと定義済みフィールド名を `grep -Fqx` で完全一致比較 | — |
-| フィールド作成 | `SINGLE_SELECT` の場合は `singleSelectOptions` で選択肢を付与して作成 | `gh api graphql` — `createProjectV2Field` mutation |
+| フィールド作成 | データ型に応じてフィールドを作成（`SINGLE_SELECT` の場合は `singleSelectOptions` で選択肢を付与） | `gh api graphql` — `createProjectV2Field` mutation |
 | サマリー出力 | 作成・スキップ・失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
 
 ## API リファレンス

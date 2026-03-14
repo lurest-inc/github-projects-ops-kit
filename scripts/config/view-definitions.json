@@ -1,5 +1,17 @@
 [
-  {"name": "Table", "layout": "table", "filter": "is:open"},
-  {"name": "Board", "layout": "board", "filter": "is:open is:issue"},
-  {"name": "Roadmap", "layout": "roadmap", "filter": "is:open"}
+  {
+    "name": "Table",
+    "layout": "table",
+    "filter": "is:open"
+  },
+  {
+    "name": "Board",
+    "layout": "board",
+    "filter": "is:open is:issue"
+  },
+  {
+    "name": "Roadmap",
+    "layout": "roadmap",
+    "filter": "is:open"
+  }
 ]
