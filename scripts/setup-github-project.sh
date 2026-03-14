@@ -32,7 +32,7 @@ detect_owner_type
 
 if [[ "${OWNER_TYPE}" == "User" ]]; then
   echo ""
-  echo "個人アカウントとして検出されました。"
+  echo "個人用アカウントとして検出されました。"
   echo "必要な PAT 権限: Account permissions > Projects > Read and write"
 elif [[ "${OWNER_TYPE}" == "Organization" ]]; then
   echo ""
