@@ -27,11 +27,13 @@ flowchart TD
     E --> F{"ITEM_TYPE に\nIssue を含む?"}
     F -- "Yes" --> G["fetch_and_add_items\n（Issue）"]
     F -- "No" --> H{"ITEM_TYPE に\nPR を含む?"}
-    G --> H
+    G --> M
+    V --> H
 
     H -- "Yes" --> I["fetch_and_add_items\n（PR）"]
     H -- "No" --> J["サマリー出力"]
-    I --> J
+    I --> M
+    V --> J
     J --> K["完了"]
 
     subgraph L["fetch_and_add_items 関数"]
