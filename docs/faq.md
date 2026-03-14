@@ -127,7 +127,9 @@ graph LR
 | `read:org` | ①②③④ |
 | `repo`（または `public_repo`） | ③（対象リポジトリが private の場合は `repo`） |
 
-> **Note:** Classic token で `read:org` が不足していると、`gh project item-add` 実行時に `unknown owner type` エラーが発生します。個人用アカウント・Organization を問わず、Project を操作するには `read:org` スコープが必要です。
+> **Note:** Classic token では、個人用アカウント・Organization を問わず `read:org` スコープが必要です。Organization オーナーの場合、`read:org` が不足していると `gh project` サブコマンド実行時に `unknown owner type` エラーが発生します。
+>
+> また、個人用アカウントオーナーの場合、`gh project field-create` が gh CLI v2.88.1 で `unknown owner type` エラーを起こす既知のバグがあります（[#119](https://github.com/mabubu0203/github-projects-starter-kit/issues/119)、本リポジトリでは GraphQL API による回避策を適用済み）。
 
 </details>
 
@@ -153,7 +155,7 @@ graph LR
 | `read:org` | ①②③④ |
 | `repo`（または `public_repo`） | ③（対象リポジトリが private の場合は `repo`） |
 
-> **Note:** Classic token で `read:org` が不足していると、`gh project item-add` 実行時に `unknown owner type` エラーが発生します。個人用アカウント・Organization を問わず、Project を操作するには `read:org` スコープが必要です。
+> **Note:** Classic token では、個人用アカウント・Organization を問わず `read:org` スコープが必要です。Organization オーナーの場合、`read:org` が不足していると `gh project` サブコマンド実行時に `unknown owner type` エラーが発生します。
 
 </details>
 
