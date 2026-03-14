@@ -30,7 +30,7 @@ cd github-projects-starter-kit
 
 GitHub の [Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens) から PAT を作成します。
 
-必要な権限の詳細は [FAQ > Q5. PAT にはどの権限が必要ですか？](faq#q5-pat-にはどの権限が必要ですか) を参照してください。Fine-grained token の制約事項については [Q7](faq#q7-fine-grained-token-の制約事項はありますか) も合わせてご確認ください。
+必要な権限の詳細は [FAQ > Q1. PAT にはどの権限が必要ですか？](faq#q1-pat-にはどの権限が必要ですか) を参照してください。Fine-grained token の制約事項については [Q3](faq#q3-fine-grained-token-の制約事項はありますか) も合わせてご確認ください。
 
 ## 3. Secrets を設定する
 
@@ -51,7 +51,7 @@ gh api repos/<owner>/github-projects-starter-kit/actions/permissions \
   --field allowed_actions="all"
 ```
 
-> **Note:** 詳しくは [FAQ > Q8. フォーク後に GitHub Actions が動きません](faq#q8-フォーク後に-github-actions-が動きません) を参照してください。
+> **Note:** 詳しくは [FAQ > Q4. フォーク後に GitHub Actions が動きません](faq#q4-フォーク後に-github-actions-が動きません) を参照してください。
 
 ## 5. ワークフローを実行する
 
