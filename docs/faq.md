@@ -9,7 +9,7 @@
 ワークフローごとに必要な権限が異なります。アカウントタイプとトークンタイプの組み合わせに応じて、以下の該当パターンを確認してください。
 
 <details>
-<summary>個人用アカウント × Fine-grained token（ここをクリック→）</summary>
+<summary>（ここをクリック）個人用アカウント × Fine-grained token</summary>
 
 <table>
 <thead>
@@ -29,7 +29,7 @@
 </details>
 
 <details>
-<summary>個人用アカウント × Classic token（ここをクリック→）</summary>
+<summary>（ここをクリック）個人用アカウント × Classic token</summary>
 
 <table>
 <thead>
@@ -51,7 +51,7 @@
 </details>
 
 <details>
-<summary>Organization × Fine-grained token（ここをクリック→）</summary>
+<summary>（ここをクリック）Organization × Fine-grained token</summary>
 
 <table>
 <thead>
@@ -71,7 +71,7 @@
 </details>
 
 <details>
-<summary>Organization × Classic token（ここをクリック→）</summary>
+<summary>（ここをクリック）Organization × Classic token</summary>
 
 <table>
 <thead>
@@ -145,7 +145,7 @@ GitHub Project の URL 末尾の数字が `project_number` です。
 **例:** `https://github.com/users/octocat/projects/3` → `project_number` は **3**
 
 <details>
-<summary><code>project_number</code> の確認例（スクリーンショット）を表示（ここをクリック→）</summary>
+<summary>（ここをクリック）<code>project_number</code> の確認例（スクリーンショット）を表示</summary>
 
 <blockquote>
 <strong>参考画像:</strong> Organization の Projects 一覧画面では、各プロジェクト名の下に <code>#番号</code> が表示されます。
@@ -172,7 +172,7 @@ gh project list
 **例:** `https://github.com/octocat/my-app` → `target_repo` は **octocat/my-app**
 
 <details>
-<summary><code>target_repo</code> の確認例（スクリーンショット）を表示（ここをクリック→）</summary>
+<summary>（ここをクリック）<code>target_repo</code> の確認例（スクリーンショット）を表示</summary>
 
 <blockquote>
 <strong>参考画像:</strong> リポジトリページのヘッダーに <code>owner/repo</code> 形式で表示されています。
