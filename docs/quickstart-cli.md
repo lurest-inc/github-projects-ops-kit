@@ -2,7 +2,7 @@
 
 `gh` CLI を使ったセットアップ手順です。PAT 作成を除き、すべての操作をターミナルから実行できます。
 
-> **Tip:** このページのコマンド例は、Claude Code などの **生成AIへのプロンプトヒント** としても活用できます。コマンド例をコンテキストとして渡すことで、セットアップ作業の自動化を支援できます。
+> **Tip:** Claude Code などの **生成AIへのプロンプト** として、「[github-projects-starter-kit](https://mabubu0203.github.io/github-projects-starter-kit/)を[クイックスタート（コマンド版）](https://mabubu0203.github.io/github-projects-starter-kit/quickstart-cli)を参照しながら自分のアカウント上でセットアップして」と命じることで、セットアップ作業の自動化を支援できます。
 
 ```mermaid
 flowchart LR

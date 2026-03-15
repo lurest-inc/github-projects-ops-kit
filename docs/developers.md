@@ -121,9 +121,9 @@ scripts/
 
 | スクリプト | 概要 |
 |-----------|------|
-| [setup-github-project.sh](scripts/setup-github-project) | Owner 種別を自動判定し、Project を新規作成する |
-| [setup-project-fields.sh](scripts/setup-project-fields) | 見積もり工数・開始予定・終了予定・実績工数・開始実績・終了実績・終了期日・依頼元 のカスタムフィールドを作成する |
-| [setup-project-status.sh](scripts/setup-project-status) | Todo・In Progress・Done のステータスカラムを設定する |
-| [setup-project-views.sh](scripts/setup-project-views) | Table・Board・Roadmap の 3 種類の View を作成する |
+| [setup-github-project.sh](scripts/setup-github-project) | フォーク先の個人用アカウント/Organizationに `Project` を新規作成する |
+| [setup-project-fields.sh](scripts/setup-project-fields) | `見積もり工数(h)`・`開始予定`・`終了予定`・`実績工数(h)`・`開始実績`・`終了実績`・`終了期日`・`依頼元` のカスタムフィールドを作成する |
+| [setup-project-status.sh](scripts/setup-project-status) | `Backlog`・`Todo`・`In Progress`・`In Review`・`Done` のステータスカラムを設定する |
+| [setup-project-views.sh](scripts/setup-project-views) | `Table`・`Board`・`Roadmap` の 3 種類の View を作成する |
 | [add-items-to-project.sh](scripts/add-items-to-project) | 指定リポジトリの Issue/PR を Project に一括追加する。追加済みアイテムは自動スキップ |
 | [export-project-items.sh](scripts/export-project-items) | 指定 Project の Issue/PR 一覧を取得し、指定形式でエクスポートする |
