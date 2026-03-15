@@ -1,5 +1,8 @@
 # ② GitHub Project 拡張
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 既存の `Project` にカスタムフィールド・ステータスカラム・`View` を追加します。
 [① GitHub Project 新規作成](01-create-project) を実行していない既存 `Project` 向けです。
 

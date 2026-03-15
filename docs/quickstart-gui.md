@@ -1,5 +1,8 @@
 # クイックスタート（GUI版）
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 GitHub の Web UI を使ったセットアップ手順です。
 
 ```mermaid

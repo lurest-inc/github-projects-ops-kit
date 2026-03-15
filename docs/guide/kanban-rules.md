@@ -1,5 +1,8 @@
 # 運用ルール
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 本スターターキットで構築する GitHub Projects の運用ルールについて説明します。
 
 ---

@@ -1,5 +1,8 @@
 # setup-github-project.sh
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 GitHub Projects V2 の `Project` を新規作成するスクリプトです。
 Owner の種別（`Organization` / `User`）を自動判定し、適切な GraphQL ミューテーションで `Project` を作成します。
 

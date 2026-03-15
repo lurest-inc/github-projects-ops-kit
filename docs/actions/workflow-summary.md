@@ -1,5 +1,8 @@
 # workflow-summary アクション
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 ワークフローの実行結果（成功・失敗）に応じたサマリーレポートを GitHub Actions の Job Summary に出力する複合アクションです。
 全4ワークフローの終了時ジョブで共通的に使用されています。
 

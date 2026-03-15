@@ -1,5 +1,8 @@
 # GitHub Projects Starter Kit ドキュメント
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 GitHub Projects の初期セットアップを GitHub Actions で自動実行するための **スターターキット** です。
 
 ---

@@ -1,5 +1,8 @@
 # add-items-to-project.sh
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 リポジトリの `Issue`/`PR` を `Project` に一括追加するスクリプトです。
 既に `Project` に追加済みのアイテムは自動的にスキップされます。
 

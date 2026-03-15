@@ -1,5 +1,8 @@
 # export-project-items.sh
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 指定した GitHub Project に紐づく Issue / Pull Request の一覧を取得し、エクスポートするスクリプトです。
 DraftIssue は出力対象外となります。
 

@@ -1,5 +1,8 @@
 # setup-project-status.sh
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 `Project` の `Status` フィールドにカラムを設定するスクリプトです。
 既存の `Status` フィールドに対して、定義済みのカラムを追加・更新します。
 

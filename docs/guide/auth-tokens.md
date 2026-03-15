@@ -1,5 +1,8 @@
 # 認証・トークンガイド
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 ワークフローを実行するために必要な PAT（Personal Access Token）の権限設定について説明します。
 
 ---

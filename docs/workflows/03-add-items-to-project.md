@@ -1,5 +1,8 @@
 # ③ Issue/PR 一括紐付け
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 リポジトリの `Issue`/`PR` を `Project` に一括追加します。
 
 ## 使い方

@@ -1,5 +1,8 @@
 # setup-project-fields.sh
 
+<!-- START doctoc -->
+<!-- END doctoc -->
+
 `Project` にカスタムフィールドを自動作成するスクリプトです。
 既に同名のフィールドが存在する場合は自動的にスキップされます。
 
