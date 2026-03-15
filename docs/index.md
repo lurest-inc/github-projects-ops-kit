@@ -2,7 +2,11 @@
 
 GitHub Projects の初期セットアップを GitHub Actions で自動実行するための **スターターキット** です。
 
-## クイックスタート
+---
+
+## はじめての方へ
+
+GitHub Projects を使ったプロジェクト管理をすぐに始められます。以下のステップで進めてください。
 
 ```mermaid
 flowchart LR
@@ -12,28 +16,57 @@ flowchart LR
     D --> E["5. ワークフロー実行"]
 ```
 
-セットアップ手順は 2 種類用意しています。お好みの方法をお選びください。
+### GUI で進める方（おすすめ）
 
-- [GUI版（Web UI）](quickstart-gui) — GitHub の画面操作で進める方法
-- [コマンド版（CLI）](quickstart-cli) — `gh` CLI でターミナルから進める方法（生成AIへのヒントとしても活用可能）
+GitHub の画面操作だけでセットアップできます。コマンド操作は不要です。
 
-## ワークフロー一覧
+→ [GUI クイックスタート](quickstart-gui)
 
-| ワークフロー | 説明 | トリガー |
-|------------|------|---------|
-| [① GitHub Project 新規作成](workflows/01-create-project) | `Project` の作成・フィールド・ステータス・View を一括セットアップ | `workflow_dispatch`（手動実行） |
-| [② GitHub Project 拡張](workflows/02-extend-project) | 既存 `Project` にフィールド・ステータス・View を追加 | `workflow_dispatch`（手動実行） |
-| [③ Issue/PR 一括紐付け](workflows/03-add-items-to-project) | リポジトリの `Issue`/`PR` を `Project` に一括追加 | `workflow_dispatch`（手動実行） |
-| [④ Project アイテム エクスポート](workflows/04-export-project-items) | `Project` の `Issue`/`PR` 一覧をエクスポート | `workflow_dispatch`（手動実行） |
+### CLI で進める方（上級者向け）
+
+`gh` CLI を使ってターミナルから操作します。生成 AI へのヒントとしても活用できます。
+
+→ [CLI クイックスタート](quickstart-cli)
+
+---
+
+## やりたいこと別ガイド
+
+| やりたいこと | ワークフロー | 説明 |
+|-------------|-------------|------|
+| 新しく Project を作りたい | [① GitHub Project 新規作成](workflows/01-create-project) | `Project` の作成・フィールド・ステータス・View を一括セットアップ |
+| 既存の Project を整えたい | [② GitHub Project 拡張](workflows/02-extend-project) | 既存 `Project` にフィールド・ステータス・View を追加 |
+| Issue/PR をまとめて取り込みたい | [③ Issue/PR 一括紐付け](workflows/03-add-items-to-project) | リポジトリの `Issue`/`PR` を `Project` に一括追加 |
+| Project の内容を一覧で出したい | [④ Project アイテム エクスポート](workflows/04-export-project-items) | `Project` の `Issue`/`PR` 一覧をエクスポート |
+
+---
+
+## 困ったときは
+
+| 状況 | 参照先 |
+|------|--------|
+| エラーが出る・動かない | [トラブルシューティング](troubleshooting) |
+| よくある質問を確認したい | [FAQ](faq) |
+
+---
+
+## 詳しく知りたい方へ
+
+| トピック | 説明 |
+|---------|------|
+| [認証・トークンガイド](guide/auth-tokens) | PAT の権限設定、Fine-grained / Classic token の選び方 |
+| [入力値ガイド](guide/input-values) | `project_number`・`target_repo` などの確認方法 |
+| [運用ルール](guide/kanban-rules) | カンバンフロー、カスタムフィールド、View 構成 |
+| [用語集](glossary) | GitHub 関連の専門用語の解説 |
+
+---
+
+## 開発者向け
+
+ワークフローの内部構成やスクリプトの詳細については [開発者向けドキュメント](developers) をご参照ください。
+
+---
 
 ## リポジトリ
 
 - GitHub: [mabubu0203/github-projects-starter-kit](https://github.com/mabubu0203/github-projects-starter-kit)
-
-## よくある質問
-
-ワークフローの利用でお困りの際は [FAQ](faq) をご覧ください。
-
-## 開発者へ
-
-ワークフローの内部構成やスクリプトの詳細については [開発者向けドキュメント](developers) をご参照ください。
