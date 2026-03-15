@@ -20,7 +20,7 @@ validate_common_project_env
 
 # --- フィールド定義の読み込み ---
 
-FIELD_DEFINITIONS_FILE="${SCRIPT_DIR}/config/field-definitions.json"
+FIELD_DEFINITIONS_FILE="${SCRIPT_DIR}/config/project-field-definitions.json"
 if [[ ! -f "${FIELD_DEFINITIONS_FILE}" ]]; then
   echo "::error::フィールド定義ファイルが見つかりません: ${FIELD_DEFINITIONS_FILE}"
   exit 1

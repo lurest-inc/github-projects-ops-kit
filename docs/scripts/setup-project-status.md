@@ -16,7 +16,7 @@
 
 ## 📋 設定されるステータスカラム
 
-ステータスカラム定義は `scripts/config/status-options.json` に外部化されています。
+ステータスカラム定義は `scripts/config/project-status-options.json` に外部化されています。
 デフォルトでは以下のカラムが設定されます:
 
 | カラム名 | カラー | 説明 | 用途 |
@@ -33,7 +33,7 @@
 flowchart TD
     A["開始"] --> B["環境変数バリデーション"]
     B --> C["オーナータイプ判定"]
-    C --> D["ステータス定義ファイル読み込み\n（config/status-options.json）"]
+    C --> D["ステータス定義ファイル読み込み\n（config/project-status-options.json）"]
     D --> E["GraphQL で Project ID・\nStatus フィールド ID を一括取得"]
 
     E --> F{"Status フィールド\nが見つかる?"}
@@ -53,7 +53,7 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別 | `gh api users/{owner}` |
-| ステータス定義ファイル読み込み | `scripts/config/status-options.json` からステータスカラム定義を読み込み | `cat` |
+| ステータス定義ファイル読み込み | `scripts/config/project-status-options.json` からステータスカラム定義を読み込み | `cat` |
 | `Status` フィールド取得 | GraphQL クエリで `Project` ID と `Status` フィールド ID を一括取得し、現在のカラム一覧を表示 | `gh api graphql` — `projectV2.fields(first: 100)` |
 | カラム更新 | `singleSelectOptions` に Backlog（GRAY）・Todo（BLUE）・In Progress（YELLOW）・In Review（ORANGE）・Done（GREEN）を指定して一括更新 | `gh api graphql` — `updateProjectV2Field` mutation |
 | サマリー出力 | カラム構成（`Backlog → Todo → In Progress → In Review → Done`）をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |

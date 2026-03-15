@@ -50,9 +50,9 @@ flowchart TD
       └── 04-export-project-items.yml  # ④ Project アイテム エクスポートワークフロー
 scripts/
   ├── config/
-  │   ├── field-definitions.json   # カスタムフィールド定義
-  │   ├── status-options.json      # ステータスカラム定義
-  │   └── view-definitions.json    # View 定義
+  │   ├── project-field-definitions.json   # カスタムフィールド定義
+  │   ├── project-status-options.json      # ステータスカラム定義
+  │   └── project-view-definitions.json    # View 定義
   ├── lib/
   │   └── common.sh                # 共通関数ライブラリ
   ├── setup-github-project.sh      # Project 作成スクリプト

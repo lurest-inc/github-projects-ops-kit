@@ -16,7 +16,7 @@
 
 ## 📋 作成されるフィールド
 
-フィールド定義は `scripts/config/field-definitions.json` に外部化されています。
+フィールド定義は `scripts/config/project-field-definitions.json` に外部化されています。
 デフォルトでは以下のフィールドが作成されます:
 
 | フィールド名 | データ型 | 選択肢 |
@@ -50,7 +50,7 @@ graph TD
 flowchart TD
     A["開始"] --> B["環境変数バリデーション"]
     B --> C["オーナータイプ判定"]
-    C --> D["フィールド定義ファイル読み込み\n（config/field-definitions.json）"]
+    C --> D["フィールド定義ファイル読み込み\n（config/project-field-definitions.json）"]
     D --> E["GraphQL で既存フィールド一覧を取得"]
     E --> F{"取得成功?"}
     F -- "No" --> G["エラー出力"]
@@ -77,7 +77,7 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別し、GraphQL クエリのフィールド名を決定 | `gh api users/{owner}` |
-| フィールド定義ファイル読み込み | `scripts/config/field-definitions.json` からフィールド定義を読み込み | `cat` |
+| フィールド定義ファイル読み込み | `scripts/config/project-field-definitions.json` からフィールド定義を読み込み | `cat` |
 | 既存フィールド取得 | GraphQL クエリで `Project` ID と全フィールド（名前・データ型・選択肢）を一括取得 | `gh api graphql` — `projectV2.fields(first: 100)` |
 | 重複チェック | 既存フィールド名リストと定義済みフィールド名を `grep -Fqx` で完全一致比較 | — |
 | フィールド作成 | データ型に応じてフィールドを作成（`SINGLE_SELECT` の場合は `singleSelectOptions` で選択肢を付与） | `gh api graphql` — `createProjectV2Field` mutation |

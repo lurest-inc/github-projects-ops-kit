@@ -20,7 +20,7 @@ validate_common_project_env
 
 # --- ステータスカラム定義の読み込み ---
 
-STATUS_OPTIONS_FILE="${SCRIPT_DIR}/config/status-options.json"
+STATUS_OPTIONS_FILE="${SCRIPT_DIR}/config/project-status-options.json"
 if [[ ! -f "${STATUS_OPTIONS_FILE}" ]]; then
   echo "::error::ステータスカラム定義ファイルが見つかりません: ${STATUS_OPTIONS_FILE}"
   exit 1

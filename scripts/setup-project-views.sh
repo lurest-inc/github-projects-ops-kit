@@ -20,7 +20,7 @@ validate_common_project_env
 
 # --- View 定義の読み込み ---
 
-VIEW_DEFINITIONS_FILE="${SCRIPT_DIR}/config/view-definitions.json"
+VIEW_DEFINITIONS_FILE="${SCRIPT_DIR}/config/project-view-definitions.json"
 if [[ ! -f "${VIEW_DEFINITIONS_FILE}" ]]; then
   echo "::error::View 定義ファイルが見つかりません: ${VIEW_DEFINITIONS_FILE}"
   exit 1

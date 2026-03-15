@@ -16,7 +16,7 @@
 
 ## 📋 作成される View
 
-`View` 定義は `scripts/config/view-definitions.json` に外部化されています。
+`View` 定義は `scripts/config/project-view-definitions.json` に外部化されています。
 デフォルトでは以下の `View` が作成されます:
 
 - `Table`（`table`）— フィルタ: `is:open`
@@ -25,7 +25,7 @@
 
 ### VIEW_DEFINITIONS の拡張フォーマット
 
-`view-definitions.json` は以下のパラメータをサポートします:
+`project-view-definitions.json` は以下のパラメータをサポートします:
 
 | パラメータ | 型 | 必須 | 説明 |
 |-----------|---|:----:|------|
@@ -65,7 +65,7 @@
 flowchart TD
     A["開始"] --> B["環境変数バリデーション"]
     B --> C["オーナータイプ判定"]
-    C --> D["View 定義ファイル読み込み\n（config/view-definitions.json）"]
+    C --> D["View 定義ファイル読み込み\n（config/project-view-definitions.json）"]
     D --> E["GraphQL API で既存 View 一覧を取得\n（ページネーション対応）"]
     E --> F{"取得成功?"}
     F -- "No" --> G["エラー出力"]
@@ -92,7 +92,7 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別 | `gh api users/{owner}` |
-| `View` 定義ファイル読み込み | `scripts/config/view-definitions.json` から `View` 定義を読み込み | `cat` |
+| `View` 定義ファイル読み込み | `scripts/config/project-view-definitions.json` から `View` 定義を読み込み | `cat` |
 | 既存 `View` 取得 | GraphQL API で `Project` の全 `View` 名をページネーション付きで取得 | `gh api graphql` (`projectV2.views`) |
 | REST API パス構築 | オーナータイプに応じて `orgs/{org}/projectsV2/{number}/views` または `users/{username}/projectsV2/{number}/views` を構築 | — |
 | 重複チェック | 既存 `View` 名リストと定義済み `View` 名を `grep -Fqx` で完全一致比較 | — |
