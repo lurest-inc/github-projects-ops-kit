@@ -1,6 +1,6 @@
 # クイックスタート（コマンド版）
 
-`gh` CLI を使ったセットアップ手順です。PAT 作成を除き、すべての操作をターミナルから実行できます。
+`gh` CLI を使ったセットアップ手順です。`PAT` 作成を除き、すべての操作をターミナルから実行できます。
 
 > **Tip:** Claude Code などの **生成AIへのプロンプト** として、「[github-projects-starter-kit](https://mabubu0203.github.io/github-projects-starter-kit/)の[クイックスタート（コマンド版）](https://mabubu0203.github.io/github-projects-starter-kit/quickstart-cli)を参照しながら自分のアカウント上でセットアップして」と命じることで、セットアップ作業の自動化を支援できます。
 
@@ -26,9 +26,9 @@ cd github-projects-starter-kit
 
 ## 2. PAT を作成する
 
-> **Note:** PAT の作成は GitHub API / CLI では実行できないため、Web UI から作成してください。
+> **Note:** `PAT` の作成は GitHub API / CLI では実行できないため、Web UI から作成してください。
 
-GitHub の [Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens) から PAT を作成します。
+GitHub の [Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens) から `PAT` を作成します。
 
 必要な権限の詳細は [FAQ > Q1. PAT にはどの権限が必要ですか？](faq#q1-pat-にはどの権限が必要ですか) を参照してください。Fine-grained token の制約事項については [Q3](faq#q3-fine-grained-token-の制約事項はありますか) も合わせてご確認ください。
 
@@ -38,7 +38,7 @@ GitHub の [Settings > Developer settings > Personal access tokens](https://gith
 gh secret set PROJECT_PAT --repo <owner>/github-projects-starter-kit
 ```
 
-実行するとプロンプトが表示されるので、作成した PAT を入力してください。
+実行するとプロンプトが表示されるので、作成した `PAT` を入力してください。
 
 ## 4. GitHub Actions を有効化する
 

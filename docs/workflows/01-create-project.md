@@ -1,6 +1,6 @@
 # ① GitHub Project 新規作成
 
-新しい Project を作成し、カスタムフィールド・ステータスカラム・View を一括でセットアップします。
+新しい `Project` を作成し、カスタムフィールド・ステータスカラム・`View` を一括でセットアップします。
 
 ## 使い方
 
@@ -13,8 +13,8 @@
 
 | パラメータ | 説明 | 必須 | タイプ | 例 |
 |------------|------|:----:|--------|-----|
-| `project_title` | Project のタイトル | ✅ | `string` | `My Project Board` |
-| `visibility` | Project の公開範囲 | ✅ | `choice` | `PRIVATE`（デフォルト） |
+| `project_title` | `Project` のタイトル | ✅ | `string` | `My Project Board` |
+| `visibility` | `Project` の公開範囲 | ✅ | `choice` | `PRIVATE`（デフォルト） |
 
 ### 公開範囲
 

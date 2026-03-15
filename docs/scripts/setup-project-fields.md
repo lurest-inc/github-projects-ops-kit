@@ -1,6 +1,6 @@
 # setup-project-fields.sh
 
-Project にカスタムフィールドを自動作成するスクリプトです。
+`Project` にカスタムフィールドを自動作成するスクリプトです。
 既に同名のフィールドが存在する場合は自動的にスキップされます。
 
 ## 環境変数
@@ -8,8 +8,8 @@ Project にカスタムフィールドを自動作成するスクリプトです
 | 環境変数 | 説明 | 必須 |
 |----------|------|:----:|
 | `GH_TOKEN` | GitHub PAT（Projects 操作権限が必要） | ✅ |
-| `PROJECT_OWNER` | Project の所有者 | ✅ |
-| `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
+| `PROJECT_OWNER` | `Project` の所有者 | ✅ |
+| `PROJECT_NUMBER` | 対象 `Project` の Number（数値） | ✅ |
 
 ## 作成されるフィールド
 
@@ -73,9 +73,9 @@ flowchart TD
 
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
-| オーナータイプ判定 | `detect_owner_type` で Organization / User を判別し、GraphQL クエリのフィールド名を決定 | `gh api users/{owner}` |
+| オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別し、GraphQL クエリのフィールド名を決定 | `gh api users/{owner}` |
 | フィールド定義ファイル読み込み | `scripts/config/field-definitions.json` からフィールド定義を読み込み | `cat` |
-| 既存フィールド取得 | GraphQL クエリで Project ID と全フィールド（名前・データ型・選択肢）を一括取得 | `gh api graphql` — `projectV2.fields(first: 100)` |
+| 既存フィールド取得 | GraphQL クエリで `Project` ID と全フィールド（名前・データ型・選択肢）を一括取得 | `gh api graphql` — `projectV2.fields(first: 100)` |
 | 重複チェック | 既存フィールド名リストと定義済みフィールド名を `grep -Fqx` で完全一致比較 | — |
 | フィールド作成 | データ型に応じてフィールドを作成（`SINGLE_SELECT` の場合は `singleSelectOptions` で選択肢を付与） | `gh api graphql` — `createProjectV2Field` mutation |
 | サマリー出力 | 作成・スキップ・失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |

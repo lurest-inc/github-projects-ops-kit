@@ -1,15 +1,15 @@
 # setup-project-status.sh
 
-Project の Status フィールドにカラムを設定するスクリプトです。
-既存の Status フィールドに対して、定義済みのカラムを追加・更新します。
+`Project` の `Status` フィールドにカラムを設定するスクリプトです。
+既存の `Status` フィールドに対して、定義済みのカラムを追加・更新します。
 
 ## 環境変数
 
 | 環境変数 | 説明 | 必須 |
 |----------|------|:----:|
 | `GH_TOKEN` | GitHub PAT（Projects 操作権限が必要） | ✅ |
-| `PROJECT_OWNER` | Project の所有者 | ✅ |
-| `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
+| `PROJECT_OWNER` | `Project` の所有者 | ✅ |
+| `PROJECT_NUMBER` | 対象 `Project` の Number（数値） | ✅ |
 
 ## 設定されるステータスカラム
 
@@ -49,9 +49,9 @@ flowchart TD
 
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
-| オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
+| オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別 | `gh api users/{owner}` |
 | ステータス定義ファイル読み込み | `scripts/config/status-options.json` からステータスカラム定義を読み込み | `cat` |
-| Status フィールド取得 | GraphQL クエリで Project ID と Status フィールド ID を一括取得し、現在のカラム一覧を表示 | `gh api graphql` — `projectV2.fields(first: 100)` |
+| `Status` フィールド取得 | GraphQL クエリで `Project` ID と `Status` フィールド ID を一括取得し、現在のカラム一覧を表示 | `gh api graphql` — `projectV2.fields(first: 100)` |
 | カラム更新 | `singleSelectOptions` に Backlog（GRAY）・Todo（BLUE）・In Progress（YELLOW）・In Review（ORANGE）・Done（GREEN）を指定して一括更新 | `gh api graphql` — `updateProjectV2Field` mutation |
 | サマリー出力 | カラム構成（`Backlog → Todo → In Progress → In Review → Done`）をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
 
@@ -59,7 +59,7 @@ flowchart TD
 
 | API / コマンド | 用途 | リファレンス |
 |---------------|------|-------------|
-| `ProjectV2SingleSelectField` (GraphQL) | Status フィールド情報の取得 | [ProjectV2SingleSelectField](https://docs.github.com/en/graphql/reference/objects#projectv2singleselectfield) |
+| `ProjectV2SingleSelectField` (GraphQL) | `Status` フィールド情報の取得 | [ProjectV2SingleSelectField](https://docs.github.com/en/graphql/reference/objects#projectv2singleselectfield) |
 | `updateProjectV2Field` (GraphQL Mutation) | ステータスカラムの一括更新 | [updateProjectV2Field](https://docs.github.com/en/graphql/reference/mutations#updateprojectv2field) |
 
 ### API バージョン要件
@@ -70,7 +70,7 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 
 | パラメータ | 現在の値 | 備考 |
 |-----------|---------|------|
-| `fields(first: N)` | 100 | Status フィールド検索用（ビルトイン＋カスタムフィールドを取得） |
+| `fields(first: N)` | 100 | `Status` フィールド検索用（ビルトイン＋カスタムフィールドを取得） |
 
 ## 使用ワークフロー
 

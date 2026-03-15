@@ -21,10 +21,10 @@ flowchart LR
 
 | ワークフロー | 説明 | トリガー |
 |------------|------|---------|
-| [① GitHub Project 新規作成](workflows/01-create-project) | Project の作成・フィールド・ステータス・View を一括セットアップ | `workflow_dispatch`（手動実行） |
-| [② GitHub Project 拡張](workflows/02-extend-project) | 既存 Project にフィールド・ステータス・View を追加 | `workflow_dispatch`（手動実行） |
-| [③ Issue/PR 一括紐付け](workflows/03-add-items-to-project) | リポジトリの Issue/PR を Project に一括追加 | `workflow_dispatch`（手動実行） |
-| [④ Project アイテム エクスポート](workflows/04-export-project-items) | Project の Issue/PR 一覧をエクスポート | `workflow_dispatch`（手動実行） |
+| [① GitHub Project 新規作成](workflows/01-create-project) | `Project` の作成・フィールド・ステータス・View を一括セットアップ | `workflow_dispatch`（手動実行） |
+| [② GitHub Project 拡張](workflows/02-extend-project) | 既存 `Project` にフィールド・ステータス・View を追加 | `workflow_dispatch`（手動実行） |
+| [③ Issue/PR 一括紐付け](workflows/03-add-items-to-project) | リポジトリの `Issue`/`PR` を `Project` に一括追加 | `workflow_dispatch`（手動実行） |
+| [④ Project アイテム エクスポート](workflows/04-export-project-items) | `Project` の `Issue`/`PR` 一覧をエクスポート | `workflow_dispatch`（手動実行） |
 
 ## リポジトリ
 

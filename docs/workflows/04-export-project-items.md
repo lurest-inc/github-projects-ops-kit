@@ -1,6 +1,6 @@
 # ④ Project アイテム エクスポート
 
-指定した GitHub Project に紐づく Issue / Pull Request の一覧を取得し、エクスポートします。
+指定した GitHub `Project` に紐づく `Issue` / `Pull Request` の一覧を取得し、エクスポートします。
 
 ## 使い方
 
@@ -13,7 +13,7 @@
 
 | パラメータ | 説明 | 必須 | タイプ | 例 |
 |------------|------|:----:|--------|-----|
-| `project_number` | 対象 Project の Number | ✅ | `number` | `1` |
+| `project_number` | 対象 `Project` の Number | ✅ | `number` | `1` |
 | `output_format` | 出力形式 | ✅ | `choice` | `markdown`（デフォルト） |
 | `item_type` | 対象アイテムの種別 | ✅ | `choice` | `all`（デフォルト） |
 | `item_state` | 取得するアイテムの状態 | ✅ | `choice` | `all`（デフォルト） |
@@ -22,9 +22,9 @@
 
 | 選択肢 | 説明 |
 |--------|------|
-| `all` | Issue と Pull Request の両方 |
-| `issues` | Issue のみ |
-| `prs` | Pull Request のみ |
+| `all` | `Issue` と `Pull Request` の両方 |
+| `issues` | `Issue` のみ |
+| `prs` | `Pull Request` のみ |
 
 ### アイテム状態
 
@@ -49,7 +49,7 @@
 
 | 項目 | 説明 |
 |------|------|
-| type | 種別（Issue / PullRequest） |
+| type | 種別（`Issue` / `PullRequest`） |
 | number | 番号 |
 | title | タイトル |
 | url | URL |
@@ -67,7 +67,7 @@
 
 | 出力形式 | 並び順 |
 |----------|--------|
-| `markdown` | Issue → Pull Request の順にセクション分けして出力。各セクション内は API 返却順 |
+| `markdown` | `Issue` → `Pull Request` の順にセクション分けして出力。各セクション内は API 返却順 |
 | `csv` | API 返却順（種別の分離なし） |
 | `tsv` | API 返却順（種別の分離なし） |
 | `json` | API 返却順（種別の分離なし） |

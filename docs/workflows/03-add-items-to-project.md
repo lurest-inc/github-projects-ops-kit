@@ -1,6 +1,6 @@
 # ③ Issue/PR 一括紐付け
 
-リポジトリの Issue/PR を Project に一括追加します。
+リポジトリの `Issue`/`PR` を `Project` に一括追加します。
 
 ## 使い方
 
@@ -13,7 +13,7 @@
 
 | パラメータ | 説明 | 必須 | タイプ | 例 |
 |------------|------|:----:|--------|-----|
-| `project_number` | 対象 Project の Number | ✅ | `number` | `1` |
+| `project_number` | 対象 `Project` の Number | ✅ | `number` | `1` |
 | `target_repo` | 対象リポジトリ（owner/repo 形式） | ✅ | `string` | `myorg/myrepo` |
 | `item_type` | 対象アイテムの種別 | ✅ | `choice` | `all`（デフォルト） |
 | `item_state` | 取得するアイテムの状態 | ✅ | `choice` | `open`（デフォルト） |
@@ -23,9 +23,9 @@
 
 | 選択肢 | 説明 |
 |--------|------|
-| `all` | Issue と Pull Request の両方 |
-| `issues` | Issue のみ |
-| `prs` | Pull Request のみ |
+| `all` | `Issue` と `Pull Request` の両方 |
+| `issues` | `Issue` のみ |
+| `prs` | `Pull Request` のみ |
 
 ### アイテム状態
 
@@ -35,7 +35,7 @@
 | `closed` | クローズ状態のもの（CLOSED + MERGED を含む） |
 | `all` | すべての状態 |
 
-> **Note:** 既に Project に追加済みのアイテムは自動的にスキップされます。
+> **Note:** 既に `Project` に追加済みのアイテムは自動的にスキップされます。
 
 ## 処理フロー
 

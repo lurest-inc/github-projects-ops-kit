@@ -94,24 +94,24 @@
 
 ## Q2. Fine-grained token と Classic token のどちらを使うべきですか？
 
-**Fine-grained token の使用を推奨します。** 理由は以下のとおりです。
+**`Fine-grained token` の使用を推奨します。** 理由は以下のとおりです。
 
 - **最小権限の原則**: 必要な権限だけを細かく設定できるため、セキュリティリスクを最小限に抑えられる
 - **リポジトリ単位のアクセス制御**: アクセスできるリポジトリを明示的に指定できるため、意図しないリポジトリへの操作を防止できる
 - **GitHub の推奨**: GitHub が今後推奨しているトークン形式であり、長期的なサポートが期待できる
 
-> **参考:** Fine-grained token の制約事項については [Q3](#q3-fine-grained-token-の制約事項はありますか) を参照してください。
+> **参考:** `Fine-grained token` の制約事項については [Q3](#q3-fine-grained-token-の制約事項はありますか) を参照してください。
 
 ---
 
 ## Q3. Fine-grained token の制約事項はありますか？
 
-Fine-grained token には以下の制約があります。
+`Fine-grained token` には以下の制約があります。
 
-- **Organization の複数指定不可**: Fine-grained token はリソースオーナーとして 1 つの Organization（または個人用アカウント）しか指定できない。複数 Organization のリポジトリを対象にする場合は、Organization ごとに PAT を作成するか Classic token を使用する
-- **個人用アカウントと Organization の横断不可**: 個人用アカウント所有リポジトリと Organization 所有リポジトリを 1 つの Fine-grained token で横断できない
+- **Organization の複数指定不可**: `Fine-grained token` はリソースオーナーとして 1 つの Organization（または個人用アカウント）しか指定できない。複数 Organization のリポジトリを対象にする場合は、Organization ごとに `PAT` を作成するか `Classic token` を使用する
+- **個人用アカウントと Organization の横断不可**: 個人用アカウント所有リポジトリと Organization 所有リポジトリを 1 つの `Fine-grained token` で横断できない
 
-> **注意:** 上記制約により、ワークフロー ③ で異なる Organization のリポジトリを `target_repo` に指定する場合は、Classic token の使用を推奨します。
+> **注意:** 上記制約により、ワークフロー ③ で異なる Organization のリポジトリを `target_repo` に指定する場合は、`Classic token` の使用を推奨します。
 
 ---
 
