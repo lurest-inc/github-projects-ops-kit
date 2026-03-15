@@ -1,0 +1,61 @@
+name: "⑤ 🏷️ Issue ラベル一括追加"
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_repo:
+        description: "対象リポジトリ（owner/repo 形式）"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  setup-repository-labels:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.PROJECT_PAT }}
+      TARGET_REPO: ${{ inputs.target_repo }}
+    # 前提: ubuntu-latest には gh (GitHub CLI) と jq がプリインストール済み
+    # スクリプト内の require_command チェックはローカル実行時の UX 向上目的で残している
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: ラベルを一括作成
+        run: |
+          chmod +x scripts/setup-repository-labels.sh
+          bash scripts/setup-repository-labels.sh
+
+  workflow-summary-failure:
+    needs: [setup-repository-labels]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: 失敗サマリーを出力
+        uses: ./.github/actions/workflow-summary
+        with:
+          status: failure
+          project-owner: ${{ github.repository_owner }}
+          job-results: |
+            {"setup-repository-labels": "${{ needs.setup-repository-labels.result }}"}
+
+  workflow-summary-success:
+    needs: [setup-repository-labels]
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: 成功サマリーを出力
+        uses: ./.github/actions/workflow-summary
+        with:
+          status: success
+          project-owner: ${{ github.repository_owner }}
+          job-results: |
+            {"setup-repository-labels": "${{ needs.setup-repository-labels.result }}"}

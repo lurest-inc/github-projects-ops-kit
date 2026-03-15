@@ -1,0 +1,17 @@
+[
+  {
+    "name": "bug",
+    "color": "d73a4a",
+    "description": "不具合の報告"
+  },
+  {
+    "name": "enhancement",
+    "color": "a2eeef",
+    "description": "機能追加・改善"
+  },
+  {
+    "name": "documentation",
+    "color": "0075ca",
+    "description": "ドキュメントの追加・更新"
+  }
+]
