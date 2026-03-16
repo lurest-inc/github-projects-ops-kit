@@ -1,8 +1,6 @@
 name: "⑥ 滞留アイテム検知"
 
 on:
-  schedule:
-    - cron: "0 0 * * 1"
   workflow_dispatch:
     inputs:
       project_number:
@@ -19,7 +17,7 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
       PROJECT_OWNER: ${{ github.repository_owner }}
-      PROJECT_NUMBER: ${{ inputs.project_number || '1' }}
+      PROJECT_NUMBER: ${{ inputs.project_number }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
@@ -51,7 +49,7 @@ jobs:
         with:
           status: failure
           project-owner: ${{ github.repository_owner }}
-          project-number: ${{ inputs.project_number || '1' }}
+          project-number: ${{ inputs.project_number }}
           job-results: |
             {"detect-stale-items": "${{ needs.detect-stale-items.result }}"}
 
@@ -68,6 +66,6 @@ jobs:
         with:
           status: success
           project-owner: ${{ github.repository_owner }}
-          project-number: ${{ inputs.project_number || '1' }}
+          project-number: ${{ inputs.project_number }}
           job-results: |
             {"detect-stale-items": "${{ needs.detect-stale-items.result }}"}

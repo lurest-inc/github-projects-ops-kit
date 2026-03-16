@@ -14,24 +14,16 @@
 
 ## 📖 使い方
 
-### 手動実行
-
 1. `Actions` タブを開く
 2. `⑥ 滞留アイテム検知` を選択
 3. `Run workflow` をクリック
 4. パラメータを入力して実行
-
-### 自動実行
-
-毎週月曜日 00:00 UTC に自動実行されます（`schedule` トリガー）。
 
 ## ⚙️ パラメータ
 
 | パラメータ | 説明 | 必須 | タイプ | 例 |
 |------------|------|:----:|--------|-----|
 | `project_number` | 対象 `Project` の Number | ✅ | `number` | `1` |
-
-> **Note:** `schedule` トリガーで実行される場合、`project_number` はデフォルト値 `1` が使用されます。
 
 ## 📊 滞留判定ルール
 
@@ -85,7 +77,7 @@
 
 ```mermaid
 flowchart TD
-    A["workflow_dispatch / schedule\n（project_number）"] --> B["detect-stale-items ジョブ\nProject アイテムを取得しフィルタ・滞留判定\nし Workflow Summary + Artifact に出力"]
+    A["workflow_dispatch\n（project_number）"] --> B["detect-stale-items ジョブ\nProject アイテムを取得しフィルタ・滞留判定\nし Workflow Summary + Artifact に出力"]
     B --> C{"結果判定"}
     C -- "成功" --> D["workflow-summary-success ジョブ\n成功サマリーを出力"]
     C -- "失敗" --> E["workflow-summary-failure ジョブ\n失敗サマリーを出力"]
