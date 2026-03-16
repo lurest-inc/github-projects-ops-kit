@@ -219,7 +219,7 @@ STALE_ITEMS=$(echo "${ITEMS}" | jq \
      else null end) as $threshold |
     select($threshold != null) |
     # 経過日数を計算
-    (($now - (.updated_at | sub("\\.[0-9]+"; "") | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime)) / 86400 | floor) as $days_stale |
+    (($now - (.updated_at | fromdateiso8601)) / 86400 | floor) as $days_stale |
     select($days_stale >= $threshold) |
     . + {days_stale: $days_stale, threshold: $threshold}
   ]
@@ -302,6 +302,13 @@ if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
     echo "- **検知件数:** ${STALE_COUNT} 件"
     echo ""
 
+    # Markdown テーブルセル用エスケープ関数（jq 内で使用）
+    # パイプ文字および Markdown 特殊文字（\, `, *, _, [, ], <, >, ~）をバックスラッシュでエスケープ
+    local md_escape='def md_escape: gsub("\\\\"; "\\\\") | gsub("`"; "\\`") | gsub("\\*"; "\\*") | gsub("_"; "\\_") | gsub("\\["; "\\[") | gsub("\\]"; "\\]") | gsub("<"; "\\<") | gsub(">"; "\\>") | gsub("~"; "\\~") | gsub("\\|"; "\\|");'
+
+    local md_row_filter="${md_escape}"'
+      "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(.repository) | \(if .assignees == "" then "-" else (.assignees | md_escape) end) | \(.updated_at | split("T")[0]) | \(.days_stale) |"'
+
     if [[ "${STALE_COUNT}" -eq 0 ]]; then
       echo "> 滞留アイテムはありません。"
     else
@@ -311,10 +318,7 @@ if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
         echo ""
         echo "| # | タイトル | リポジトリ | アサイン | 最終更新 | 経過日数 |"
         echo "|---|---------|-----------|---------|---------|---------|"
-        echo "${STALE_ITEMS}" | jq -r '
-          [.[] | select(.status == "In Review")] | sort_by(-.days_stale)[] |
-          "| [#\(.number)](\(.url)) | \(.title | gsub("\\|"; "\\\\|")) | \(.repository) | \(if .assignees == "" then "-" else .assignees end) | \(.updated_at | split("T")[0]) | \(.days_stale) |"
-        '
+        echo "${STALE_ITEMS}" | jq -r "[.[] | select(.status == \"In Review\")] | sort_by(-.days_stale)[] | ${md_row_filter}"
         echo ""
       fi
 
@@ -324,10 +328,7 @@ if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
         echo ""
         echo "| # | タイトル | リポジトリ | アサイン | 最終更新 | 経過日数 |"
         echo "|---|---------|-----------|---------|---------|---------|"
-        echo "${STALE_ITEMS}" | jq -r '
-          [.[] | select(.status == "In Progress")] | sort_by(-.days_stale)[] |
-          "| [#\(.number)](\(.url)) | \(.title | gsub("\\|"; "\\\\|")) | \(.repository) | \(if .assignees == "" then "-" else .assignees end) | \(.updated_at | split("T")[0]) | \(.days_stale) |"
-        '
+        echo "${STALE_ITEMS}" | jq -r "[.[] | select(.status == \"In Progress\")] | sort_by(-.days_stale)[] | ${md_row_filter}"
         echo ""
       fi
 
@@ -337,10 +338,7 @@ if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
         echo ""
         echo "| # | タイトル | リポジトリ | アサイン | 最終更新 | 経過日数 |"
         echo "|---|---------|-----------|---------|---------|---------|"
-        echo "${STALE_ITEMS}" | jq -r '
-          [.[] | select(.status == "Todo")] | sort_by(-.days_stale)[] |
-          "| [#\(.number)](\(.url)) | \(.title | gsub("\\|"; "\\\\|")) | \(.repository) | \(if .assignees == "" then "-" else .assignees end) | \(.updated_at | split("T")[0]) | \(.days_stale) |"
-        '
+        echo "${STALE_ITEMS}" | jq -r "[.[] | select(.status == \"Todo\")] | sort_by(-.days_stale)[] | ${md_row_filter}"
         echo ""
       fi
     fi
