@@ -138,7 +138,7 @@ query($login: String!, $number: Int!, $after: String) {
 | `blocked` ラベルが付与されたアイテム | 外部要因で進行不可 |
 | `DraftIssue` タイプのアイテム | プロジェクト内メモであり追跡対象外 |
 
-除外ラベルは環境変数 `EXCLUDE_LABELS` で設定可能にする（カンマ区切り、デフォルト: `on-hold,blocked`）。
+除外ラベルはスクリプト内で `on-hold,blocked` として定義する（変更時はスクリプトを直接編集する）。
 
 ### 2.6 大規模プロジェクト（1000+ アイテム）での実行性能
 
@@ -160,7 +160,7 @@ query($login: String!, $number: Int!, $after: String) {
 | `In Review` | 3 | レビュー中のまま 3 日以上更新なし |
 
 - `Backlog` と `Done` はデフォルトで検知対象外
-- 閾値は環境変数で上書き可能（`STALE_DAYS_TODO`, `STALE_DAYS_IN_PROGRESS`, `STALE_DAYS_IN_REVIEW`）
+- 閾値はスクリプト内で定義（変更時はスクリプトを直接編集する）
 
 ### 3.2 判定ロジック
 
@@ -251,19 +251,24 @@ query($login: String!, $number: Int!, $after: String) {
 
 ## ⚙️ 5. ワークフロー設計
 
-### 5.1 入力パラメータ
+### 5.1 ワークフロー入力パラメータ
 
-| パラメータ | 必須 | デフォルト | 説明 |
-|---|---|---|---|
-| `PROJECT_NUMBER` | Yes | - | 対象 Project の Number |
-| `STALE_DAYS_TODO` | No | `14` | Todo の滞留閾値（日） |
-| `STALE_DAYS_IN_PROGRESS` | No | `7` | In Progress の滞留閾値（日） |
-| `STALE_DAYS_IN_REVIEW` | No | `3` | In Review の滞留閾値（日） |
-| `EXCLUDE_LABELS` | No | `on-hold,blocked` | 除外ラベル（カンマ区切り） |
-| `INCLUDE_BACKLOG` | No | `false` | Backlog を検知対象に含めるか |
-| `STALE_DAYS_BACKLOG` | No | `30` | Backlog の滞留閾値（日、INCLUDE_BACKLOG=true 時のみ有効） |
+| パラメータ | 必須 | 説明 |
+|---|---|---|
+| `project-number` | Yes | 対象 Project の Number |
 
-### 5.2 ワークフロー構成
+### 5.2 スクリプト内定数
+
+以下の値はスクリプト内で定義する。変更が必要な場合はスクリプトを直接編集する。
+
+| 定数 | 値 | 説明 |
+|---|---|---|
+| `STALE_DAYS_TODO` | `14` | Todo の滞留閾値（日） |
+| `STALE_DAYS_IN_PROGRESS` | `7` | In Progress の滞留閾値（日） |
+| `STALE_DAYS_IN_REVIEW` | `3` | In Review の滞留閾値（日） |
+| `EXCLUDE_LABELS` | `on-hold,blocked` | 除外ラベル（カンマ区切り） |
+
+### 5.3 ワークフロー構成
 
 ```yaml
 name: "⑥ 滞留アイテム検知"
@@ -276,22 +281,6 @@ on:
       project-number:
         description: "Project の Number"
         required: true
-      stale-days-todo:
-        description: "Todo の滞留閾値（日）"
-        default: "14"
-      stale-days-in-progress:
-        description: "In Progress の滞留閾値（日）"
-        default: "7"
-      stale-days-in-review:
-        description: "In Review の滞留閾値（日）"
-        default: "3"
-      exclude-labels:
-        description: "除外ラベル（カンマ区切り）"
-        default: "on-hold,blocked"
-      include-backlog:
-        description: "Backlog を検知対象に含めるか"
-        type: boolean
-        default: false
 
 jobs:
   detect-stale-items:
@@ -304,12 +293,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.PROJECT_PAT }}
           PROJECT_OWNER: ${{ github.repository_owner }}
-          PROJECT_NUMBER: ${{ inputs.project-number || vars.PROJECT_NUMBER }}
-          STALE_DAYS_TODO: ${{ inputs.stale-days-todo || '14' }}
-          STALE_DAYS_IN_PROGRESS: ${{ inputs.stale-days-in-progress || '7' }}
-          STALE_DAYS_IN_REVIEW: ${{ inputs.stale-days-in-review || '3' }}
-          EXCLUDE_LABELS: ${{ inputs.exclude-labels || 'on-hold,blocked' }}
-          INCLUDE_BACKLOG: ${{ inputs.include-backlog || 'false' }}
+          PROJECT_NUMBER: ${{ inputs.project-number }}
         run: |
           chmod +x scripts/detect-stale-items.sh
           bash scripts/detect-stale-items.sh
@@ -324,7 +308,7 @@ jobs:
         with:
           status: failure
           project-owner: ${{ github.repository_owner }}
-          project-number: ${{ inputs.project-number || vars.PROJECT_NUMBER }}
+          project-number: ${{ inputs.project-number }}
           job-results: |
             {"detect-stale-items": "${{ needs.detect-stale-items.result }}"}
 
@@ -338,12 +322,12 @@ jobs:
         with:
           status: success
           project-owner: ${{ github.repository_owner }}
-          project-number: ${{ inputs.project-number || vars.PROJECT_NUMBER }}
+          project-number: ${{ inputs.project-number }}
           job-results: |
             {"detect-stale-items": "${{ needs.detect-stale-items.result }}"}
 ```
 
-### 5.3 スクリプト処理概要
+### 5.4 スクリプト処理概要
 
 `scripts/detect-stale-items.sh` の処理フロー:
 
