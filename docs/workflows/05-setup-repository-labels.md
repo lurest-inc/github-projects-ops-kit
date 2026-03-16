@@ -3,8 +3,6 @@
 <!-- START doctoc -->
 <!-- END doctoc -->
 
-> **Note:** 本ドキュメントは仕様ドキュメント（未実装）です。実装は [Issue #225](https://github.com/mabubu0203/github-projects-starter-kit/issues/225) で対応予定です。
-
 指定リポジトリに対して、設定ファイルで定義した Issue ラベルを一括作成します。
 既存ラベルと同名のラベルが存在する場合はスキップします。
 

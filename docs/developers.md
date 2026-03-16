@@ -12,6 +12,7 @@ flowchart TD
     A["① Project 新規作成"] --> B["② Project 拡張"]
     B --> C["③ Issue/PR 一括紐付け"]
     C --> D["④ アイテム エクスポート"]
+    D --> E["⑤ Issue ラベル一括追加"]
 
     A -- "再利用可能ワークフロー" --> R["_reusable-extend-project"]
     B -- "再利用可能ワークフロー" --> R
@@ -23,6 +24,7 @@ flowchart TD
         S4["setup-project-views.sh"]
         S5["add-items-to-project.sh"]
         S6["export-project-items.sh"]
+        S7["setup-repository-labels.sh"]
         SL["lib/common.sh"]
     end
 
@@ -32,7 +34,8 @@ flowchart TD
     R --> S4
     C --> S5
     D --> S6
-    S1 & S2 & S3 & S4 & S5 & S6 --> SL
+    E --> S7
+    S1 & S2 & S3 & S4 & S5 & S6 & S7 --> SL
 ```
 
 ## 📁 構成ファイル
@@ -47,12 +50,14 @@ flowchart TD
       ├── 02-extend-project.yml        # ② Project 拡張ワークフロー
       ├── _reusable-extend-project.yml # Project 拡張（再利用可能ワークフロー）
       ├── 03-add-items-to-project.yml  # ③ Issue/PR 一括紐付けワークフロー
-      └── 04-export-project-items.yml  # ④ Project アイテム エクスポートワークフロー
+      ├── 04-export-project-items.yml  # ④ Project アイテム エクスポートワークフロー
+      └── 05-setup-repository-labels.yml  # ⑤ Issue ラベル一括追加ワークフロー
 scripts/
   ├── config/
   │   ├── project-field-definitions.json   # カスタムフィールド定義
   │   ├── project-status-options.json      # ステータスカラム定義
-  │   └── project-view-definitions.json    # View 定義
+  │   ├── project-view-definitions.json    # View 定義
+  │   └── repository-label-definitions.json  # ラベル定義
   ├── lib/
   │   └── common.sh                # 共通関数ライブラリ
   ├── setup-github-project.sh      # Project 作成スクリプト
@@ -60,7 +65,8 @@ scripts/
   ├── setup-project-status.sh      # ステータスカラム設定スクリプト
   ├── setup-project-views.sh       # View 作成スクリプト
   ├── add-items-to-project.sh      # アイテム一括追加スクリプト
-  └── export-project-items.sh      # アイテムエクスポートスクリプト
+  ├── export-project-items.sh      # アイテムエクスポートスクリプト
+  └── setup-repository-labels.sh   # ラベル一括作成スクリプト
 ```
 
 ## ⚙️ 各ワークフローの構成
@@ -120,6 +126,18 @@ scripts/
       └── .github/actions/workflow-summary   # 成功サマリー出力
 ```
 
+### ⑤ Issue ラベル一括追加
+
+```
+05-setup-repository-labels.yml
+  ├── setup-repository-labels ジョブ
+  │   └── scripts/setup-repository-labels.sh    # ラベル一括作成
+  ├── workflow-summary-failure ジョブ（失敗時）
+  │   └── .github/actions/workflow-summary   # 失敗サマリー出力
+  └── workflow-summary-success ジョブ（成功時）
+      └── .github/actions/workflow-summary   # 成功サマリー出力
+```
+
 ## 📜 スクリプト詳細
 
 | スクリプト | 概要 |
@@ -130,3 +148,4 @@ scripts/
 | [setup-project-views.sh](scripts/setup-project-views) | `Table`・`Board`・`Roadmap` の 3 種類の View を作成する |
 | [add-items-to-project.sh](scripts/add-items-to-project) | 指定リポジトリの Issue/PR を `Project` に一括追加する。追加済みアイテムは自動スキップ |
 | [export-project-items.sh](scripts/export-project-items) | 指定 `Project` の Issue/PR 一覧を取得し、指定形式でエクスポートする |
+| [setup-repository-labels.sh](scripts/setup-repository-labels) | 指定リポジトリに対して、設定ファイルで定義した Issue ラベルを一括作成する |
