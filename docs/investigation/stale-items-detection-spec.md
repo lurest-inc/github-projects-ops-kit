@@ -1,16 +1,19 @@
-# 滞留アイテム検知ワークフロー仕様書
+# 🔍 滞留アイテム検知ワークフロー仕様書
+
+<!-- START doctoc -->
+<!-- END doctoc -->
 
 > **ステータス:** 調査・仕様策定（Issue #188）
-> **目的:** 一定期間ステータスが変更されていないプロジェクトアイテムを検出・報告する
+> **目的:** 一定期間更新（アクティビティ）がないプロジェクトアイテムを検出・報告する
 
 ---
 
-## 1. 背景
+## 📋 1. 背景
 
 長期間放置されたタスクはプロジェクトの進行を阻害する。
 定期的に滞留アイテムを検知し可視化することで、早期対応を促す。
 
-## 2. 調査結果
+## 🔬 2. 調査結果
 
 ### 2.1 GitHub Projects V2 GraphQL API でのアイテム更新日時取得
 
@@ -142,11 +145,11 @@ query($login: String!, $number: Int!, $after: String) {
 | 項目 | 対応策 |
 |---|---|
 | ページネーション | 既存の `run_graphql_paginated` を使用（100件/ページ、最大50ページ = 5000件） |
-| API レート制限 | GraphQL API のレート制限は 5,000 ポイント/時間。1 クエリ ≈ 1 ポイントのため、50 ページでも十分余裕がある |
+| API レート制限 | GraphQL API のレート制限は 5,000 ポイント/時間。クエリのコストは取得フィールド・接続の `first` 値等で変動するため、`rateLimit { cost remaining resetAt }` を併用して実測し余裕を見積もること |
 | 実行時間 | 1000 アイテムの場合、10 ページ × 約 1-2 秒 = 約 10-20 秒で完了見込み |
 | メモリ | jq によるストリーム処理で、全件をメモリに保持するのはフィルタ後のアイテムのみ |
 
-## 3. 滞留判定ルール
+## ⚖️ 3. 滞留判定ルール
 
 ### 3.1 ステータス別閾値
 
@@ -175,7 +178,7 @@ query($login: String!, $number: Int!, $after: String) {
 6. ステータス別閾値を超過したアイテムを「滞留」と判定
 7. ステータス別に分類してレポート出力
 
-## 4. レポート出力フォーマット
+## 📊 4. レポート出力フォーマット
 
 ### 4.1 Workflow Summary（Markdown）
 
@@ -246,13 +249,13 @@ query($login: String!, $number: Int!, $after: String) {
 }
 ```
 
-## 5. ワークフロー設計
+## ⚙️ 5. ワークフロー設計
 
 ### 5.1 入力パラメータ
 
 | パラメータ | 必須 | デフォルト | 説明 |
 |---|---|---|---|
-| `PROJECT_OWNER` | Yes | - | Project の所有者 |
+| `PROJECT_OWNER` | Yes | `github.repository_owner` | Project の所有者（`workflow_dispatch` 時は `inputs`、`schedule` 時は `github.repository_owner` をデフォルトとする） |
 | `PROJECT_NUMBER` | Yes | - | 対象 Project の Number |
 | `STALE_DAYS_TODO` | No | `14` | Todo の滞留閾値（日） |
 | `STALE_DAYS_IN_PROGRESS` | No | `7` | In Progress の滞留閾値（日） |
@@ -268,7 +271,7 @@ name: "⑥ 滞留アイテム検知"
 
 on:
   schedule:
-    - cron: '0 0 * * 1'  # 毎週月曜 00:00 UTC（JST 09:00）
+    - cron: '0 9 * * 1'  # 毎週月曜 9:00 UTC
   workflow_dispatch:
     inputs:
       project-owner:
@@ -300,19 +303,48 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
       - name: 滞留アイテム検知
         env:
           GH_TOKEN: ${{ secrets.PROJECT_PAT }}
-          PROJECT_OWNER: ${{ inputs.project-owner || vars.PROJECT_OWNER }}
+          PROJECT_OWNER: ${{ inputs.project-owner || github.repository_owner }}
           PROJECT_NUMBER: ${{ inputs.project-number || vars.PROJECT_NUMBER }}
           STALE_DAYS_TODO: ${{ inputs.stale-days-todo || '14' }}
           STALE_DAYS_IN_PROGRESS: ${{ inputs.stale-days-in-progress || '7' }}
           STALE_DAYS_IN_REVIEW: ${{ inputs.stale-days-in-review || '3' }}
           EXCLUDE_LABELS: ${{ inputs.exclude-labels || 'on-hold,blocked' }}
           INCLUDE_BACKLOG: ${{ inputs.include-backlog || 'false' }}
-        run: bash scripts/detect-stale-items.sh
+        run: |
+          chmod +x scripts/detect-stale-items.sh
+          bash scripts/detect-stale-items.sh
+
+  workflow-summary-failure:
+    needs: [detect-stale-items]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
       - uses: ./.github/actions/workflow-summary
+        with:
+          status: failure
+          project-owner: ${{ github.repository_owner }}
+          project-number: ${{ inputs.project-number || vars.PROJECT_NUMBER }}
+          job-results: |
+            {"detect-stale-items": "${{ needs.detect-stale-items.result }}"}
+
+  workflow-summary-success:
+    needs: [detect-stale-items]
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - uses: ./.github/actions/workflow-summary
+        with:
+          status: success
+          project-owner: ${{ github.repository_owner }}
+          project-number: ${{ inputs.project-number || vars.PROJECT_NUMBER }}
+          job-results: |
+            {"detect-stale-items": "${{ needs.detect-stale-items.result }}"}
 ```
 
 ### 5.3 スクリプト処理概要
@@ -326,7 +358,7 @@ jobs:
 5. レポート生成（Workflow Summary 用 Markdown + Artifact 用 JSON）
 6. コンソールサマリー出力
 
-## 6. 今後の拡張候補
+## 🚀 6. 今後の拡張候補
 
 - Slack / Teams 通知連携（Artifact JSON を入力として webhook 送信）
 - Issue コメントへの自動投稿オプション
