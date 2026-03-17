@@ -3,7 +3,7 @@
 <!-- START doctoc -->
 <!-- END doctoc -->
 
-指定した GitHub `Project` のアイテムを走査し、滞留アイテム検知・プロジェクトサマリーレポート・工数集計レポート・アイテムエクスポートを 1 回の実行でまとめて生成します。`report_types` パラメータで実行する機能を選択することも可能です。
+指定した GitHub `Project` のアイテムを走査し、滞留アイテム検知・プロジェクトサマリーレポート・工数集計レポート・ベロシティレポート・アイテムエクスポートを 1 回の実行でまとめて生成します。`report_types` パラメータで実行する機能を選択することも可能です。
 
 ## ✅ 前提
 
@@ -34,10 +34,11 @@
 
 | 値 | 説明 |
 |------|------|
-| `all` | 全機能（滞留検知 + サマリー + 工数集計 + エクスポート）を実行 |
+| `all` | 全機能（滞留検知 + サマリー + 工数集計 + ベロシティ + エクスポート）を実行 |
 | `stale` | 滞留アイテム検知のみ実行 |
 | `summary` | プロジェクトサマリーレポートのみ実行 |
 | `effort` | 工数集計レポートのみ実行 |
+| `velocity` | ベロシティレポートのみ実行 |
 | `export` | アイテムエクスポートのみ実行 |
 
 ### `output_format` の選択肢
@@ -216,6 +217,60 @@
 
 ---
 
+## 📈 ベロシティレポート（velocity）
+
+Done ステータスのアイテムを週別に集計し、チームのベロシティ（完了数・完了工数）の推移を可視化します。
+
+### 集計項目
+
+#### 必須項目
+
+| # | 項目 | 説明 |
+|---|------|------|
+| 1 | 概要サマリー | 集計期間、Done アイテム数、平均ベロシティ（件/週） |
+| 2 | 週別ベロシティ | 各週の完了アイテム数（Mermaid 棒グラフ付き） |
+| 3 | 担当者別ベロシティ | 担当者ごとの完了数合計（Mermaid 円グラフ付き） |
+
+#### オプション項目（工数フィールド使用時）
+
+| # | 項目 | 説明 |
+|---|------|------|
+| 4 | 週別完了工数 | 各週の完了工数（Mermaid 棒グラフ付き） |
+| 5 | 平均完了工数 | 平均完了工数（h/週） |
+| 6 | 担当者別完了工数 | 担当者ごとの完了工数合計 |
+
+> **Note:** 実績工数(h) フィールドが設定されていないプロジェクトでは、工数関連の項目は自動的に非表示となります。
+
+### ベロシティ算出ルール
+
+| 項目 | 説明 |
+|------|------|
+| 対象アイテム | Status が `Done` のアイテム |
+| 集計期間 | 直近 8 週間（スクリプト内定数 `VELOCITY_WEEKS` で変更可能） |
+| 完了日判定 | ProjectV2Item の `updatedAt`（Project 上での最終更新日時）を使用 |
+| 週の区切り | ISO 週（月曜始まり） |
+
+### 出力
+
+#### Workflow Summary（Markdown + Mermaid）
+
+週別ベロシティを Markdown テーブルおよび Mermaid 棒グラフで出力します。
+担当者別の完了数分布は Mermaid 円グラフでも可視化されます。
+
+出力項目:
+
+| セクション | 内容 |
+|-----------|------|
+| 概要サマリー | 集計期間、Done アイテム数、平均ベロシティ |
+| 週別ベロシティ | 週ラベル、期間、完了数、完了工数（テーブル + Mermaid 棒グラフ） |
+| 担当者別ベロシティ | 担当者名、完了数、完了工数（テーブル + Mermaid 円グラフ） |
+
+#### Artifact
+
+`report-{number}-velocity.{json|md|csv|tsv}` が artifact としてダウンロード可能です（保持期間: 7 日）。出力形式は `output_format` パラメータで選択できます。
+
+---
+
 ## 📤 アイテムエクスポート（export）
 
 Project に紐づく Issue / Pull Request の一覧を取得し、エクスポートします。DraftIssue は出力対象外です。
@@ -305,9 +360,10 @@ flowchart TD
     A["workflow_dispatch\n（project_number, report_types, output_format, item_type, item_state）"] --> B{"report_types 判定"}
     B -- "all or summary" --> C["generate-summary-report ジョブ\nサマリーレポート生成"]
     B -- "all or effort" --> D["generate-effort-report ジョブ\n工数集計レポート生成"]
+    B -- "all or velocity" --> V["generate-velocity-report ジョブ\nベロシティレポート生成"]
     B -- "all or stale" --> E["detect-stale-items ジョブ\n滞留アイテム検知"]
     B -- "all or export" --> I["export-items ジョブ\nアイテムエクスポート"]
-    C & D & E & I --> F{"結果判定"}
+    C & D & V & E & I --> F{"結果判定"}
     F -- "成功" --> G["workflow-summary-success ジョブ\n成功サマリーを出力"]
     F -- "失敗" --> H["workflow-summary-failure ジョブ\n失敗サマリーを出力"]
 ```

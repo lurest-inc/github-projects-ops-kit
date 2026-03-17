@@ -28,6 +28,7 @@ flowchart TD
         S8["detect-stale-items.sh"]
         S9["generate-summary-report.sh"]
         S10["generate-effort-report.sh"]
+        S11["generate-velocity-report.sh"]
         SL["lib/common.sh"]
     end
 
@@ -41,7 +42,8 @@ flowchart TD
     F --> S8
     F --> S9
     F --> S10
-    S1 & S2 & S3 & S4 & S5 & S6 & S7 & S8 & S9 & S10 --> SL
+    F --> S11
+    S1 & S2 & S3 & S4 & S5 & S6 & S7 & S8 & S9 & S10 & S11 --> SL
 ```
 
 ## 📁 構成ファイル
@@ -75,7 +77,8 @@ scripts/
   ├── setup-repository-labels.sh   # ラベル一括作成スクリプト
   ├── detect-stale-items.sh        # 滞留アイテム検知スクリプト
   ├── generate-summary-report.sh   # プロジェクトサマリーレポート生成スクリプト
-  └── generate-effort-report.sh    # 工数集計レポート生成スクリプト
+  ├── generate-effort-report.sh    # 工数集計レポート生成スクリプト
+  └── generate-velocity-report.sh  # ベロシティレポート生成スクリプト
 ```
 
 ## ⚙️ 各ワークフローの構成
@@ -144,6 +147,9 @@ scripts/
   ├── generate-effort-report ジョブ（report_types: all or effort）
   │   ├── scripts/generate-effort-report.sh      # 工数集計レポート生成
   │   └── artifact アップロード                    # 工数レポートを保存
+  ├── generate-velocity-report ジョブ（report_types: all or velocity）
+  │   ├── scripts/generate-velocity-report.sh    # ベロシティレポート生成
+  │   └── artifact アップロード                    # ベロシティレポートを保存
   ├── detect-stale-items ジョブ（report_types: all or stale）
   │   ├── scripts/detect-stale-items.sh          # 滞留アイテム検知
   │   └── artifact アップロード                    # 滞留レポートを保存
@@ -170,3 +176,4 @@ scripts/
 | [detect-stale-items.sh](scripts/detect-stale-items) | 指定 `Project` のアイテムを走査し、ステータス別の閾値に基づいて滞留アイテムを検知する |
 | [generate-summary-report.sh](scripts/generate-summary-report) | 指定 `Project` のアイテムをステータス別・担当者別・ラベル別に集計しサマリーレポートを生成する |
 | [generate-effort-report.sh](scripts/generate-effort-report) | 指定 `Project` の見積もり工数・実績工数を多角的に集計・分析しレポートを生成する |
+| [generate-velocity-report.sh](scripts/generate-velocity-report) | 指定 `Project` の Done アイテムを週別に集計し、ベロシティレポートを生成する |
