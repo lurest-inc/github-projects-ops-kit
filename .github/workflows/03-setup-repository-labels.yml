@@ -25,6 +25,8 @@ jobs:
 
       - name: ラベルを一括作成
         run: |
+          # トリム（前後の空白のみ削除、内部空白は保持）
+          TARGET_REPO="$(echo "$TARGET_REPO" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
           chmod +x scripts/setup-repository-labels.sh
           bash scripts/setup-repository-labels.sh
 

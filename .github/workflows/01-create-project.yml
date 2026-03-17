@@ -39,6 +39,8 @@ jobs:
           PROJECT_TITLE: ${{ inputs.project_title }}
           PROJECT_VISIBILITY: ${{ inputs.visibility }}
         run: |
+          # トリム（前後の空白のみ削除、内部空白は保持）
+          PROJECT_TITLE="$(echo "$PROJECT_TITLE" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
           chmod +x scripts/setup-github-project.sh
           bash scripts/setup-github-project.sh
 

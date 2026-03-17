@@ -57,6 +57,9 @@ jobs:
           ITEM_STATE: ${{ inputs.item_state }}
           ITEM_LABEL: ${{ inputs.item_label }}
         run: |
+          # トリム（前後の空白のみ削除、内部空白は保持）
+          TARGET_REPO="$(echo "$TARGET_REPO" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          ITEM_LABEL="$(echo "$ITEM_LABEL" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
           chmod +x scripts/add-items-to-project.sh
           bash scripts/add-items-to-project.sh
 
