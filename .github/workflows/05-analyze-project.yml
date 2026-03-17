@@ -47,11 +47,6 @@ on:
           - all
           - open
           - closed
-      velocity_weeks:
-        description: "ベロシティレポートの集計対象週数（1〜52）"
-        required: true
-        type: number
-        default: 8
       retention_days:
         description: "アーティファクトの保持日数（1〜7）"
         required: true
@@ -65,13 +60,6 @@ jobs:
   validate-inputs:
     runs-on: ubuntu-latest
     steps:
-      - name: velocity_weeks の範囲チェック（1〜52）
-        run: |
-          if [ "${{ inputs.velocity_weeks }}" -lt 1 ] || [ "${{ inputs.velocity_weeks }}" -gt 52 ]; then
-            echo "::error::velocity_weeks は 1〜52 の範囲で指定してください（入力値: ${{ inputs.velocity_weeks }}）"
-            exit 1
-          fi
-
       - name: retention_days の範囲チェック（1〜7）
         run: |
           if [ "${{ inputs.retention_days }}" -lt 1 ] || [ "${{ inputs.retention_days }}" -gt 7 ]; then
@@ -181,7 +169,6 @@ jobs:
       OUTPUT_FORMAT: ${{ inputs.output_format }}
       ITEM_TYPE: ${{ inputs.item_type }}
       ITEM_STATE: ${{ inputs.item_state }}
-      VELOCITY_WEEKS: ${{ inputs.velocity_weeks }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2

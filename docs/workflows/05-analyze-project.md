@@ -28,7 +28,6 @@
 | `output_format` | 出力形式 | ✅ | `choice` | `json` | `markdown` |
 | `item_type` | 対象アイテムの種別 | ✅ | `choice` | `all` | `issues` |
 | `item_state` | 対象アイテムの状態 | ✅ | `choice` | `all` | `open` |
-| `velocity_weeks` | ベロシティレポートの集計対象週数（1〜52） | ✅ | `number` | `8` | `12` |
 | `retention_days` | アーティファクトの保持日数（1〜7） | ✅ | `number` | `7` | `3` |
 
 ### `report_types` の選択肢
@@ -247,7 +246,7 @@ Done ステータスのアイテムを週別に集計し、チームのベロシ
 | 項目 | 説明 |
 |------|------|
 | 対象アイテム | Status が `Done` のアイテム |
-| 集計期間 | 直近 `velocity_weeks` 週間（デフォルト: 8 週間、ワークフロー入力で指定可能） |
+| 集計期間 | 直近 8 週間（スクリプト内定数 `VELOCITY_WEEKS` で変更可能） |
 | 完了日判定 | ProjectV2Item の `updatedAt`（Project 上での最終更新日時）を使用 |
 | 週の区切り | ISO 週（月曜始まり） |
 
