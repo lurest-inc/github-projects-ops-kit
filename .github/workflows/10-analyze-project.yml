@@ -17,6 +17,15 @@ on:
           - stale
           - summary
           - effort
+      item_type:
+        description: "対象アイテムの種別"
+        required: false
+        type: choice
+        default: "all"
+        options:
+          - all
+          - issues
+          - prs
 
 permissions:
   contents: read
@@ -30,6 +39,7 @@ jobs:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
       PROJECT_OWNER: ${{ github.repository_owner }}
       PROJECT_NUMBER: ${{ inputs.project_number }}
+      ITEM_TYPE: ${{ inputs.item_type }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
@@ -56,6 +66,7 @@ jobs:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
       PROJECT_OWNER: ${{ github.repository_owner }}
       PROJECT_NUMBER: ${{ inputs.project_number }}
+      ITEM_TYPE: ${{ inputs.item_type }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
@@ -82,6 +93,7 @@ jobs:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
       PROJECT_OWNER: ${{ github.repository_owner }}
       PROJECT_NUMBER: ${{ inputs.project_number }}
+      ITEM_TYPE: ${{ inputs.item_type }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2

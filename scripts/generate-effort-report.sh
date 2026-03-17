@@ -8,6 +8,7 @@ set -euo pipefail
 #   GH_TOKEN       - GitHub PAT（Projects 読み取り権限が必要）
 #   PROJECT_OWNER  - Project の所有者
 #   PROJECT_NUMBER - 対象 Project の Number
+#   ITEM_TYPE      - 対象アイテムの種別（all / issues / prs、デフォルト: all）
 
 # --- 共通ライブラリ読み込み ---
 
@@ -18,10 +19,12 @@ source "${SCRIPT_DIR}/lib/common.sh"
 
 VARIANCE_THRESHOLD=10
 VARIANCE_TOP_N=10
+ITEM_TYPE="${ITEM_TYPE:-all}"
 
 # --- バリデーション ---
 
 validate_common_project_env
+validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
 
 # --- ヘルパー関数 ---
 
@@ -167,8 +170,22 @@ echo "Project #${PROJECT_NUMBER} のアイテムを取得しています..."
 PROJECT_TITLE=""
 ITEMS=$(fetch_project_items)
 
+TOTAL_BEFORE_FILTER=$(echo "${ITEMS}" | jq 'length')
+echo "  合計: ${TOTAL_BEFORE_FILTER} 件（フィルタ前）"
+
+# --- type フィルタリング ---
+
+ITEMS=$(echo "${ITEMS}" | jq \
+  --argjson includeIssues "$(should_include_issues && echo true || echo false)" \
+  --argjson includePRs "$(should_include_prs && echo true || echo false)" '
+  map(select(
+    ($includeIssues or .type != "Issue")
+    and ($includePRs or .type != "PullRequest")
+  ))
+')
+
 TOTAL_COUNT=$(echo "${ITEMS}" | jq 'length')
-echo "  合計: ${TOTAL_COUNT} 件"
+echo "  合計: ${TOTAL_COUNT} 件（フィルタ後）"
 
 # --- 工数集計 ---
 
@@ -513,6 +530,7 @@ fi
 # --- コンソールサマリー ---
 
 print_summary "Project" "${PROJECT_TITLE} (#${PROJECT_NUMBER})" \
+  "フィルタ(type)" "${ITEM_TYPE}" \
   "総アイテム数" "${TOTAL_COUNT} 件" \
   "工数入力済み" "${ITEMS_WITH_EFFORT_COUNT} 件" \
   "工数未入力" "${ITEMS_WITHOUT_EFFORT_COUNT} 件" \

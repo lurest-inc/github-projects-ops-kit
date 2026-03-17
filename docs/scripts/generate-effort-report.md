@@ -13,6 +13,7 @@
 | `GH_TOKEN` | GitHub PAT（Projects 読み取り権限が必要） | ✅ |
 | `PROJECT_OWNER` | Project の所有者 | ✅ |
 | `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
+| `ITEM_TYPE` | 対象アイテムの種別（`all` / `issues` / `prs`、デフォルト: `all`） | — |
 
 ## 📊 スクリプト内定数
 
@@ -52,7 +53,8 @@ flowchart TD
     E -- "Yes" --> D
     E -- "No" --> F["DraftIssue を除外\nアイテムを正規化"]
 
-    F --> G["工数集計"]
+    F --> F2["type フィルタリング\n（ITEM_TYPE に応じて Issue/PR を絞り込み）"]
+    F2 --> G["工数集計"]
     G --> G1["全体サマリー\n（総工数、乖離率、入力率）"]
     G --> G2["担当者別集計"]
     G --> G3["ステータス別集計"]
