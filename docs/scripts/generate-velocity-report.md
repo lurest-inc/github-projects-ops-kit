@@ -69,16 +69,15 @@ flowchart TD
     E -- "Yes" --> D
     E -- "No" --> F["DraftIssue を除外\nアイテムを正規化"]
 
-    F --> G["type フィルタリング\n（ITEM_TYPE に応じて Issue/PR を絞り込み）"]
-    G --> H["state フィルタリング\n（ITEM_STATE に応じて open/closed を絞り込み）"]
-    H --> I["Done ステータスのアイテムを抽出\n集計期間内のものに絞り込み"]
-    I --> J["週別ベロシティ集計\n（ISO 週ベースで完了数・工数を集計）"]
-    I --> K["担当者別ベロシティ集計"]
-    J --> L["平均ベロシティ算出"]
-    J & K & L --> M["レポート生成"]
-    M --> N["Workflow Summary\n（Markdown + Mermaid チャート）"]
-    M --> O["Artifact\n（JSON / Markdown / CSV / TSV ファイル）"]
-    N & O --> P["完了"]
+    F --> G["type / state フィルタリング\n（ITEM_TYPE / ITEM_STATE に応じて絞り込み）"]
+    G --> H["Done ステータスのアイテムを抽出\n集計期間内のものに絞り込み"]
+    H --> I["週別ベロシティ集計\n（ISO 週ベースで完了数・工数を集計）"]
+    H --> J["担当者別ベロシティ集計"]
+    I --> K["平均ベロシティ算出"]
+    I & J & K --> L["レポート生成"]
+    L --> M["Workflow Summary\n（Markdown + Mermaid チャート）"]
+    L --> N["Artifact\n（JSON / Markdown / CSV / TSV ファイル）"]
+    M & N --> O["完了"]
 ```
 
 ## 📝 処理詳細
@@ -87,15 +86,14 @@ flowchart TD
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
 | アイテム取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全アイテムをページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、Issue・PR の基本情報に加え、Status・実績工数(h) のフィールド値を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
-| type フィルタリング | `ITEM_TYPE` に応じて Issue / PR を絞り込み | `filter_items_by_type` |
-| state フィルタリング | `ITEM_STATE` に応じて open / closed を絞り込み | `filter_items_by_state` |
+| type / state フィルタリング | `ITEM_TYPE` による種別フィルタ、`ITEM_STATE` による状態フィルタを1回の jq 呼び出しで一括適用 | `filter_items` |
 | Done アイテム抽出 | Status が `Done` のアイテムを抽出し、集計期間内（ProjectV2Item の `updatedAt` ベース）のものに絞り込み | `jq` |
 | 集計期間の計算 | ISO 週ベースで `VELOCITY_WEEKS` 週間の開始日・終了日を `jq` で算出（macOS/Linux 互換） | `jq` |
 | 週別集計 | 各週にマッチする Done アイテムの完了数・完了工数を集計 | `jq` |
 | 担当者別集計 | 担当者ごとの完了数・完了工数合計を算出。複数担当者のアイテムは各担当者に計上。未アサインのアイテムは「(未アサイン)」として集計 | `jq` |
 | 平均ベロシティ算出 | 集計週数で完了数・完了工数を除算 | `jq` |
 | レポート出力 | `OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。Markdown 形式では Mermaid 棒グラフ・円グラフを含む | `jq` + bash |
-| Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記 | — |
+| Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記。`OUTPUT_FORMAT=markdown` の場合は出力ファイルを再利用 | — |
 
 ## 📚 API リファレンス
 

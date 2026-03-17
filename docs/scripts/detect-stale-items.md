@@ -51,14 +51,13 @@ flowchart TD
     E -- "Yes" --> D
     E -- "No" --> F["DraftIssue を除外\nアイテムを正規化"]
 
-    F --> G["type フィルタリング\n（ITEM_TYPE に応じて Issue/PR を絞り込み）"]
-    G --> H["state フィルタリング\n（ITEM_STATE に応じて open/closed を絞り込み）"]
-    H --> I["フィルタリング\n（除外ステータス: Done, Backlog）\n（除外ラベル: on-hold, blocked）"]
-    I --> J["滞留判定\n（ステータス別閾値との比較）"]
-    J --> K["レポート生成"]
-    K --> L["Workflow Summary\n（Markdown テーブル）"]
-    K --> M["Artifact\n（JSON ファイル）"]
-    L & M --> N["完了"]
+    F --> G["type / state フィルタリング\n（ITEM_TYPE / ITEM_STATE に応じて絞り込み）"]
+    G --> H["フィルタリング\n（除外ステータス: Done, Backlog）\n（除外ラベル: on-hold, blocked）"]
+    H --> I["滞留判定\n（ステータス別閾値との比較）"]
+    I --> J["レポート生成"]
+    J --> K["Workflow Summary\n（Markdown テーブル）"]
+    J --> L["Artifact\n（JSON ファイル）"]
+    K & L --> M["完了"]
 ```
 
 ## 📝 処理詳細
@@ -67,12 +66,11 @@ flowchart TD
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
 | アイテム取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全アイテムをページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、Issue・PR の `number`・`title`・`url`・`state`・`updatedAt`・`assignees`・`labels` および Status フィールド値を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
-| type フィルタリング | `ITEM_TYPE` に応じて Issue / PR を絞り込み | `filter_items_by_type` |
-| state フィルタリング | `ITEM_STATE` に応じて open / closed を絞り込み | `filter_items_by_state` |
+| type / state フィルタリング | `ITEM_TYPE` による種別フィルタ、`ITEM_STATE` による状態フィルタを1回の jq 呼び出しで一括適用 | `filter_items` |
 | 除外フィルタリング | 除外ステータス（`Done`・`Backlog`）および除外ラベル（`on-hold`・`blocked`）に該当するアイテムを除外 | `jq` |
 | 滞留判定 | 各アイテムの `updatedAt` と現在日時の差分を計算し、ステータス別閾値を超過したアイテムを「滞留」と判定 | `jq`（`strptime`・`mktime` で日付計算） |
 | レポート出力 | `OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。Markdown 形式ではステータス別テーブル・`JQ_MD_ESCAPE` によるエスケープを適用 | `jq` + bash |
-| Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記 | — |
+| Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記。`OUTPUT_FORMAT=markdown` の場合は出力ファイルを再利用 | — |
 
 ## 📚 API リファレンス
 

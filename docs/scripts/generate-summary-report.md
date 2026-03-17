@@ -62,18 +62,17 @@ flowchart TD
     E -- "Yes" --> D
     E -- "No" --> F["DraftIssue を除外\nアイテムを正規化"]
 
-    F --> G["type フィルタリング\n（ITEM_TYPE に応じて Issue/PR を絞り込み）"]
-    G --> H["state フィルタリング\n（ITEM_STATE に応じて open/closed を絞り込み）"]
-    H --> I["集計処理"]
-    I --> J["ステータス別集計"]
-    I --> K["担当者別集計"]
-    I --> L["ラベル別集計"]
-    I --> M["工数集計\n（カスタムフィールドがある場合）"]
-    I --> N["期日超過判定\n（カスタムフィールドがある場合）"]
-    J & K & L & M & N --> O["レポート生成"]
-    O --> P["Workflow Summary\n（Markdown + Mermaid チャート）"]
-    O --> Q["Artifact\n（JSON ファイル）"]
-    P & Q --> R["完了"]
+    F --> G["type / state フィルタリング\n（ITEM_TYPE / ITEM_STATE に応じて絞り込み）"]
+    G --> H["集計処理"]
+    H --> I["ステータス別集計"]
+    H --> J["担当者別集計"]
+    H --> K["ラベル別集計"]
+    H --> L["工数集計\n（カスタムフィールドがある場合）"]
+    H --> M["期日超過判定\n（カスタムフィールドがある場合）"]
+    I & J & K & L & M --> N["レポート生成"]
+    N --> O["Workflow Summary\n（Markdown + Mermaid チャート）"]
+    N --> P["Artifact\n（JSON ファイル）"]
+    O & P --> Q["完了"]
 ```
 
 ## 📝 処理詳細
@@ -82,15 +81,14 @@ flowchart TD
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
 | アイテム取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全アイテムをページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、Issue・PR の基本情報に加え、Status・見積もり工数(h)・実績工数(h)・終了期日のフィールド値を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
-| type フィルタリング | `ITEM_TYPE` に応じて Issue / PR を絞り込み | `filter_items_by_type` |
-| state フィルタリング | `ITEM_STATE` に応じて open / closed を絞り込み | `filter_items_by_state` |
+| type / state フィルタリング | `ITEM_TYPE` による種別フィルタ、`ITEM_STATE` による状態フィルタを1回の jq 呼び出しで一括適用 | `filter_items` |
 | ステータス別集計 | 各ステータスの件数と割合を計算 | `jq` |
 | 担当者別集計 | 各担当者のアイテム数と In Progress / In Review の内訳を集計。未アサインアイテムも含む | `jq` |
 | ラベル別集計 | 各ラベルのアイテム数を集計。ラベルなしアイテムも含む | `jq` |
 | 工数集計 | ステータス別の見積もり工数合計・実績工数合計を算出（カスタムフィールドが設定されている場合のみ） | `jq` |
 | 期日超過判定 | 終了期日を過ぎた未完了（Done 以外の）アイテムを検出し超過日数を計算（カスタムフィールドが設定されている場合のみ） | `jq` |
 | レポート出力 | `OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。Markdown 形式では Mermaid 円グラフを含む | `jq` + bash |
-| Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記 | — |
+| Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記。`OUTPUT_FORMAT=markdown` の場合は出力ファイルを再利用 | — |
 
 ## 📚 API リファレンス
 

@@ -70,19 +70,18 @@ flowchart TD
     E -- "Yes" --> D
     E -- "No" --> F["DraftIssue を除外\nアイテムを正規化"]
 
-    F --> G["type フィルタリング\n（ITEM_TYPE に応じて Issue/PR を絞り込み）"]
-    G --> H["state フィルタリング\n（ITEM_STATE に応じて open/closed を絞り込み）"]
-    H --> I["工数集計"]
-    I --> J["全体サマリー\n（総工数、乖離率、入力率）"]
-    I --> K["担当者別集計"]
-    I --> L["ステータス別集計"]
-    I --> M["乖離アイテム抽出"]
-    I --> N["リードタイム分析\n（日付データがある場合）"]
-    I --> O["工数未入力アイテム抽出"]
-    J & K & L & M & N & O --> P["レポート生成"]
-    P --> Q["Workflow Summary\n（Markdown + Mermaid チャート）"]
-    P --> R["Artifact\n（JSON ファイル）"]
-    Q & R --> S["完了"]
+    F --> G["type / state フィルタリング\n（ITEM_TYPE / ITEM_STATE に応じて絞り込み）"]
+    G --> H["工数集計"]
+    H --> I["全体サマリー\n（総工数、乖離率、入力率）"]
+    H --> J["担当者別集計"]
+    H --> K["ステータス別集計"]
+    H --> L["乖離アイテム抽出"]
+    H --> M["リードタイム分析\n（日付データがある場合）"]
+    H --> N["工数未入力アイテム抽出"]
+    I & J & K & L & M & N --> O["レポート生成"]
+    O --> P["Workflow Summary\n（Markdown + Mermaid チャート）"]
+    O --> Q["Artifact\n（JSON ファイル）"]
+    P & Q --> R["完了"]
 ```
 
 ## 📝 処理詳細
@@ -91,8 +90,7 @@ flowchart TD
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
 | アイテム取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全アイテムをページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、Issue・PR の基本情報に加え、Status・見積もり工数(h)・実績工数(h)・終了期日・開始予定・終了予定・開始実績・終了実績のフィールド値を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
-| type フィルタリング | `ITEM_TYPE` に応じて Issue / PR を絞り込み | `filter_items_by_type` |
-| state フィルタリング | `ITEM_STATE` に応じて open / closed を絞り込み | `filter_items_by_state` |
+| type / state フィルタリング | `ITEM_TYPE` による種別フィルタ、`ITEM_STATE` による状態フィルタを1回の jq 呼び出しで一括適用 | `filter_items` |
 | 全体サマリー | 総見積もり工数・総実績工数・全体乖離率・工数入力率を算出 | `jq` + `awk` |
 | 担当者別集計 | 担当者ごとの見積もり・実績工数合計・乖離率を算出。複数担当者のアイテムは各担当者に同一工数を計上 | `jq` |
 | ステータス別集計 | ステータスごとの見積もり・実績工数合計を算出。Done ステータスの消化率を計算 | `jq` |
@@ -100,7 +98,7 @@ flowchart TD
 | リードタイム分析 | 開始実績・終了実績がある場合にリードタイム・日あたり工数を算出（条件付き） | `jq` |
 | 工数未入力アイテム抽出 | 見積もり・実績ともに未入力のアイテムを抽出。Done ステータスのアイテムを優先表示 | `jq` |
 | レポート出力 | `OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。Markdown 形式では Mermaid 円グラフを含む | `jq` + bash |
-| Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記 | — |
+| Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記。`OUTPUT_FORMAT=markdown` の場合は出力ファイルを再利用 | — |
 
 ## 📚 API リファレンス
 
