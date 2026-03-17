@@ -280,31 +280,23 @@ JQ_STATUS_ORDER='def status_order(s): if s == "Backlog" then 0 elif s == "Todo" 
 should_include_issues() { [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "issues" ]]; }
 should_include_prs() { [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "prs" ]]; }
 
-# ITEM_TYPE に基づいてアイテム JSON 配列を type フィルタリングする
+# ITEM_TYPE と ITEM_STATE に基づいてアイテム JSON 配列を一括フィルタリングする
+# type フィルタと state フィルタを1回の jq 呼び出しで実行する
 # 標準入力から JSON 配列を受け取り、フィルタ後の JSON 配列を標準出力に返す
-# 使用例: ITEMS=$(echo "${ITEMS}" | filter_items_by_type)
-filter_items_by_type() {
+# 使用例: ITEMS=$(echo "${ITEMS}" | filter_items)
+filter_items() {
   jq \
     --argjson includeIssues "$(should_include_issues && echo true || echo false)" \
-    --argjson includePRs "$(should_include_prs && echo true || echo false)" '
+    --argjson includePRs "$(should_include_prs && echo true || echo false)" \
+    --arg itemState "${ITEM_STATE}" '
     map(select(
       ($includeIssues or .type != "Issue")
       and ($includePRs or .type != "PullRequest")
-    ))
-  '
-}
-
-# ITEM_STATE に基づいてアイテム JSON 配列を state フィルタリングする
-# GitHub の state 値: Issue は OPEN / CLOSED、PullRequest は OPEN / CLOSED / MERGED
-# item_state=closed の場合、CLOSED と MERGED の両方を含める
-# 標準入力から JSON 配列を受け取り、フィルタ後の JSON 配列を標準出力に返す
-# 使用例: ITEMS=$(echo "${ITEMS}" | filter_items_by_state)
-filter_items_by_state() {
-  jq --arg itemState "${ITEM_STATE}" '
-    map(select(
-      $itemState == "all"
-      or ($itemState == "open" and .state == "OPEN")
-      or ($itemState == "closed" and (.state == "CLOSED" or .state == "MERGED"))
+      and (
+        $itemState == "all"
+        or ($itemState == "open" and .state == "OPEN")
+        or ($itemState == "closed" and (.state == "CLOSED" or .state == "MERGED"))
+      )
     ))
   '
 }

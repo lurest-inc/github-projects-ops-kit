@@ -113,8 +113,7 @@ echo "  合計: ${TOTAL_BEFORE_FILTER} 件（フィルタ前）"
 
 # --- フィルタリング ---
 
-ITEMS=$(echo "${ITEMS}" | filter_items_by_type)
-ITEMS=$(echo "${ITEMS}" | filter_items_by_state)
+ITEMS=$(echo "${ITEMS}" | filter_items)
 
 TOTAL_COUNT=$(echo "${ITEMS}" | jq 'length')
 echo "  合計: ${TOTAL_COUNT} 件（フィルタ後）"
@@ -403,7 +402,11 @@ echo "  出力: ${OUTPUT_FILE}（形式: ${OUTPUT_FORMAT}）"
 # --- Workflow Summary 出力 ---
 
 if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  format_velocity_markdown >> "${GITHUB_STEP_SUMMARY}"
+  if [[ "${OUTPUT_FORMAT}" == "markdown" ]]; then
+    cat "${OUTPUT_FILE}" >> "${GITHUB_STEP_SUMMARY}"
+  else
+    format_velocity_markdown >> "${GITHUB_STEP_SUMMARY}"
+  fi
 fi
 
 # --- コンソールサマリー ---

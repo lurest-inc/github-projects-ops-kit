@@ -127,8 +127,7 @@ echo "  合計: ${TOTAL_BEFORE_FILTER} 件（フィルタ前）"
 
 # --- フィルタリング ---
 
-ITEMS=$(echo "${ITEMS}" | filter_items_by_type)
-ITEMS=$(echo "${ITEMS}" | filter_items_by_state)
+ITEMS=$(echo "${ITEMS}" | filter_items)
 
 TOTAL_COUNT=$(echo "${ITEMS}" | jq 'length')
 echo "  合計: ${TOTAL_COUNT} 件（フィルタ後）"
@@ -140,11 +139,14 @@ echo "工数集計を実行しています..."
 
 EXECUTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-# 工数データの有無判定
-ITEMS_WITH_EFFORT=$(echo "${ITEMS}" | jq '[.[] | select(.estimated_hours != null or .actual_hours != null)]')
-ITEMS_WITH_EFFORT_COUNT=$(echo "${ITEMS_WITH_EFFORT}" | jq 'length')
-ITEMS_WITHOUT_EFFORT=$(echo "${ITEMS}" | jq '[.[] | select(.estimated_hours == null and .actual_hours == null)]')
-ITEMS_WITHOUT_EFFORT_COUNT=$(echo "${ITEMS_WITHOUT_EFFORT}" | jq 'length')
+# 工数データの有無判定・全体サマリー（1回の jq で算出）
+read -r ITEMS_WITH_EFFORT_COUNT ITEMS_WITHOUT_EFFORT_COUNT TOTAL_ESTIMATED TOTAL_ACTUAL < <(echo "${ITEMS}" | jq -r '
+  ([.[] | select(.estimated_hours != null or .actual_hours != null)] | length) as $with |
+  ([.[] | select(.estimated_hours == null and .actual_hours == null)] | length) as $without |
+  ([.[].estimated_hours // 0] | add // 0) as $est |
+  ([.[].actual_hours // 0] | add // 0) as $act |
+  [$with, $without, $est, $act] | @tsv
+')
 
 # 工数入力率
 if [[ "${TOTAL_COUNT}" -gt 0 ]]; then
@@ -152,10 +154,6 @@ if [[ "${TOTAL_COUNT}" -gt 0 ]]; then
 else
   EFFORT_INPUT_RATE="0.0"
 fi
-
-# 全体サマリー
-TOTAL_ESTIMATED=$(echo "${ITEMS}" | jq '[.[].estimated_hours // 0] | add // 0')
-TOTAL_ACTUAL=$(echo "${ITEMS}" | jq '[.[].actual_hours // 0] | add // 0')
 
 # 全体乖離率
 if [[ $(echo "${TOTAL_ESTIMATED}" | awk '{print ($1 > 0)}') -eq 1 ]]; then
@@ -499,7 +497,11 @@ echo "  出力: ${OUTPUT_FILE}（形式: ${OUTPUT_FORMAT}）"
 # --- Workflow Summary 出力 ---
 
 if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  format_effort_markdown >> "${GITHUB_STEP_SUMMARY}"
+  if [[ "${OUTPUT_FORMAT}" == "markdown" ]]; then
+    cat "${OUTPUT_FILE}" >> "${GITHUB_STEP_SUMMARY}"
+  else
+    format_effort_markdown >> "${GITHUB_STEP_SUMMARY}"
+  fi
 fi
 
 # --- コンソールサマリー ---

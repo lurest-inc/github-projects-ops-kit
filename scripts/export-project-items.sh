@@ -151,11 +151,8 @@ echo "  合計: ${TOTAL_BEFORE_FILTER} 件（フィルタ前）"
 
 # --- type / state フィルタリング ---
 
-# type フィルタを適用
-ITEMS=$(echo "${ITEMS}" | filter_items_by_type)
-
-# state フィルタを適用（closed は CLOSED + MERGED を含む）
-ITEMS=$(echo "${ITEMS}" | filter_items_by_state)
+# type / state フィルタを一括適用
+ITEMS=$(echo "${ITEMS}" | filter_items)
 
 read -r TOTAL_COUNT ISSUE_COUNT PR_COUNT < <(echo "${ITEMS}" | jq -r '[length, ([.[] | select(.type == "Issue")] | length), ([.[] | select(.type == "PullRequest")] | length)] | @tsv')
 

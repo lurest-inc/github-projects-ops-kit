@@ -139,10 +139,6 @@ echo "${PROJECT_V2}" | jq '.' 2>/dev/null || echo "${PROJECT_V2}"
 echo ""
 echo "Visibility を ${PROJECT_VISIBILITY} に設定します..."
 
-IS_PUBLIC="false"
-if [[ "${PROJECT_VISIBILITY}" == "PUBLIC" ]]; then
-  IS_PUBLIC="true"
-fi
 UPDATE_MUTATION=$(cat <<'GRAPHQL'
 mutation($projectId: ID!, $public: Boolean!) {
   updateProjectV2(input: {projectId: $projectId, public: $public}) {
@@ -153,16 +149,17 @@ GRAPHQL
 )
 VARIABLES_JSON=$(jq -n \
   --arg projectId "${PROJECT_ID}" \
-  --argjson public "${IS_PUBLIC}" \
+  --argjson public "$([[ "${PROJECT_VISIBILITY}" == "PUBLIC" ]] && echo true || echo false)" \
   '{projectId: $projectId, public: $public}')
 EDIT_OUTPUT=$(run_graphql_json "${UPDATE_MUTATION}" "Visibility の設定" "${VARIABLES_JSON}")
 
 # Visibility 設定結果の検証
-ACTUAL_PUBLIC=$(echo "${EDIT_OUTPUT}" | jq '.data.updateProjectV2.projectV2.public')
+ACTUAL_PUBLIC=$(echo "${EDIT_OUTPUT}" | jq -r '.data.updateProjectV2.projectV2.public')
+EXPECTED_PUBLIC=$([[ "${PROJECT_VISIBILITY}" == "PUBLIC" ]] && echo "true" || echo "false")
 
 if [[ "${ACTUAL_PUBLIC}" == "null" ]]; then
   echo "::warning::Visibility の検証をスキップしました（レスポンスから visibility を取得できませんでした）。"
-elif [[ "${ACTUAL_PUBLIC}" == "true" && "${PROJECT_VISIBILITY}" != "PUBLIC" ]] || [[ "${ACTUAL_PUBLIC}" == "false" && "${PROJECT_VISIBILITY}" != "PRIVATE" ]]; then
+elif [[ "${ACTUAL_PUBLIC}" != "${EXPECTED_PUBLIC}" ]]; then
   echo "::warning::Visibility の設定値が期待と異なります。期待: ${PROJECT_VISIBILITY}、実際: public=${ACTUAL_PUBLIC}"
 else
   echo "::notice::Visibility を ${PROJECT_VISIBILITY} に設定し、検証に成功しました。"

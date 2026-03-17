@@ -126,11 +126,8 @@ echo "  合計: ${TOTAL_BEFORE_FILTER} 件（フィルタ前）"
 echo ""
 echo "フィルタリングを実行しています..."
 
-# type フィルタを適用
-ITEMS=$(echo "${ITEMS}" | filter_items_by_type)
-
-# state フィルタを適用
-ITEMS=$(echo "${ITEMS}" | filter_items_by_state)
+# type / state フィルタを一括適用
+ITEMS=$(echo "${ITEMS}" | filter_items)
 
 # 除外ステータス（Done, Backlog）および除外ラベルを適用
 EXCLUDE_LABELS_JSON=$(echo "${EXCLUDE_LABELS}" | jq -R '[split(",") | .[] | gsub("^\\s+|\\s+$"; "") | ascii_downcase]')
@@ -178,18 +175,17 @@ STALE_ITEMS=$(echo "${ITEMS}" | jq \
   ]
 ')
 
-STALE_COUNT=$(echo "${STALE_ITEMS}" | jq 'length')
-echo "  滞留アイテム: ${STALE_COUNT} 件"
-
 # --- ステータス別集計 ---
 
-read -r IN_REVIEW_COUNT IN_PROGRESS_COUNT TODO_COUNT < <(echo "${STALE_ITEMS}" | jq -r '
+read -r STALE_COUNT IN_REVIEW_COUNT IN_PROGRESS_COUNT TODO_COUNT < <(echo "${STALE_ITEMS}" | jq -r '
   [
+    length,
     ([.[] | select(.status == "In Review")] | length),
     ([.[] | select(.status == "In Progress")] | length),
     ([.[] | select(.status == "Todo")] | length)
   ] | @tsv
 ')
+echo "  滞留アイテム: ${STALE_COUNT} 件"
 
 # --- フォーマッター関数 ---
 
@@ -323,7 +319,11 @@ echo "  出力: ${OUTPUT_FILE}（形式: ${OUTPUT_FORMAT}）"
 # --- Workflow Summary 出力 ---
 
 if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  format_stale_markdown "${STALE_ITEMS}" >> "${GITHUB_STEP_SUMMARY}"
+  if [[ "${OUTPUT_FORMAT}" == "markdown" ]]; then
+    cat "${OUTPUT_FILE}" >> "${GITHUB_STEP_SUMMARY}"
+  else
+    format_stale_markdown "${STALE_ITEMS}" >> "${GITHUB_STEP_SUMMARY}"
+  fi
 fi
 
 # --- コンソールサマリー ---

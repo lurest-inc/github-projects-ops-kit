@@ -118,8 +118,7 @@ echo "  合計: ${TOTAL_BEFORE_FILTER} 件（フィルタ前）"
 
 # --- フィルタリング ---
 
-ITEMS=$(echo "${ITEMS}" | filter_items_by_type)
-ITEMS=$(echo "${ITEMS}" | filter_items_by_state)
+ITEMS=$(echo "${ITEMS}" | filter_items)
 
 TOTAL_COUNT=$(echo "${ITEMS}" | jq 'length')
 echo "  合計: ${TOTAL_COUNT} 件（フィルタ後）"
@@ -132,13 +131,10 @@ echo "集計処理を実行しています..."
 EXECUTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 TODAY=$(date -u +"%Y-%m-%d")
 
-# タイプ別・状態別件数
-read -r ISSUE_COUNT PR_COUNT < <(echo "${ITEMS}" | jq -r '[
+# タイプ別・状態別件数（1回の jq で算出）
+read -r ISSUE_COUNT PR_COUNT OPEN_COUNT CLOSED_COUNT MERGED_COUNT < <(echo "${ITEMS}" | jq -r '[
   ([.[] | select(.type == "Issue")] | length),
-  ([.[] | select(.type == "PullRequest")] | length)
-] | @tsv')
-
-read -r OPEN_COUNT CLOSED_COUNT MERGED_COUNT < <(echo "${ITEMS}" | jq -r '[
+  ([.[] | select(.type == "PullRequest")] | length),
   ([.[] | select(.state == "OPEN")] | length),
   ([.[] | select(.state == "CLOSED")] | length),
   ([.[] | select(.state == "MERGED")] | length)
@@ -179,8 +175,11 @@ LABEL_SUMMARY=$(echo "${ITEMS}" | jq '
   | sort_by(-.count)
 ')
 
-# カスタムフィールド集計（工数）
-HAS_EFFORT=$(echo "${ITEMS}" | jq '[.[] | select(.estimated_hours != null or .actual_hours != null)] | length > 0')
+# カスタムフィールド集計（工数）・期日超過アイテムのフラグを1回の jq で判定
+read -r HAS_EFFORT HAS_DUE_DATE < <(echo "${ITEMS}" | jq -r '[
+  ([.[] | select(.estimated_hours != null or .actual_hours != null)] | length > 0),
+  ([.[] | select(.due_date != null)] | length > 0)
+] | @tsv')
 
 EFFORT_SUMMARY=""
 if [[ "${HAS_EFFORT}" == "true" ]]; then
@@ -194,9 +193,6 @@ if [[ "${HAS_EFFORT}" == "true" ]]; then
     | sort_by(status_order(.status))
   ')
 fi
-
-# 期日超過アイテム
-HAS_DUE_DATE=$(echo "${ITEMS}" | jq '[.[] | select(.due_date != null)] | length > 0')
 
 OVERDUE_ITEMS="[]"
 if [[ "${HAS_DUE_DATE}" == "true" ]]; then
@@ -397,7 +393,11 @@ echo "  出力: ${OUTPUT_FILE}（形式: ${OUTPUT_FORMAT}）"
 # --- Workflow Summary 出力 ---
 
 if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  format_summary_markdown >> "${GITHUB_STEP_SUMMARY}"
+  if [[ "${OUTPUT_FORMAT}" == "markdown" ]]; then
+    cat "${OUTPUT_FILE}" >> "${GITHUB_STEP_SUMMARY}"
+  else
+    format_summary_markdown >> "${GITHUB_STEP_SUMMARY}"
+  fi
 fi
 
 # --- コンソールサマリー ---

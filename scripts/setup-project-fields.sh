@@ -98,7 +98,7 @@ echo "カスタムフィールドを作成します..."
 # ループ前にフィールド定義を1回の jq で事前解析する（Issue #122）
 # 各行: name\tdataType\tsingleSelectOptions(JSON)
 PARSED_FIELDS=$(echo "${FIELD_DEFINITIONS}" | jq -r '.[] | [.name, .dataType, (if .options then ([.options[] | {name: ., color: "GRAY", description: ""}] | tojson) else "" end)] | @tsv')
-FIELD_COUNT=$(echo "${PARSED_FIELDS}" | wc -l | tr -d ' ')
+FIELD_COUNT=$(echo "${FIELD_DEFINITIONS}" | jq 'length')
 CREATED_COUNT=0
 SKIPPED_COUNT=0
 FAILED_COUNT=0
