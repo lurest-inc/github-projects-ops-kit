@@ -137,11 +137,11 @@ EXECUTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 # macOS と Linux の date 互換性のため jq で計算
 read -r PERIOD_START PERIOD_END < <(jq -n \
   --argjson weeks "${VELOCITY_WEEKS}" '
-  now | floor |
+  (now | floor) as $now |
   # 現在の曜日（月=0, 日=6）
-  (. / 86400 + 3) % 7 | floor |
+  ($now / 86400 + 3) % 7 | floor |
   # 今週の月曜日（epoch秒）
-  (now | floor) - . * 86400 |
+  $now - . * 86400 |
   # 今週の日曜日
   . + 6 * 86400 |
   # 集計期間の開始（VELOCITY_WEEKS 週前の月曜日）
@@ -166,7 +166,10 @@ echo "  Done アイテム数（期間内）: ${DONE_COUNT} 件"
 # --- 週別ベロシティ集計 ---
 
 # ISO 週ラベルと期間で集計
-WEEKLY_VELOCITY=$(echo "${DONE_ITEMS}" | jq --arg start "${PERIOD_START}" --argjson weeks "${VELOCITY_WEEKS}" '
+WEEKLY_VELOCITY=$(jq -n \
+  --arg start "${PERIOD_START}" \
+  --argjson weeks "${VELOCITY_WEEKS}" \
+  --argjson items "${DONE_ITEMS}" '
   # 集計期間の各週の情報を生成
   [range($weeks)] |
   map(
@@ -186,10 +189,8 @@ WEEKLY_VELOCITY=$(echo "${DONE_ITEMS}" | jq --arg start "${PERIOD_START}" --argj
     }
   ) |
   # 各週にマッチするアイテムを集計
-  . as $weeks_info |
-  $weeks_info | map(
+  map(
     . as $week |
-    ($ARGS.positional[0] // []) as $items |
     ($items | [.[] |
       select(
         (.updated_at | split("T")[0]) >= $week.week_start
@@ -201,21 +202,19 @@ WEEKLY_VELOCITY=$(echo "${DONE_ITEMS}" | jq --arg start "${PERIOD_START}" --argj
       actual_hours: ([$week_items[].actual_hours // 0] | add // 0)
     }
   )
-' --jsonargs "${DONE_ITEMS}")
+')
 
 # 工数データの有無を判定
 HAS_HOURS=$(echo "${DONE_ITEMS}" | jq '[.[] | select(.actual_hours != null and .actual_hours > 0)] | length > 0')
 
-# 平均ベロシティ
-AVG_COUNT=$(echo "${WEEKLY_VELOCITY}" | jq --argjson weeks "${VELOCITY_WEEKS}" '
-  ([.[].count] | add // 0) / $weeks * 10 | round / 10
+# 平均ベロシティ（件数・工数を1回の jq で算出）
+read -r AVG_COUNT AVG_HOURS < <(echo "${WEEKLY_VELOCITY}" | jq -r --argjson weeks "${VELOCITY_WEEKS}" '
+  (([.[].count] | add // 0) / $weeks * 10 | round / 10) as $avg_count |
+  (([.[].actual_hours] | add // 0) / $weeks * 10 | round / 10) as $avg_hours |
+  "\($avg_count) \($avg_hours)"
 ')
-
-AVG_HOURS="0"
-if [[ "${HAS_HOURS}" == "true" ]]; then
-  AVG_HOURS=$(echo "${WEEKLY_VELOCITY}" | jq --argjson weeks "${VELOCITY_WEEKS}" '
-    ([.[].actual_hours] | add // 0) / $weeks * 10 | round / 10
-  ')
+if [[ "${HAS_HOURS}" != "true" ]]; then
+  AVG_HOURS="0"
 fi
 
 echo "  平均ベロシティ: ${AVG_COUNT} 件/週"
@@ -245,6 +244,29 @@ ASSIGNEE_VELOCITY=$(echo "${DONE_ITEMS}" | jq '
 echo "  担当者別: $(echo "${ASSIGNEE_VELOCITY}" | jq 'length') 件"
 
 # --- フォーマッター関数 ---
+
+# Mermaid xychart-beta チャートを出力するヘルパー関数
+# 引数: $1=タイトル, $2=Y軸ラベル, $3=データフィールド名, $4=Y軸最大値の追加分
+emit_mermaid_xychart() {
+  local title="$1" y_label="$2" data_field="$3" y_padding="$4"
+  local has_nonzero
+  has_nonzero=$(echo "${WEEKLY_VELOCITY}" | jq "[.[] | select(.${data_field} > 0)] | length")
+  if [[ "${has_nonzero}" -gt 0 ]]; then
+    echo '```mermaid'
+    echo 'xychart-beta'
+    echo "    title \"${title}\""
+    echo -n '    x-axis ['
+    echo "${WEEKLY_VELOCITY}" | jq -r '[.[] | "\"\(.week_label)\""] | join(", ")' | tr -d '\n'
+    echo ']'
+    echo -n "    y-axis \"${y_label}\" 0 --> "
+    echo "${WEEKLY_VELOCITY}" | jq "[.[].${data_field}] | max + ${y_padding} | floor"
+    echo -n '    bar ['
+    echo "${WEEKLY_VELOCITY}" | jq -r "[.[].${data_field} | tostring] | join(\", \")" | tr -d '\n'
+    echo ']'
+    echo '```'
+    echo ""
+  fi
+}
 
 format_velocity_markdown() {
   {
@@ -277,43 +299,11 @@ format_velocity_markdown() {
     echo ""
 
     # Mermaid チャート（完了数）
-    local has_nonzero
-    has_nonzero=$(echo "${WEEKLY_VELOCITY}" | jq '[.[] | select(.count > 0)] | length')
-    if [[ "${has_nonzero}" -gt 0 ]]; then
-      echo '```mermaid'
-      echo 'xychart-beta'
-      echo '    title "週別完了アイテム数"'
-      echo -n '    x-axis ['
-      echo "${WEEKLY_VELOCITY}" | jq -r '[.[] | "\"\(.week_label)\""] | join(", ")' | tr -d '\n'
-      echo ']'
-      echo -n '    y-axis "完了数" 0 --> '
-      echo "${WEEKLY_VELOCITY}" | jq '[.[].count] | max + 2'
-      echo -n '    bar ['
-      echo "${WEEKLY_VELOCITY}" | jq -r '[.[].count | tostring] | join(", ")' | tr -d '\n'
-      echo ']'
-      echo '```'
-      echo ""
-    fi
+    emit_mermaid_xychart "週別完了アイテム数" "完了数" "count" 2
 
     # Mermaid チャート（完了工数）
     if [[ "${HAS_HOURS}" == "true" ]]; then
-      local has_nonzero_hours
-      has_nonzero_hours=$(echo "${WEEKLY_VELOCITY}" | jq '[.[] | select(.actual_hours > 0)] | length')
-      if [[ "${has_nonzero_hours}" -gt 0 ]]; then
-        echo '```mermaid'
-        echo 'xychart-beta'
-        echo '    title "週別完了工数(h)"'
-        echo -n '    x-axis ['
-        echo "${WEEKLY_VELOCITY}" | jq -r '[.[] | "\"\(.week_label)\""] | join(", ")' | tr -d '\n'
-        echo ']'
-        echo -n '    y-axis "工数(h)" 0 --> '
-        echo "${WEEKLY_VELOCITY}" | jq '[.[].actual_hours] | max + 5 | floor'
-        echo -n '    bar ['
-        echo "${WEEKLY_VELOCITY}" | jq -r '[.[].actual_hours | tostring] | join(", ")' | tr -d '\n'
-        echo ']'
-        echo '```'
-        echo ""
-      fi
+      emit_mermaid_xychart "週別完了工数(h)" "工数(h)" "actual_hours" 5
     fi
 
     # 担当者別ベロシティ
@@ -348,13 +338,15 @@ format_velocity_markdown() {
 }
 
 format_velocity_csv() {
+  local items="$1"
   echo "week_label,week_start,week_end,count,actual_hours"
-  echo "${WEEKLY_VELOCITY}" | jq -r '.[] | [.week_label, .week_start, .week_end, .count, .actual_hours] | @csv'
+  echo "${items}" | jq -r '.[] | [.week_label, .week_start, .week_end, .count, .actual_hours] | @csv'
 }
 
 format_velocity_tsv() {
+  local items="$1"
   echo -e "week_label\tweek_start\tweek_end\tcount\tactual_hours"
-  echo "${WEEKLY_VELOCITY}" | jq -r '.[] | [.week_label, .week_start, .week_end, (.count | tostring), (.actual_hours | tostring)] | @tsv'
+  echo "${items}" | jq -r '.[] | [.week_label, .week_start, .week_end, (.count | tostring), (.actual_hours | tostring)] | @tsv'
 }
 
 # --- レポート出力 ---
@@ -406,10 +398,10 @@ case "${OUTPUT_FORMAT}" in
     format_velocity_markdown > "${OUTPUT_FILE}"
     ;;
   csv)
-    format_velocity_csv > "${OUTPUT_FILE}"
+    format_velocity_csv "${WEEKLY_VELOCITY}" > "${OUTPUT_FILE}"
     ;;
   tsv)
-    format_velocity_tsv > "${OUTPUT_FILE}"
+    format_velocity_tsv "${WEEKLY_VELOCITY}" > "${OUTPUT_FILE}"
     ;;
 esac
 
