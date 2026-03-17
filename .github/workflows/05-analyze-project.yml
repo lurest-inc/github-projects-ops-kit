@@ -1,4 +1,4 @@
-name: "⑩ 統合プロジェクト分析"
+name: "⑤ 統合プロジェクト分析"
 
 on:
   workflow_dispatch:
@@ -51,35 +51,6 @@ permissions:
   contents: read
 
 jobs:
-  detect-stale-items:
-    if: >-
-      inputs.report_types == 'all' || inputs.report_types == 'stale'
-    runs-on: ubuntu-latest
-    env:
-      GH_TOKEN: ${{ secrets.PROJECT_PAT }}
-      PROJECT_OWNER: ${{ github.repository_owner }}
-      PROJECT_NUMBER: ${{ inputs.project_number }}
-      OUTPUT_FORMAT: ${{ inputs.output_format }}
-      ITEM_TYPE: ${{ inputs.item_type }}
-      ITEM_STATE: ${{ inputs.item_state }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6.0.2
-
-      - name: 滞留アイテム検知
-        run: |
-          chmod +x scripts/detect-stale-items.sh
-          bash scripts/detect-stale-items.sh
-
-      - name: アーティファクトをアップロード
-        if: always()
-        uses: actions/upload-artifact@v7.0.0
-        with:
-          name: stale-items-report
-          path: stale-items-report.*
-          if-no-files-found: ignore
-          retention-days: 7
-
   generate-summary-report:
     if: >-
       inputs.report_types == 'all' || inputs.report_types == 'summary'
@@ -138,6 +109,35 @@ jobs:
           if-no-files-found: ignore
           retention-days: 90
 
+  detect-stale-items:
+    if: >-
+      inputs.report_types == 'all' || inputs.report_types == 'stale'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.PROJECT_PAT }}
+      PROJECT_OWNER: ${{ github.repository_owner }}
+      PROJECT_NUMBER: ${{ inputs.project_number }}
+      OUTPUT_FORMAT: ${{ inputs.output_format }}
+      ITEM_TYPE: ${{ inputs.item_type }}
+      ITEM_STATE: ${{ inputs.item_state }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: 滞留アイテム検知
+        run: |
+          chmod +x scripts/detect-stale-items.sh
+          bash scripts/detect-stale-items.sh
+
+      - name: アーティファクトをアップロード
+        if: always()
+        uses: actions/upload-artifact@v7.0.0
+        with:
+          name: stale-items-report
+          path: stale-items-report.*
+          if-no-files-found: ignore
+          retention-days: 7
+
   export-items:
     if: >-
       inputs.report_types == 'all' || inputs.report_types == 'export'
@@ -168,7 +168,7 @@ jobs:
           retention-days: 7
 
   workflow-summary-failure:
-    needs: [detect-stale-items, generate-summary-report, generate-effort-report, export-items]
+    needs: [generate-summary-report, generate-effort-report, detect-stale-items, export-items]
     if: always() && contains(needs.*.result, 'failure')
     runs-on: ubuntu-latest
     steps:
@@ -182,10 +182,10 @@ jobs:
           project-owner: ${{ github.repository_owner }}
           project-number: ${{ inputs.project_number }}
           job-results: |
-            {"detect-stale-items": "${{ needs.detect-stale-items.result }}", "generate-summary-report": "${{ needs.generate-summary-report.result }}", "generate-effort-report": "${{ needs.generate-effort-report.result }}", "export-items": "${{ needs.export-items.result }}"}
+            {"generate-summary-report": "${{ needs.generate-summary-report.result }}", "generate-effort-report": "${{ needs.generate-effort-report.result }}", "detect-stale-items": "${{ needs.detect-stale-items.result }}", "export-items": "${{ needs.export-items.result }}"}
 
   workflow-summary-success:
-    needs: [detect-stale-items, generate-summary-report, generate-effort-report, export-items]
+    needs: [generate-summary-report, generate-effort-report, detect-stale-items, export-items]
     if: always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     steps:
@@ -199,4 +199,4 @@ jobs:
           project-owner: ${{ github.repository_owner }}
           project-number: ${{ inputs.project_number }}
           job-results: |
-            {"detect-stale-items": "${{ needs.detect-stale-items.result }}", "generate-summary-report": "${{ needs.generate-summary-report.result }}", "generate-effort-report": "${{ needs.generate-effort-report.result }}", "export-items": "${{ needs.export-items.result }}"}
+            {"generate-summary-report": "${{ needs.generate-summary-report.result }}", "generate-effort-report": "${{ needs.generate-effort-report.result }}", "detect-stale-items": "${{ needs.detect-stale-items.result }}", "export-items": "${{ needs.export-items.result }}"}

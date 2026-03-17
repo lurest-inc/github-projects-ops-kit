@@ -10,10 +10,9 @@
 ```mermaid
 flowchart TD
     A["① Project 新規作成"] --> B["② Project 拡張"]
-    B --> C["③ Issue/PR 一括紐付け"]
-    C --> D["④ アイテム エクスポート"]
-    D --> E["⑤ Issue ラベル一括追加"]
-    E --> F["⑩ 統合プロジェクト分析"]
+    B --> C["③ Issue ラベル一括追加"]
+    C --> D["④ Issue/PR 一括紐付け"]
+    D --> F["⑤ 統合プロジェクト分析"]
 
     A -- "再利用可能ワークフロー" --> R["_reusable-extend-project"]
     B -- "再利用可能ワークフロー" --> R
@@ -36,9 +35,9 @@ flowchart TD
     R --> S2
     R --> S3
     R --> S4
-    C --> S5
-    D --> S6
-    E --> S7
+    C --> S7
+    D --> S5
+    F --> S6
     F --> S8
     F --> S9
     F --> S10
@@ -56,10 +55,9 @@ flowchart TD
       ├── 01-create-project.yml        # ① Project 新規作成ワークフロー
       ├── 02-extend-project.yml        # ② Project 拡張ワークフロー
       ├── _reusable-extend-project.yml # Project 拡張（再利用可能ワークフロー）
-      ├── 03-add-items-to-project.yml  # ③ Issue/PR 一括紐付けワークフロー
-      ├── 04-export-project-items.yml  # ④ Project アイテム エクスポートワークフロー
-      ├── 05-setup-repository-labels.yml  # ⑤ Issue ラベル一括追加ワークフロー
-      └── 10-analyze-project.yml         # ⑩ 統合プロジェクト分析ワークフロー
+      ├── 03-setup-repository-labels.yml  # ③ Issue ラベル一括追加ワークフロー
+      ├── 04-add-items-to-project.yml  # ④ Issue/PR 一括紐付けワークフロー
+      └── 05-analyze-project.yml         # ⑤ 統合プロジェクト分析ワークフロー
 scripts/
   ├── config/
   │   ├── project-field-definitions.json   # カスタムフィールド定義
@@ -89,8 +87,8 @@ scripts/
   ├── create-project ジョブ
   │   └── scripts/setup-github-project.sh    # Project 作成
   ├── extend-project ジョブ（_reusable-extend-project.yml）
-  │   ├── scripts/setup-project-fields.sh    # カスタムフィールド作成
   │   ├── scripts/setup-project-status.sh    # ステータスカラム設定
+  │   ├── scripts/setup-project-fields.sh    # カスタムフィールド作成
   │   └── scripts/setup-project-views.sh     # View 作成
   ├── workflow-summary-failure ジョブ（失敗時）
   │   └── .github/actions/workflow-summary   # 失敗サマリー出力
@@ -103,8 +101,8 @@ scripts/
 ```
 02-extend-project.yml
   ├── extend-project ジョブ（_reusable-extend-project.yml）
-  │   ├── scripts/setup-project-fields.sh    # カスタムフィールド作成
   │   ├── scripts/setup-project-status.sh    # ステータスカラム設定
+  │   ├── scripts/setup-project-fields.sh    # カスタムフィールド作成
   │   └── scripts/setup-project-views.sh     # View 作成
   ├── workflow-summary-failure ジョブ（失敗時）
   │   └── .github/actions/workflow-summary   # 失敗サマリー出力
@@ -112,35 +110,10 @@ scripts/
       └── .github/actions/workflow-summary   # 成功サマリー出力
 ```
 
-### ③ Issue/PR 一括紐付け
+### ③ Issue ラベル一括追加
 
 ```
-03-add-items-to-project.yml
-  ├── add-items ジョブ
-  │   └── scripts/add-items-to-project.sh    # アイテム一括追加
-  ├── workflow-summary-failure ジョブ（失敗時）
-  │   └── .github/actions/workflow-summary   # 失敗サマリー出力
-  └── workflow-summary-success ジョブ（成功時）
-      └── .github/actions/workflow-summary   # 成功サマリー出力
-```
-
-### ④ `Project` アイテム エクスポート
-
-```
-04-export-project-items.yml
-  ├── export-items ジョブ
-  │   ├── scripts/export-project-items.sh    # アイテム取得・エクスポート
-  │   └── artifact アップロード                # エクスポートファイルを保存
-  ├── workflow-summary-failure ジョブ（失敗時）
-  │   └── .github/actions/workflow-summary   # 失敗サマリー出力
-  └── workflow-summary-success ジョブ（成功時）
-      └── .github/actions/workflow-summary   # 成功サマリー出力
-```
-
-### ⑤ Issue ラベル一括追加
-
-```
-05-setup-repository-labels.yml
+03-setup-repository-labels.yml
   ├── setup-repository-labels ジョブ
   │   └── scripts/setup-repository-labels.sh    # ラベル一括作成
   ├── workflow-summary-failure ジョブ（失敗時）
@@ -149,19 +122,34 @@ scripts/
       └── .github/actions/workflow-summary   # 成功サマリー出力
 ```
 
-### ⑩ 統合プロジェクト分析
+### ④ Issue/PR 一括紐付け
 
 ```
-10-analyze-project.yml
-  ├── detect-stale-items ジョブ（report_types: all or stale）
-  │   ├── scripts/detect-stale-items.sh          # 滞留アイテム検知
-  │   └── artifact アップロード                    # 滞留レポートを保存
+04-add-items-to-project.yml
+  ├── add-items ジョブ
+  │   └── scripts/add-items-to-project.sh    # アイテム一括追加
+  ├── workflow-summary-failure ジョブ（失敗時）
+  │   └── .github/actions/workflow-summary   # 失敗サマリー出力
+  └── workflow-summary-success ジョブ（成功時）
+      └── .github/actions/workflow-summary   # 成功サマリー出力
+```
+
+### ⑤ 統合プロジェクト分析
+
+```
+05-analyze-project.yml
   ├── generate-summary-report ジョブ（report_types: all or summary）
   │   ├── scripts/generate-summary-report.sh     # サマリーレポート生成
   │   └── artifact アップロード                    # サマリーレポートを保存
   ├── generate-effort-report ジョブ（report_types: all or effort）
   │   ├── scripts/generate-effort-report.sh      # 工数集計レポート生成
   │   └── artifact アップロード                    # 工数レポートを保存
+  ├── detect-stale-items ジョブ（report_types: all or stale）
+  │   ├── scripts/detect-stale-items.sh          # 滞留アイテム検知
+  │   └── artifact アップロード                    # 滞留レポートを保存
+  ├── export-items ジョブ（report_types: all or export）
+  │   ├── scripts/export-project-items.sh        # アイテムエクスポート
+  │   └── artifact アップロード                    # エクスポートファイルを保存
   ├── workflow-summary-failure ジョブ（失敗時）
   │   └── .github/actions/workflow-summary       # 失敗サマリー出力
   └── workflow-summary-success ジョブ（成功時）

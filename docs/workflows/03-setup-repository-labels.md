@@ -1,4 +1,4 @@
-# ⑤ 🏷️ Issue ラベル一括追加
+# ③ 🏷️ Issue ラベル一括追加
 
 <!-- START doctoc -->
 <!-- END doctoc -->
@@ -16,7 +16,7 @@
 ## 📖 使い方
 
 1. `Actions` タブを開く
-2. `⑤ Issue ラベル一括追加` を選択
+2. `③ Issue ラベル一括追加` を選択
 3. `Run workflow` をクリック
 4. パラメータを入力して実行
 
@@ -42,7 +42,7 @@ flowchart TD
 
 ### ファイル
 
-`.github/workflows/05-setup-repository-labels.yml`
+`.github/workflows/03-setup-repository-labels.yml`
 
 ### トリガー
 
@@ -65,7 +65,7 @@ permissions:
 ### ジョブ構成
 
 ```
-.github/workflows/05-setup-repository-labels.yml
+.github/workflows/03-setup-repository-labels.yml
   ├── setup-repository-labels ジョブ
   │   └── scripts/setup-repository-labels.sh    # ラベル一括作成
   ├── workflow-summary-failure ジョブ（失敗時）

@@ -25,15 +25,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
 
-      - name: カスタムフィールドを作成
-        run: |
-          chmod +x scripts/setup-project-fields.sh
-          bash scripts/setup-project-fields.sh
-
       - name: ステータスカラムを設定
         run: |
           chmod +x scripts/setup-project-status.sh
           bash scripts/setup-project-status.sh
+
+      - name: カスタムフィールドを作成
+        run: |
+          chmod +x scripts/setup-project-fields.sh
+          bash scripts/setup-project-fields.sh
 
       - name: View を作成
         run: |

@@ -1,4 +1,4 @@
-# ③ 🔗 Issue/PR 一括紐付け
+# ④ 🔗 Issue/PR 一括紐付け
 
 <!-- START doctoc -->
 <!-- END doctoc -->
@@ -15,7 +15,7 @@
 ## 📖 使い方
 
 1. `Actions` タブを開く
-2. `③ Issue/PR 一括紐付け` を選択
+2. `④ Issue/PR 一括紐付け` を選択
 3. `Run workflow` をクリック
 4. パラメータを入力して実行
 

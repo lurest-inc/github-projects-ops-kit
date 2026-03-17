@@ -3,7 +3,7 @@
 <!-- START doctoc -->
 <!-- END doctoc -->
 
-> **⚠️ このワークフローは [⑩ 統合プロジェクト分析](10-analyze-project) に統合されました。** `report_types: export` を選択して実行してください。
+> **⚠️ このワークフローは [⑤ 統合プロジェクト分析](05-analyze-project) に統合されました。** `report_types: export` を選択して実行してください。
 
 指定した GitHub `Project` に紐づく `Issue` / `Pull Request` の一覧を取得し、エクスポートします。
 

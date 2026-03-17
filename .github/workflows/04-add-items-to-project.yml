@@ -1,4 +1,4 @@
-name: "③ Issue/PR 一括紐付け"
+name: "④ Issue/PR 一括紐付け"
 
 on:
   workflow_dispatch:

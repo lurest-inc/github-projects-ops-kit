@@ -159,4 +159,4 @@ Fine-grained PAT の場合は、対象リポジトリに対する **Issues** の
 
 ## 🔄 使用ワークフロー
 
-- [⑤ Issue ラベル一括追加](../workflows/05-setup-repository-labels)
+- [③ Issue ラベル一括追加](../workflows/03-setup-repository-labels)

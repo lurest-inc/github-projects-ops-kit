@@ -1,4 +1,4 @@
-name: "⑤ 🏷️ Issue ラベル一括追加"
+name: "③ 🏷️ Issue ラベル一括追加"
 
 on:
   workflow_dispatch:

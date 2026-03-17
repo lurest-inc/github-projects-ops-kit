@@ -73,24 +73,21 @@ gh workflow run 02-extend-project.yml \
   --field project_number="<PROJECT_NUMBER>"
 ```
 
-### ③ Issue/PR 一括紐付け
+### ③ Issue ラベル一括追加
 
 ```bash
-gh workflow run 03-add-items-to-project.yml \
+gh workflow run 03-setup-repository-labels.yml \
+  --field target_repo="<owner/repo>"
+```
+
+### ④ Issue/PR 一括紐付け
+
+```bash
+gh workflow run 04-add-items-to-project.yml \
   --field project_number="<PROJECT_NUMBER>" \
   --field target_repo="<owner/repo>" \
   --field item_type="all" \
   --field item_state="open"
-```
-
-### ④ Project アイテム エクスポート
-
-```bash
-gh workflow run 04-export-project-items.yml \
-  --field project_number="<PROJECT_NUMBER>" \
-  --field output_format="markdown" \
-  --field item_type="all" \
-  --field item_state="all"
 ```
 
 ## 👀 ワークフロー実行状況の確認
@@ -107,5 +104,5 @@ gh run watch
 
 - [① GitHub Project 新規作成](workflows/01-create-project)
 - [② GitHub Project 拡張](workflows/02-extend-project)
-- [③ Issue/PR 一括紐付け](workflows/03-add-items-to-project)
-- [④ Project アイテム エクスポート](workflows/04-export-project-items)
+- [③ Issue ラベル一括追加](workflows/03-setup-repository-labels)
+- [④ Issue/PR 一括紐付け](workflows/04-add-items-to-project)
