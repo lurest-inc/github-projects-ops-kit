@@ -10,7 +10,8 @@ set -euo pipefail
 #   PROJECT_NUMBER - 対象 Project の Number
 #   OUTPUT_FORMAT  - 出力形式（markdown / csv / tsv / json、デフォルト: markdown）
 #   ITEM_TYPE      - 対象アイテムの種別（all / issues / prs、デフォルト: all）
-#   ITEM_STATE     - 取得するアイテムの状態（open / closed / all、デフォルト: all）
+#   ITEM_STATE        - 取得するアイテムの状態（open / closed / all、デフォルト: all）
+#   REDACT_SENSITIVE  - 機密フィールドをリダクション（true / false、デフォルト: false）
 
 # --- 共通ライブラリ読み込み ---
 
@@ -26,6 +27,7 @@ validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
 
 ITEM_TYPE="${ITEM_TYPE:-all}"
 ITEM_STATE="${ITEM_STATE:-all}"
+REDACT_SENSITIVE="${REDACT_SENSITIVE:-false}"
 validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
 validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
 
@@ -149,9 +151,17 @@ format_markdown() {
   local issue_count pr_count
   read -r issue_count pr_count < <(echo "${items}" | jq -r '[([.[] | select(.type == "Issue")] | length), ([.[] | select(.type == "PullRequest")] | length)] | @tsv')
 
-  # Markdown テーブル行の jq フィルタ（特殊文字をエスケープし、日付を YYYY-MM-DD に変換）
-  local md_row_filter="${JQ_MD_ESCAPE}"'
-    "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(.state) | \(.repository) | \(.author) | \(.assignees | md_escape) | \(.labels | md_escape) | \(.created_at | split("T")[0]) | \(.updated_at | split("T")[0]) |"'
+  if is_redact_enabled; then
+    local md_row_filter="${JQ_MD_ESCAPE}"'
+      "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(.state) | \(.repository) | \(.labels | md_escape) | \(.created_at | split(\"T\")[0]) | \(.updated_at | split(\"T\")[0]) |"'
+    local table_header="| # | タイトル | 状態 | リポジトリ | ラベル | 作成日 | 更新日 |"
+    local table_separator="|---|---------|------|-----------|--------|--------|--------|"
+  else
+    local md_row_filter="${JQ_MD_ESCAPE}"'
+      "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(.state) | \(.repository) | \(.author) | \(.assignees | md_escape) | \(.labels | md_escape) | \(.created_at | split(\"T\")[0]) | \(.updated_at | split(\"T\")[0]) |"'
+    local table_header="| # | タイトル | 状態 | リポジトリ | 作成者 | アサイン | ラベル | 作成日 | 更新日 |"
+    local table_separator="|---|---------|------|-----------|--------|---------|--------|--------|--------|"
+  fi
 
   {
     echo "# Project アイテム一覧"
@@ -166,8 +176,8 @@ format_markdown() {
     if [[ "${issue_count}" -gt 0 ]]; then
       echo "## Issues"
       echo ""
-      echo "| # | タイトル | 状態 | リポジトリ | 作成者 | アサイン | ラベル | 作成日 | 更新日 |"
-      echo "|---|---------|------|-----------|--------|---------|--------|--------|--------|"
+      echo "${table_header}"
+      echo "${table_separator}"
       echo "${items}" | jq -r ".[] | select(.type == \"Issue\") | ${md_row_filter}"
       echo ""
     fi
@@ -175,8 +185,8 @@ format_markdown() {
     if [[ "${pr_count}" -gt 0 ]]; then
       echo "## Pull Requests"
       echo ""
-      echo "| # | タイトル | 状態 | リポジトリ | 作成者 | アサイン | ラベル | 作成日 | 更新日 |"
-      echo "|---|---------|------|-----------|--------|---------|--------|--------|--------|"
+      echo "${table_header}"
+      echo "${table_separator}"
       echo "${items}" | jq -r ".[] | select(.type == \"PullRequest\") | ${md_row_filter}"
       echo ""
     fi
@@ -185,19 +195,33 @@ format_markdown() {
 
 format_csv() {
   local items="$1"
-  echo "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at"
-  echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, .assignees, .labels, .created_at, .updated_at] | @csv'
+  if is_redact_enabled; then
+    echo "type,number,title,url,state,repository,labels,created_at,updated_at"
+    echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .labels, .created_at, .updated_at] | @csv'
+  else
+    echo "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at"
+    echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, .assignees, .labels, .created_at, .updated_at] | @csv'
+  fi
 }
 
 format_tsv() {
   local items="$1"
-  echo -e "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at"
-  echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, .assignees, .labels, .created_at, .updated_at] | @tsv'
+  if is_redact_enabled; then
+    echo -e "type\tnumber\ttitle\turl\tstate\trepository\tlabels\tcreated_at\tupdated_at"
+    echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .labels, .created_at, .updated_at] | @tsv'
+  else
+    echo -e "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at"
+    echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, .assignees, .labels, .created_at, .updated_at] | @tsv'
+  fi
 }
 
 format_json() {
   local items="$1"
-  echo "${items}" | jq '.'
+  if is_redact_enabled; then
+    echo "${items}" | jq '[.[] | del(.author, .assignees)]'
+  else
+    echo "${items}" | jq '.'
+  fi
 }
 
 # --- アイテム取得 ---
@@ -221,6 +245,13 @@ ITEMS=$(echo "${ITEMS}" | filter_items_by_state)
 read -r TOTAL_COUNT ISSUE_COUNT PR_COUNT < <(echo "${ITEMS}" | jq -r '[length, ([.[] | select(.type == "Issue")] | length), ([.[] | select(.type == "PullRequest")] | length)] | @tsv')
 
 echo "  合計: ${TOTAL_COUNT} 件（Issue: ${ISSUE_COUNT}, PR: ${PR_COUNT}）"
+
+# --- 機密フィールドのリダクション ---
+
+if is_redact_enabled; then
+  echo "  機密フィールドをリダクションしています..."
+  ITEMS=$(echo "${ITEMS}" | jq '[.[] | .author = "***" | .assignees = "***"]')
+fi
 
 if [[ "${TOTAL_COUNT}" -eq 0 ]]; then
   echo "::warning::対象の Issue / Pull Request が見つかりませんでした。"

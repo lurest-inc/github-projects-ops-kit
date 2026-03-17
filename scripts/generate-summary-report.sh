@@ -10,7 +10,8 @@ set -euo pipefail
 #   PROJECT_NUMBER - 対象 Project の Number
 #   ITEM_TYPE      - 対象アイテムの種別（all / issues / prs、デフォルト: all）
 #   ITEM_STATE     - 対象アイテムの状態（open / closed / all、デフォルト: all）
-#   OUTPUT_FORMAT  - 出力形式（json / markdown / csv / tsv、デフォルト: json）
+#   OUTPUT_FORMAT     - 出力形式（json / markdown / csv / tsv、デフォルト: json）
+#   REDACT_SENSITIVE  - 機密フィールドをリダクション（true / false、デフォルト: false）
 
 # --- 共通ライブラリ読み込み ---
 
@@ -29,6 +30,7 @@ validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
 validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
 OUTPUT_FORMAT="${OUTPUT_FORMAT:-json}"
 validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
+REDACT_SENSITIVE="${REDACT_SENSITIVE:-false}"
 
 # --- ヘルパー関数 ---
 
@@ -181,6 +183,13 @@ ITEMS=$(echo "${ITEMS}" | filter_items_by_state)
 TOTAL_COUNT=$(echo "${ITEMS}" | jq 'length')
 echo "  合計: ${TOTAL_COUNT} 件（フィルタ後）"
 
+# --- 機密フィールドのリダクション ---
+
+if is_redact_enabled; then
+  echo "  機密フィールドをリダクションしています..."
+  ITEMS=$(echo "${ITEMS}" | jq '[.[] | .author = "***" | .assignees = ["***"]]')
+fi
+
 # --- 基本集計 ---
 
 echo ""
@@ -220,17 +229,21 @@ STATUS_SUMMARY=$(echo "${ITEMS}" | jq --argjson total "${TOTAL_COUNT}" '
 ')
 
 # 担当者別集計
-ASSIGNEE_SUMMARY=$(echo "${ITEMS}" | jq '
-  [.[] | . as $item | (if (.assignees | length) == 0 then ["(未アサイン)"] else .assignees end)[] | {assignee: ., status: $item.status}]
-  | sort_by(.assignee) | group_by(.assignee)
-  | map({
-      assignee: .[0].assignee,
-      total: length,
-      in_progress: ([.[] | select(.status == "In Progress")] | length),
-      in_review: ([.[] | select(.status == "In Review")] | length)
-    })
-  | sort_by(-.total)
-')
+if is_redact_enabled; then
+  ASSIGNEE_SUMMARY="[]"
+else
+  ASSIGNEE_SUMMARY=$(echo "${ITEMS}" | jq '
+    [.[] | . as $item | (if (.assignees | length) == 0 then ["(未アサイン)"] else .assignees end)[] | {assignee: ., status: $item.status}]
+    | sort_by(.assignee) | group_by(.assignee)
+    | map({
+        assignee: .[0].assignee,
+        total: length,
+        in_progress: ([.[] | select(.status == "In Progress")] | length),
+        in_review: ([.[] | select(.status == "In Review")] | length)
+      })
+    | sort_by(-.total)
+  ')
+fi
 
 # ラベル別集計
 LABEL_SUMMARY=$(echo "${ITEMS}" | jq '
@@ -332,12 +345,14 @@ format_summary_markdown() {
     fi
 
     # 担当者別
-    echo "## 担当者別"
-    echo ""
-    echo "| 担当者 | 件数 | In Progress | In Review |"
-    echo "|---|---|---|---|"
-    echo "${ASSIGNEE_SUMMARY}" | jq -r '.[] | "| \(.assignee) | \(.total) | \(.in_progress) | \(.in_review) |"'
-    echo ""
+    if ! is_redact_enabled; then
+      echo "## 担当者別"
+      echo ""
+      echo "| 担当者 | 件数 | In Progress | In Review |"
+      echo "|---|---|---|---|"
+      echo "${ASSIGNEE_SUMMARY}" | jq -r '.[] | "| \(.assignee) | \(.total) | \(.in_progress) | \(.in_review) |"'
+      echo ""
+    fi
 
     # ラベル別
     echo "## ラベル別"
@@ -360,13 +375,19 @@ format_summary_markdown() {
 
     # 期日超過アイテム
     if [[ "${HAS_DUE_DATE}" == "true" && "${OVERDUE_COUNT}" -gt 0 ]]; then
-      local md_row_filter="${JQ_MD_ESCAPE}"'
-        "| [#\(.number)](\(.url)) | \(.title | md_escape) | \((.status // \"-\") | md_escape) | \(if (.assignees | length) > 0 then (.assignees | join(\", \") | md_escape) else \"-\" end) | \(.due_date) | \(.days_overdue) |"'
-
       echo "## 期日超過アイテム: ${OVERDUE_COUNT} 件"
       echo ""
-      echo "| # | タイトル | ステータス | 担当者 | 終了期日 | 超過日数 |"
-      echo "|---|---------|-----------|--------|---------|---------|"
+      if is_redact_enabled; then
+        local md_row_filter="${JQ_MD_ESCAPE}"'
+          "| [#\(.number)](\(.url)) | \(.title | md_escape) | \((.status // \"-\") | md_escape) | \(.due_date) | \(.days_overdue) |"'
+        echo "| # | タイトル | ステータス | 終了期日 | 超過日数 |"
+        echo "|---|---------|-----------|---------|---------|"
+      else
+        local md_row_filter="${JQ_MD_ESCAPE}"'
+          "| [#\(.number)](\(.url)) | \(.title | md_escape) | \((.status // \"-\") | md_escape) | \(if (.assignees | length) > 0 then (.assignees | join(\", \") | md_escape) else \"-\" end) | \(.due_date) | \(.days_overdue) |"'
+        echo "| # | タイトル | ステータス | 担当者 | 終了期日 | 超過日数 |"
+        echo "|---|---------|-----------|--------|---------|---------|"
+      fi
       echo "${OVERDUE_ITEMS}" | jq -r ".[] | ${md_row_filter}"
       echo ""
     fi
@@ -375,14 +396,24 @@ format_summary_markdown() {
 
 format_summary_csv() {
   local items="$1"
-  echo "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at,status,estimated_hours,actual_hours,due_date"
-  echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // "")] | @csv'
+  if is_redact_enabled; then
+    echo "type,number,title,url,state,repository,labels,created_at,updated_at,status,due_date"
+    echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.due_date // "")] | @csv'
+  else
+    echo "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at,status,estimated_hours,actual_hours,due_date"
+    echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // "")] | @csv'
+  fi
 }
 
 format_summary_tsv() {
   local items="$1"
-  echo -e "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at\tstatus\testimated_hours\tactual_hours\tdue_date"
-  echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // "")] | @tsv'
+  if is_redact_enabled; then
+    echo -e "type\tnumber\ttitle\turl\tstate\trepository\tlabels\tcreated_at\tupdated_at\tstatus\tdue_date"
+    echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.due_date // "")] | @tsv'
+  else
+    echo -e "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at\tstatus\testimated_hours\tactual_hours\tdue_date"
+    echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // "")] | @tsv'
+  fi
 }
 
 # --- レポート出力 ---
@@ -448,6 +479,11 @@ case "${OUTPUT_FORMAT}" in
           }
         }
       ')
+    fi
+
+    # リダクション: 機密フィールドを除外
+    if is_redact_enabled; then
+      REPORT_JSON=$(echo "${REPORT_JSON}" | jq 'del(.by_assignee) | del(.effort) | .overdue_items = [.overdue_items[] | del(.author, .assignees)]')
     fi
 
     echo "${REPORT_JSON}" > "${OUTPUT_FILE}"

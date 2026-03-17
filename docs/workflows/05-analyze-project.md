@@ -28,6 +28,7 @@
 | `output_format` | 出力形式 | — | `choice` | `json` | `markdown` |
 | `item_type` | 対象アイテムの種別 | — | `choice` | `all` | `issues` |
 | `item_state` | 対象アイテムの状態 | — | `choice` | `all` | `open` |
+| `redact_sensitive` | 機密フィールドの除外 | — | `boolean` | `false` | `true` |
 
 ### `report_types` の選択肢
 
@@ -63,6 +64,19 @@
 | `all` | 全状態のアイテムを対象 |
 | `open` | Open 状態のアイテムのみを対象 |
 | `closed` | Closed / Merged 状態のアイテムのみを対象 |
+
+### `redact_sensitive` の動作
+
+`true` に設定すると、アーティファクトのレポートから機密性の高いフィールドが除外されます。Public リポジトリでアーティファクトが第三者にダウンロードされるリスクがある場合に使用してください。
+
+| 除外対象 | 影響を受けるレポート | 説明 |
+|----------|---------------------|------|
+| 担当者名（`assignees`） | 全レポート | 担当者カラム・担当者別集計セクションを除外 |
+| 作成者名（`author`） | summary, effort, export | 作成者カラムを除外 |
+| 工数（`estimated_hours`, `actual_hours`） | summary, effort（CSV/TSV） | フラットデータ出力から除外（集計値は維持） |
+| スケジュール（`planned_start/end`, `actual_start/end`） | effort（CSV/TSV） | フラットデータ出力から除外 |
+
+> **Note:** `REDACT_SENSITIVE` 環境変数を `true` に設定することで、ワークフロー外からも同じリダクション機能を利用できます。
 
 ---
 

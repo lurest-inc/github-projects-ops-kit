@@ -10,7 +10,8 @@ set -euo pipefail
 #   PROJECT_NUMBER - 対象 Project の Number
 #   ITEM_TYPE      - 対象アイテムの種別（all / issues / prs、デフォルト: all）
 #   ITEM_STATE     - 対象アイテムの状態（open / closed / all、デフォルト: all）
-#   OUTPUT_FORMAT  - 出力形式（json / markdown / csv / tsv、デフォルト: json）
+#   OUTPUT_FORMAT     - 出力形式（json / markdown / csv / tsv、デフォルト: json）
+#   REDACT_SENSITIVE  - 機密フィールドをリダクション（true / false、デフォルト: false）
 
 # --- 共通ライブラリ読み込み ---
 
@@ -23,6 +24,7 @@ VARIANCE_THRESHOLD=10
 VARIANCE_TOP_N=10
 ITEM_TYPE="${ITEM_TYPE:-all}"
 ITEM_STATE="${ITEM_STATE:-all}"
+REDACT_SENSITIVE="${REDACT_SENSITIVE:-false}"
 
 # --- バリデーション ---
 
@@ -187,6 +189,13 @@ ITEMS=$(echo "${ITEMS}" | filter_items_by_state)
 TOTAL_COUNT=$(echo "${ITEMS}" | jq 'length')
 echo "  合計: ${TOTAL_COUNT} 件（フィルタ後）"
 
+# --- 機密フィールドのリダクション ---
+
+if is_redact_enabled; then
+  echo "  機密フィールドをリダクションしています..."
+  ITEMS=$(echo "${ITEMS}" | jq '[.[] | .author = "***" | .assignees = ["***"]]')
+fi
+
 # --- 工数集計 ---
 
 echo ""
@@ -222,29 +231,33 @@ echo "  工数入力済み: ${ITEMS_WITH_EFFORT_COUNT} 件 / 未入力: ${ITEMS_
 echo "  総見積もり工数: ${TOTAL_ESTIMATED} h / 総実績工数: ${TOTAL_ACTUAL} h"
 
 # 担当者別工数集計
-ASSIGNEE_EFFORT=$(echo "${ITEMS}" | jq '
-  [.[] | select(.estimated_hours != null or .actual_hours != null) | . as $item |
-    (if (.assignees | length) == 0 then ["(未アサイン)"] else .assignees end)[]
-    | {
-        assignee: .,
-        estimated_hours: $item.estimated_hours,
-        actual_hours: $item.actual_hours
-      }
-  ]
-  | sort_by(.assignee) | group_by(.assignee)
-  | map({
-      assignee: .[0].assignee,
-      count: length,
-      estimated_hours: ([.[].estimated_hours // 0] | add),
-      actual_hours: ([.[].actual_hours // 0] | add),
-      variance_rate: (
-        if ([.[].estimated_hours // 0] | add) > 0 then
-          ((([.[].actual_hours // 0] | add) - ([.[].estimated_hours // 0] | add)) / ([.[].estimated_hours // 0] | add) * 1000 | round / 10)
-        else null end
-      )
-    })
-  | sort_by(-.estimated_hours)
-')
+if is_redact_enabled; then
+  ASSIGNEE_EFFORT="[]"
+else
+  ASSIGNEE_EFFORT=$(echo "${ITEMS}" | jq '
+    [.[] | select(.estimated_hours != null or .actual_hours != null) | . as $item |
+      (if (.assignees | length) == 0 then ["(未アサイン)"] else .assignees end)[]
+      | {
+          assignee: .,
+          estimated_hours: $item.estimated_hours,
+          actual_hours: $item.actual_hours
+        }
+    ]
+    | sort_by(.assignee) | group_by(.assignee)
+    | map({
+        assignee: .[0].assignee,
+        count: length,
+        estimated_hours: ([.[].estimated_hours // 0] | add),
+        actual_hours: ([.[].actual_hours // 0] | add),
+        variance_rate: (
+          if ([.[].estimated_hours // 0] | add) > 0 then
+            ((([.[].actual_hours // 0] | add) - ([.[].estimated_hours // 0] | add)) / ([.[].estimated_hours // 0] | add) * 1000 | round / 10)
+          else null end
+        )
+      })
+    | sort_by(-.estimated_hours)
+  ')
+fi
 
 # ステータス別工数集計
 STATUS_EFFORT=$(echo "${ITEMS}" | jq --argjson total_estimated "${TOTAL_ESTIMATED}" '
@@ -285,6 +298,9 @@ VARIANCE_ITEMS=$(echo "${ITEMS}" | jq --argjson threshold "${VARIANCE_THRESHOLD}
 ')
 
 VARIANCE_ITEMS_COUNT=$(echo "${VARIANCE_ITEMS}" | jq 'length')
+if is_redact_enabled; then
+  VARIANCE_ITEMS=$(echo "${VARIANCE_ITEMS}" | jq '[.[] | .assignees = ["***"] | .author = "***"]')
+fi
 
 echo "  担当者別: $(echo "${ASSIGNEE_EFFORT}" | jq 'length') 件"
 echo "  ステータス別: $(echo "${STATUS_EFFORT}" | jq 'length') 件"
@@ -338,6 +354,10 @@ if [[ "${HAS_LEAD_TIME}" == "true" ]]; then
     ] | sort_by(-.actual_days)
   ')
 
+  if is_redact_enabled; then
+    LEAD_TIME_ITEMS=$(echo "${LEAD_TIME_ITEMS}" | jq '[.[] | .assignees = ["***"]]')
+  fi
+
   echo "  リードタイム分析対象: $(echo "${LEAD_TIME_ITEMS}" | jq 'length') 件"
 fi
 
@@ -357,6 +377,10 @@ MISSING_EFFORT_ITEMS=$(echo "${ITEMS}" | jq '
   ]
   | sort_by(if .is_done then 0 else 1 end, .number)
 ')
+
+if is_redact_enabled; then
+  MISSING_EFFORT_ITEMS=$(echo "${MISSING_EFFORT_ITEMS}" | jq '[.[] | .assignees = ["***"]]')
+fi
 
 MISSING_EFFORT_COUNT=$(echo "${MISSING_EFFORT_ITEMS}" | jq 'length')
 MISSING_EFFORT_DONE_COUNT=$(echo "${MISSING_EFFORT_ITEMS}" | jq '[.[] | select(.is_done)] | length')
@@ -396,28 +420,30 @@ format_effort_markdown() {
     echo ""
 
     # 担当者別工数
-    local assignee_count
-    assignee_count=$(echo "${ASSIGNEE_EFFORT}" | jq 'length')
-    if [[ "${assignee_count}" -gt 0 ]]; then
-      echo "## 担当者別工数"
-      echo ""
-      echo "| 担当者 | アイテム数 | 見積もり(h) | 実績(h) | 乖離率 |"
-      echo "|---|---|---|---|---|"
-      echo "${ASSIGNEE_EFFORT}" | jq -r '.[] | "| \(.assignee) | \(.count) | \(.estimated_hours) | \(.actual_hours) | \(if .variance_rate != null then (if .variance_rate >= 0 then "+\(.variance_rate)%" else "\(.variance_rate)%" end) else "-" end) |"'
-      echo ""
-
-      echo "> **Note:** 複数担当者がアサインされたアイテムは、各担当者に同一工数が計上されます。担当者別の合計は全体合計と一致しない場合があります。"
-      echo ""
-
-      # Mermaid 円グラフ
-      local has_actual
-      has_actual=$(echo "${ASSIGNEE_EFFORT}" | jq '[.[] | select(.actual_hours > 0)] | length')
-      if [[ "${has_actual}" -gt 0 ]]; then
-        echo '```mermaid'
-        echo 'pie title 担当者別実績工数'
-        echo "${ASSIGNEE_EFFORT}" | jq -r '.[] | select(.actual_hours > 0) | "    \"\(.assignee)\" : \(.actual_hours)"'
-        echo '```'
+    if ! is_redact_enabled; then
+      local assignee_count
+      assignee_count=$(echo "${ASSIGNEE_EFFORT}" | jq 'length')
+      if [[ "${assignee_count}" -gt 0 ]]; then
+        echo "## 担当者別工数"
         echo ""
+        echo "| 担当者 | アイテム数 | 見積もり(h) | 実績(h) | 乖離率 |"
+        echo "|---|---|---|---|---|"
+        echo "${ASSIGNEE_EFFORT}" | jq -r '.[] | "| \(.assignee) | \(.count) | \(.estimated_hours) | \(.actual_hours) | \(if .variance_rate != null then (if .variance_rate >= 0 then "+\(.variance_rate)%" else "\(.variance_rate)%" end) else "-" end) |"'
+        echo ""
+
+        echo "> **Note:** 複数担当者がアサインされたアイテムは、各担当者に同一工数が計上されます。担当者別の合計は全体合計と一致しない場合があります。"
+        echo ""
+
+        # Mermaid 円グラフ
+        local has_actual
+        has_actual=$(echo "${ASSIGNEE_EFFORT}" | jq '[.[] | select(.actual_hours > 0)] | length')
+        if [[ "${has_actual}" -gt 0 ]]; then
+          echo '```mermaid'
+          echo 'pie title 担当者別実績工数'
+          echo "${ASSIGNEE_EFFORT}" | jq -r '.[] | select(.actual_hours > 0) | "    \"\(.assignee)\" : \(.actual_hours)"'
+          echo '```'
+          echo ""
+        fi
       fi
     fi
 
@@ -435,13 +461,19 @@ format_effort_markdown() {
 
     # 乖離アイテム
     if [[ "${VARIANCE_ITEMS_COUNT}" -gt 0 ]]; then
-      local md_row_filter="${JQ_MD_ESCAPE}"'
-        "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(if (.assignees | length) > 0 then (.assignees | join(", ")) else "-" end) | \(.estimated_hours) | \(.actual_hours) | \(if .variance_rate >= 0 then "+\(.variance_rate)%" else "\(.variance_rate)%" end) |"'
-
       echo "## 乖離アイテム（上位）"
       echo ""
-      echo "| # | タイトル | 担当者 | 見積もり(h) | 実績(h) | 乖離率 |"
-      echo "|---|---|---|---|---|---|"
+      if is_redact_enabled; then
+        local md_row_filter="${JQ_MD_ESCAPE}"'
+          "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(.estimated_hours) | \(.actual_hours) | \(if .variance_rate >= 0 then \"+\(.variance_rate)%\" else \"\(.variance_rate)%\" end) |"'
+        echo "| # | タイトル | 見積もり(h) | 実績(h) | 乖離率 |"
+        echo "|---|---|---|---|---|"
+      else
+        local md_row_filter="${JQ_MD_ESCAPE}"'
+          "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(if (.assignees | length) > 0 then (.assignees | join(\", \")) else \"-\" end) | \(.estimated_hours) | \(.actual_hours) | \(if .variance_rate >= 0 then \"+\(.variance_rate)%\" else \"\(.variance_rate)%\" end) |"'
+        echo "| # | タイトル | 担当者 | 見積もり(h) | 実績(h) | 乖離率 |"
+        echo "|---|---|---|---|---|---|"
+      fi
       echo "${VARIANCE_ITEMS}" | jq -r ".[] | ${md_row_filter}"
       echo ""
     fi
@@ -465,17 +497,23 @@ format_effort_markdown() {
 
     # 工数未入力アイテム
     if [[ "${MISSING_EFFORT_COUNT}" -gt 0 ]]; then
-      local md_row_filter="${JQ_MD_ESCAPE}"'
-        "| \(if .is_done then "**" else "" end)[#\(.number)](\(.url))\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\(.title | md_escape)\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\((.status // "-") | md_escape)\(if .is_done then "**" else "" end) | \(if (.assignees | length) > 0 then (.assignees | join(", ") | md_escape) else "-" end) |"'
-
       echo "## 工数未入力アイテム: ${MISSING_EFFORT_COUNT} 件"
       echo ""
       if [[ "${MISSING_EFFORT_DONE_COUNT}" -gt 0 ]]; then
         echo "> **Warning:** Done ステータスで工数未入力のアイテムが ${MISSING_EFFORT_DONE_COUNT} 件あります（太字で表示）。"
         echo ""
       fi
-      echo "| # | タイトル | ステータス | 担当者 |"
-      echo "|---|---|---|---|"
+      if is_redact_enabled; then
+        local md_row_filter="${JQ_MD_ESCAPE}"'
+          "| \(if .is_done then "**" else "" end)[#\(.number)](\(.url))\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\(.title | md_escape)\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\((.status // "-") | md_escape)\(if .is_done then "**" else "" end) |"'
+        echo "| # | タイトル | ステータス |"
+        echo "|---|---|---|"
+      else
+        local md_row_filter="${JQ_MD_ESCAPE}"'
+          "| \(if .is_done then "**" else "" end)[#\(.number)](\(.url))\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\(.title | md_escape)\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\((.status // "-") | md_escape)\(if .is_done then "**" else "" end) | \(if (.assignees | length) > 0 then (.assignees | join(", ") | md_escape) else "-" end) |"'
+        echo "| # | タイトル | ステータス | 担当者 |"
+        echo "|---|---|---|---|"
+      fi
       echo "${MISSING_EFFORT_ITEMS}" | jq -r ".[] | ${md_row_filter}"
       echo ""
     fi
@@ -484,14 +522,24 @@ format_effort_markdown() {
 
 format_effort_csv() {
   local items="$1"
-  echo "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at,status,estimated_hours,actual_hours,due_date,planned_start,planned_end,actual_start,actual_end"
-  echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // ""), (.planned_start // ""), (.planned_end // ""), (.actual_start // ""), (.actual_end // "")] | @csv'
+  if is_redact_enabled; then
+    echo "type,number,title,url,state,repository,labels,created_at,updated_at,status,due_date"
+    echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.due_date // "")] | @csv'
+  else
+    echo "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at,status,estimated_hours,actual_hours,due_date,planned_start,planned_end,actual_start,actual_end"
+    echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // ""), (.planned_start // ""), (.planned_end // ""), (.actual_start // ""), (.actual_end // "")] | @csv'
+  fi
 }
 
 format_effort_tsv() {
   local items="$1"
-  echo -e "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at\tstatus\testimated_hours\tactual_hours\tdue_date\tplanned_start\tplanned_end\tactual_start\tactual_end"
-  echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // ""), (.planned_start // ""), (.planned_end // ""), (.actual_start // ""), (.actual_end // "")] | @tsv'
+  if is_redact_enabled; then
+    echo -e "type\tnumber\ttitle\turl\tstate\trepository\tlabels\tcreated_at\tupdated_at\tstatus\tdue_date"
+    echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.due_date // "")] | @tsv'
+  else
+    echo -e "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at\tstatus\testimated_hours\tactual_hours\tdue_date\tplanned_start\tplanned_end\tactual_start\tactual_end"
+    echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // ""), (.planned_start // ""), (.planned_end // ""), (.actual_start // ""), (.actual_end // "")] | @tsv'
+  fi
 }
 
 # --- レポート出力 ---
@@ -542,6 +590,14 @@ case "${OUTPUT_FORMAT}" in
         missing_effort_items: $missing_effort_items
       }
     ')
+    if is_redact_enabled; then
+      REPORT_JSON=$(echo "${REPORT_JSON}" | jq '
+        del(.by_assignee) |
+        .variance_items = [.variance_items[] | del(.author, .assignees)] |
+        .lead_time = [.lead_time[] | del(.assignees)] |
+        .missing_effort_items = [.missing_effort_items[] | del(.assignees)]
+      ')
+    fi
     echo "${REPORT_JSON}" > "${OUTPUT_FILE}"
     ;;
   markdown)

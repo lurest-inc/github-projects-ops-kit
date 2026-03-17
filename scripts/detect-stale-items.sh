@@ -10,7 +10,8 @@ set -euo pipefail
 #   PROJECT_NUMBER - 対象 Project の Number
 #   ITEM_TYPE      - 対象アイテムの種別（all / issues / prs、デフォルト: all）
 #   ITEM_STATE     - 対象アイテムの状態（open / closed / all、デフォルト: all）
-#   OUTPUT_FORMAT  - 出力形式（json / markdown / csv / tsv、デフォルト: json）
+#   OUTPUT_FORMAT     - 出力形式（json / markdown / csv / tsv、デフォルト: json）
+#   REDACT_SENSITIVE  - 機密フィールドをリダクション（true / false、デフォルト: false）
 
 # --- 共通ライブラリ読み込み ---
 
@@ -25,6 +26,7 @@ STALE_DAYS_IN_REVIEW=3
 EXCLUDE_LABELS="on-hold,blocked"
 ITEM_TYPE="${ITEM_TYPE:-all}"
 ITEM_STATE="${ITEM_STATE:-all}"
+REDACT_SENSITIVE="${REDACT_SENSITIVE:-false}"
 
 # --- バリデーション ---
 
@@ -241,6 +243,14 @@ STALE_ITEMS=$(echo "${ITEMS}" | jq \
 ')
 
 STALE_COUNT=$(echo "${STALE_ITEMS}" | jq 'length')
+
+# --- 機密フィールドのリダクション ---
+
+if is_redact_enabled; then
+  echo "  機密フィールドをリダクションしています..."
+  STALE_ITEMS=$(echo "${STALE_ITEMS}" | jq '[.[] | .assignees = "***"]')
+fi
+
 echo "  滞留アイテム: ${STALE_COUNT} 件"
 
 # --- ステータス別集計 ---
@@ -258,8 +268,17 @@ read -r IN_REVIEW_COUNT IN_PROGRESS_COUNT TODO_COUNT < <(echo "${STALE_ITEMS}" |
 format_stale_markdown() {
   local stale_items="$1"
 
-  local md_row_filter="${JQ_MD_ESCAPE}"'
-    "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(.repository) | \(if .assignees == "" then "-" else (.assignees | md_escape) end) | \(.updated_at | split("T")[0]) | \(.days_stale) |"'
+  if is_redact_enabled; then
+    local md_row_filter="${JQ_MD_ESCAPE}"'
+      "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(.repository) | \(.updated_at | split("T")[0]) | \(.days_stale) |"'
+    local table_header="| # | タイトル | リポジトリ | 最終更新 | 経過日数 |"
+    local table_separator="|---|---------|-----------|---------|---------|"
+  else
+    local md_row_filter="${JQ_MD_ESCAPE}"'
+      "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(.repository) | \(if .assignees == "" then "-" else (.assignees | md_escape) end) | \(.updated_at | split("T")[0]) | \(.days_stale) |"'
+    local table_header="| # | タイトル | リポジトリ | アサイン | 最終更新 | 経過日数 |"
+    local table_separator="|---|---------|-----------|---------|---------|---------|"
+  fi
 
   {
     echo "# 滞留アイテムレポート"
@@ -275,8 +294,8 @@ format_stale_markdown() {
       if [[ "${IN_REVIEW_COUNT}" -gt 0 ]]; then
         echo "## In Review（${STALE_DAYS_IN_REVIEW} 日以上）: ${IN_REVIEW_COUNT} 件"
         echo ""
-        echo "| # | タイトル | リポジトリ | アサイン | 最終更新 | 経過日数 |"
-        echo "|---|---------|-----------|---------|---------|---------|"
+        echo "${table_header}"
+        echo "${table_separator}"
         echo "${stale_items}" | jq -r "[.[] | select(.status == \"In Review\")] | sort_by(-.days_stale)[] | ${md_row_filter}"
         echo ""
       fi
@@ -284,8 +303,8 @@ format_stale_markdown() {
       if [[ "${IN_PROGRESS_COUNT}" -gt 0 ]]; then
         echo "## In Progress（${STALE_DAYS_IN_PROGRESS} 日以上）: ${IN_PROGRESS_COUNT} 件"
         echo ""
-        echo "| # | タイトル | リポジトリ | アサイン | 最終更新 | 経過日数 |"
-        echo "|---|---------|-----------|---------|---------|---------|"
+        echo "${table_header}"
+        echo "${table_separator}"
         echo "${stale_items}" | jq -r "[.[] | select(.status == \"In Progress\")] | sort_by(-.days_stale)[] | ${md_row_filter}"
         echo ""
       fi
@@ -293,8 +312,8 @@ format_stale_markdown() {
       if [[ "${TODO_COUNT}" -gt 0 ]]; then
         echo "## Todo（${STALE_DAYS_TODO} 日以上）: ${TODO_COUNT} 件"
         echo ""
-        echo "| # | タイトル | リポジトリ | アサイン | 最終更新 | 経過日数 |"
-        echo "|---|---------|-----------|---------|---------|---------|"
+        echo "${table_header}"
+        echo "${table_separator}"
         echo "${stale_items}" | jq -r "[.[] | select(.status == \"Todo\")] | sort_by(-.days_stale)[] | ${md_row_filter}"
         echo ""
       fi
@@ -304,14 +323,24 @@ format_stale_markdown() {
 
 format_stale_csv() {
   local stale_items="$1"
-  echo "type,number,title,url,status,repository,assignees,updated_at,days_stale,threshold"
-  echo "${stale_items}" | jq -r '.[] | [.type, .number, .title, .url, .status, .repository, .assignees, .updated_at, .days_stale, .threshold] | @csv'
+  if is_redact_enabled; then
+    echo "type,number,title,url,status,repository,updated_at,days_stale,threshold"
+    echo "${stale_items}" | jq -r '.[] | [.type, .number, .title, .url, .status, .repository, .updated_at, .days_stale, .threshold] | @csv'
+  else
+    echo "type,number,title,url,status,repository,assignees,updated_at,days_stale,threshold"
+    echo "${stale_items}" | jq -r '.[] | [.type, .number, .title, .url, .status, .repository, .assignees, .updated_at, .days_stale, .threshold] | @csv'
+  fi
 }
 
 format_stale_tsv() {
   local stale_items="$1"
-  echo -e "type\tnumber\ttitle\turl\tstatus\trepository\tassignees\tupdated_at\tdays_stale\tthreshold"
-  echo "${stale_items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .status, .repository, .assignees, .updated_at, (.days_stale | tostring), (.threshold | tostring)] | @tsv'
+  if is_redact_enabled; then
+    echo -e "type\tnumber\ttitle\turl\tstatus\trepository\tupdated_at\tdays_stale\tthreshold"
+    echo "${stale_items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .status, .repository, .updated_at, (.days_stale | tostring), (.threshold | tostring)] | @tsv'
+  else
+    echo -e "type\tnumber\ttitle\turl\tstatus\trepository\tassignees\tupdated_at\tdays_stale\tthreshold"
+    echo "${stale_items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .status, .repository, .assignees, .updated_at, (.days_stale | tostring), (.threshold | tostring)] | @tsv'
+  fi
 }
 
 # --- レポート出力 ---
@@ -367,6 +396,9 @@ case "${OUTPUT_FORMAT}" in
         }]
       }
     ')
+    if is_redact_enabled; then
+      REPORT_JSON=$(echo "${REPORT_JSON}" | jq '.stale_items = [.stale_items[] | del(.assignees)]')
+    fi
     echo "${REPORT_JSON}" > "${OUTPUT_FILE}"
     ;;
   markdown)

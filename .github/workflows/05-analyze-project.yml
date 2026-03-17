@@ -46,6 +46,11 @@ on:
           - all
           - open
           - closed
+      redact_sensitive:
+        description: "機密フィールド（担当者名・工数など）をレポートから除外する"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -62,6 +67,7 @@ jobs:
       OUTPUT_FORMAT: ${{ inputs.output_format }}
       ITEM_TYPE: ${{ inputs.item_type }}
       ITEM_STATE: ${{ inputs.item_state }}
+      REDACT_SENSITIVE: ${{ inputs.redact_sensitive }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
@@ -91,6 +97,7 @@ jobs:
       OUTPUT_FORMAT: ${{ inputs.output_format }}
       ITEM_TYPE: ${{ inputs.item_type }}
       ITEM_STATE: ${{ inputs.item_state }}
+      REDACT_SENSITIVE: ${{ inputs.redact_sensitive }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
@@ -120,6 +127,7 @@ jobs:
       OUTPUT_FORMAT: ${{ inputs.output_format }}
       ITEM_TYPE: ${{ inputs.item_type }}
       ITEM_STATE: ${{ inputs.item_state }}
+      REDACT_SENSITIVE: ${{ inputs.redact_sensitive }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
@@ -149,6 +157,7 @@ jobs:
       OUTPUT_FORMAT: ${{ inputs.output_format }}
       ITEM_TYPE: ${{ inputs.item_type }}
       ITEM_STATE: ${{ inputs.item_state }}
+      REDACT_SENSITIVE: ${{ inputs.redact_sensitive }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2

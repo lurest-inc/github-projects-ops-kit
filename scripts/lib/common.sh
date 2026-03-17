@@ -317,6 +317,12 @@ get_file_extension() {
   esac
 }
 
+# REDACT_SENSITIVE が有効かどうかを判定する
+# 使用例: if is_redact_enabled; then ... fi
+is_redact_enabled() {
+  [[ "${REDACT_SENSITIVE:-false}" == "true" ]]
+}
+
 # 環境変数の値が許可リストに含まれるかチェックする
 # 使用例: validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
 validate_enum() {
