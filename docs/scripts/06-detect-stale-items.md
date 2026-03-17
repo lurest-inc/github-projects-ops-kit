@@ -78,5 +78,4 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 
 ## 🔄 使用ワークフロー
 
-- [⑥ 滞留アイテム検知](../workflows/06-detect-stale-items)
 - [⑩ 統合プロジェクト分析](../workflows/10-analyze-project)

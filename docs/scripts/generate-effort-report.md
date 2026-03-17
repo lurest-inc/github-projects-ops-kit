@@ -107,5 +107,4 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 
 ## 🔄 使用ワークフロー
 
-- [⑨ 工数集計レポート](../workflows/09-generate-effort-report)
 - [⑩ 統合プロジェクト分析](../workflows/10-analyze-project)

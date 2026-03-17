@@ -98,5 +98,4 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 
 ## 🔄 使用ワークフロー
 
-- [⑧ プロジェクトサマリーレポート](../workflows/08-generate-summary-report)
 - [⑩ 統合プロジェクト分析](../workflows/10-analyze-project)
