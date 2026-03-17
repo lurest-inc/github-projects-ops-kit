@@ -4,7 +4,9 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [📘 GitHub 基本用語](#-github-%E5%9F%BA%E6%9C%AC%E7%94%A8%E8%AA%9E)
+- [🔀 Git 基本用語](#-git-%E5%9F%BA%E6%9C%AC%E7%94%A8%E8%AA%9E)
+- [📦 GitHub Repository 関連用語](#-github-repository-%E9%96%A2%E9%80%A3%E7%94%A8%E8%AA%9E)
+- [👥 GitHub 組織・アカウント用語](#-github-%E7%B5%84%E7%B9%94%E3%83%BB%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E7%94%A8%E8%AA%9E)
 - [📋 GitHub Projects 関連用語](#-github-projects-%E9%96%A2%E9%80%A3%E7%94%A8%E8%AA%9E)
 - [🔑 認証・トークン関連用語](#-%E8%AA%8D%E8%A8%BC%E3%83%BB%E3%83%88%E3%83%BC%E3%82%AF%E3%83%B3%E9%96%A2%E9%80%A3%E7%94%A8%E8%AA%9E)
 - [⚡ GitHub Actions 関連用語](#-github-actions-%E9%96%A2%E9%80%A3%E7%94%A8%E8%AA%9E)
