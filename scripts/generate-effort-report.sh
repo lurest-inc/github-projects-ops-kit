@@ -425,7 +425,7 @@ format_effort_markdown() {
       echo ""
       echo "| ステータス | アイテム数 | 見積もり(h) | 実績(h) | 消化率 |"
       echo "|---|---|---|---|---|"
-      echo "${STATUS_EFFORT}" | jq -r '.[] | "| \(.status) | \(.count) | \(.estimated_hours) | \(.actual_hours) | \(if .consumption_rate != null then "\(.consumption_rate)%" else "-" end) |"'
+      echo "${STATUS_EFFORT}" | jq -r "${JQ_MD_ESCAPE}"'.[] | "| \(.status | md_escape) | \(.count) | \(.estimated_hours) | \(.actual_hours) | \(if .consumption_rate != null then "\(.consumption_rate)%" else "-" end) |"'
       echo ""
     fi
 
@@ -462,7 +462,7 @@ format_effort_markdown() {
     # 工数未入力アイテム
     if [[ "${MISSING_EFFORT_COUNT}" -gt 0 ]]; then
       local md_row_filter="${JQ_MD_ESCAPE}"'
-        "| \(if .is_done then "**" else "" end)[#\(.number)](\(.url))\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\(.title | md_escape)\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\(.status // "-")\(if .is_done then "**" else "" end) | \(if (.assignees | length) > 0 then (.assignees | join(", ")) else "-" end) |"'
+        "| \(if .is_done then "**" else "" end)[#\(.number)](\(.url))\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\(.title | md_escape)\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\((.status // "-") | md_escape)\(if .is_done then "**" else "" end) | \(if (.assignees | length) > 0 then (.assignees | join(", ") | md_escape) else "-" end) |"'
 
       echo "## 工数未入力アイテム: ${MISSING_EFFORT_COUNT} 件"
       echo ""
@@ -481,7 +481,7 @@ format_effort_markdown() {
 format_effort_csv() {
   local items="$1"
   echo "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at,status,estimated_hours,actual_hours,due_date,planned_start,planned_end,actual_start,actual_end"
-  echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, .status, .estimated_hours, .actual_hours, .due_date, .planned_start, .planned_end, .actual_start, .actual_end] | @csv'
+  echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // ""), (.planned_start // ""), (.planned_end // ""), (.actual_start // ""), (.actual_end // "")] | @csv'
 }
 
 format_effort_tsv() {

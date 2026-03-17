@@ -313,7 +313,7 @@ format_summary_markdown() {
     echo ""
     echo "| ステータス | 件数 | 割合 |"
     echo "|---|---|---|"
-    echo "${STATUS_SUMMARY}" | jq -r '.[] | "| \(.status) | \(.count) | \(.percentage)% |"'
+    echo "${STATUS_SUMMARY}" | jq -r "${JQ_MD_ESCAPE}"'.[] | "| \(.status | md_escape) | \(.count) | \(.percentage)% |"'
     echo ""
 
     # Mermaid 円グラフ
@@ -322,7 +322,7 @@ format_summary_markdown() {
     if [[ "${has_nonzero}" -gt 0 ]]; then
       echo '```mermaid'
       echo 'pie title ステータス別アイテム分布'
-      echo "${STATUS_SUMMARY}" | jq -r '.[] | select(.count > 0) | "    \"\(.status)\" : \(.count)"'
+      echo "${STATUS_SUMMARY}" | jq -r '.[] | select(.count > 0) | "    \"\(.status | gsub("\""; "\\\"") | gsub("\\\\"; "\\\\"))\" : \(.count)"'
       echo '```'
       echo ""
     fi
@@ -349,7 +349,7 @@ format_summary_markdown() {
       echo ""
       echo "| ステータス | 見積もり工数(h) | 実績工数(h) |"
       echo "|---|---|---|"
-      echo "${EFFORT_SUMMARY}" | jq -r '.[] | "| \(.status) | \(.estimated_hours) | \(.actual_hours) |"'
+      echo "${EFFORT_SUMMARY}" | jq -r "${JQ_MD_ESCAPE}"'.[] | "| \(.status | md_escape) | \(.estimated_hours) | \(.actual_hours) |"'
       echo "| **合計** | **${TOTAL_ESTIMATED}** | **${TOTAL_ACTUAL}** |"
       echo ""
     fi
@@ -357,7 +357,7 @@ format_summary_markdown() {
     # 期日超過アイテム
     if [[ "${HAS_DUE_DATE}" == "true" && "${OVERDUE_COUNT}" -gt 0 ]]; then
       local md_row_filter="${JQ_MD_ESCAPE}"'
-        "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(.status // \"-\") | \(if (.assignees | length) > 0 then (.assignees | join(\", \")) else \"-\" end) | \(.due_date) | \(.days_overdue) |"'
+        "| [#\(.number)](\(.url)) | \(.title | md_escape) | \((.status // \"-\") | md_escape) | \(if (.assignees | length) > 0 then (.assignees | join(\", \") | md_escape) else \"-\" end) | \(.due_date) | \(.days_overdue) |"'
 
       echo "## 期日超過アイテム: ${OVERDUE_COUNT} 件"
       echo ""
@@ -372,7 +372,7 @@ format_summary_markdown() {
 format_summary_csv() {
   local items="$1"
   echo "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at,status,estimated_hours,actual_hours,due_date"
-  echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, .status, .estimated_hours, .actual_hours, .due_date] | @csv'
+  echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // "")] | @csv'
 }
 
 format_summary_tsv() {
