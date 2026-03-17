@@ -46,6 +46,11 @@ on:
           - all
           - open
           - closed
+      retention_days:
+        description: "アーティファクトの保持日数（1〜7）"
+        required: true
+        type: number
+        default: 7
 
 permissions:
   contents: read
@@ -78,7 +83,7 @@ jobs:
           name: summary-report-${{ inputs.project_number }}
           path: report-*-summary.*
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: ${{ inputs.retention_days }}
 
   generate-effort-report:
     if: >-
@@ -107,7 +112,7 @@ jobs:
           name: effort-report-${{ inputs.project_number }}
           path: report-*-effort.*
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: ${{ inputs.retention_days }}
 
   detect-stale-items:
     if: >-
@@ -136,7 +141,7 @@ jobs:
           name: stale-items-report
           path: stale-items-report.*
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: ${{ inputs.retention_days }}
 
   export-items:
     if: >-
@@ -165,7 +170,7 @@ jobs:
           name: export-items-${{ inputs.project_number }}
           path: export-*
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: ${{ inputs.retention_days }}
 
   workflow-summary-failure:
     needs: [generate-summary-report, generate-effort-report, detect-stale-items, export-items]
