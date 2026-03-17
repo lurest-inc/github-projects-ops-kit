@@ -216,14 +216,7 @@ echo "  合計: ${TOTAL_BEFORE_FILTER} 件（フィルタ前）"
 ITEMS=$(echo "${ITEMS}" | filter_items_by_type)
 
 # state フィルタを適用（closed は CLOSED + MERGED を含む）
-ITEMS=$(echo "${ITEMS}" | jq \
-  --arg itemState "${ITEM_STATE}" '
-  map(select(
-    $itemState == "all"
-    or ($itemState == "open" and .state == "OPEN")
-    or ($itemState == "closed" and (.state == "CLOSED" or .state == "MERGED"))
-  ))
-')
+ITEMS=$(echo "${ITEMS}" | filter_items_by_state)
 
 read -r TOTAL_COUNT ISSUE_COUNT PR_COUNT < <(echo "${ITEMS}" | jq -r '[length, ([.[] | select(.type == "Issue")] | length), ([.[] | select(.type == "PullRequest")] | length)] | @tsv')
 
@@ -238,12 +231,7 @@ fi
 echo ""
 echo "出力形式: ${OUTPUT_FORMAT}"
 
-case "${OUTPUT_FORMAT}" in
-  markdown) FILE_EXT="md" ;;
-  csv)      FILE_EXT="csv" ;;
-  tsv)      FILE_EXT="tsv" ;;
-  json)     FILE_EXT="json" ;;
-esac
+FILE_EXT=$(get_file_extension "${OUTPUT_FORMAT}")
 
 OUTPUT_FILE="export-${PROJECT_NUMBER}-items.${FILE_EXT}"
 

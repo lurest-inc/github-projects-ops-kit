@@ -48,18 +48,18 @@ flowchart TD
     E -- "Yes" --> D
     E -- "No" --> F["DraftIssue を除外\nアイテムを正規化"]
 
-    F --> F2["type フィルタリング\n（ITEM_TYPE に応じて Issue/PR を絞り込み）"]
-    F2 --> F3["state フィルタリング\n（ITEM_STATE に応じて open/closed を絞り込み）"]
-    F3 --> G["集計処理"]
-    G --> G1["ステータス別集計"]
-    G --> G2["担当者別集計"]
-    G --> G3["ラベル別集計"]
-    G --> G4["工数集計\n（カスタムフィールドがある場合）"]
-    G --> G5["期日超過判定\n（カスタムフィールドがある場合）"]
-    G1 & G2 & G3 & G4 & G5 --> H["レポート生成"]
-    H --> I["Workflow Summary\n（Markdown + Mermaid チャート）"]
-    H --> J["Artifact\n（JSON ファイル）"]
-    I & J --> K["完了"]
+    F --> G["type フィルタリング\n（ITEM_TYPE に応じて Issue/PR を絞り込み）"]
+    G --> H["state フィルタリング\n（ITEM_STATE に応じて open/closed を絞り込み）"]
+    H --> I["集計処理"]
+    I --> J["ステータス別集計"]
+    I --> K["担当者別集計"]
+    I --> L["ラベル別集計"]
+    I --> M["工数集計\n（カスタムフィールドがある場合）"]
+    I --> N["期日超過判定\n（カスタムフィールドがある場合）"]
+    J & K & L & M & N --> O["レポート生成"]
+    O --> P["Workflow Summary\n（Markdown + Mermaid チャート）"]
+    O --> Q["Artifact\n（JSON ファイル）"]
+    P & Q --> R["完了"]
 ```
 
 ## 📝 処理詳細
@@ -69,6 +69,8 @@ flowchart TD
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
 | アイテム取得 | GraphQL クエリで Project の全アイテムをページネーション付きで取得（100件/ページ、最大 50 ページ）。Issue・PR の基本情報に加え、Status・見積もり工数(h)・実績工数(h)・終了期日のフィールド値を取得 | `gh api graphql` — `projectV2.items(first: 100)` |
 | データ正規化 | `DraftIssue`（`__typename` が null）を除外し、各アイテムを統一フォーマットの JSON オブジェクトに変換。`fieldValues` から各フィールドの値を抽出 | `jq` |
+| type フィルタリング | `ITEM_TYPE` に応じて Issue / PR を絞り込み | `filter_items_by_type` |
+| state フィルタリング | `ITEM_STATE` に応じて open / closed を絞り込み | `filter_items_by_state` |
 | ステータス別集計 | 各ステータスの件数と割合を計算 | `jq` |
 | 担当者別集計 | 各担当者のアイテム数と In Progress / In Review の内訳を集計。未アサインアイテムも含む | `jq` |
 | ラベル別集計 | 各ラベルのアイテム数を集計。ラベルなしアイテムも含む | `jq` |

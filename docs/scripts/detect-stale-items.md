@@ -39,14 +39,14 @@ flowchart TD
     E -- "Yes" --> D
     E -- "No" --> F["DraftIssue を除外\nアイテムを正規化"]
 
-    F --> F2["type フィルタリング\n（ITEM_TYPE に応じて Issue/PR を絞り込み）"]
-    F2 --> F3["state フィルタリング\n（ITEM_STATE に応じて open/closed を絞り込み）"]
-    F3 --> G["フィルタリング\n（除外ステータス: Done, Backlog）\n（除外ラベル: on-hold, blocked）"]
-    G --> H["滞留判定\n（ステータス別閾値との比較）"]
-    H --> I["レポート生成"]
-    I --> J["Workflow Summary\n（Markdown テーブル）"]
-    I --> K["Artifact\n（JSON ファイル）"]
-    J & K --> L["完了"]
+    F --> G["type フィルタリング\n（ITEM_TYPE に応じて Issue/PR を絞り込み）"]
+    G --> H["state フィルタリング\n（ITEM_STATE に応じて open/closed を絞り込み）"]
+    H --> I["フィルタリング\n（除外ステータス: Done, Backlog）\n（除外ラベル: on-hold, blocked）"]
+    I --> J["滞留判定\n（ステータス別閾値との比較）"]
+    J --> K["レポート生成"]
+    K --> L["Workflow Summary\n（Markdown テーブル）"]
+    K --> M["Artifact\n（JSON ファイル）"]
+    L & M --> N["完了"]
 ```
 
 ## 📝 処理詳細
@@ -56,7 +56,9 @@ flowchart TD
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
 | アイテム取得 | GraphQL クエリで Project の全アイテムをページネーション付きで取得（100件/ページ、最大 50 ページ）。Issue・PR の `number`・`title`・`url`・`state`・`updatedAt`・`assignees`・`labels` および Status フィールド値を取得 | `gh api graphql` — `projectV2.items(first: 100)` |
 | データ正規化 | `DraftIssue`（`__typename` が null）を除外し、各アイテムを統一フォーマットの JSON オブジェクトに変換。`fieldValues` から Status フィールドの値を抽出 | `jq` |
-| フィルタリング | 除外ステータス（`Done`・`Backlog`）および除外ラベル（`on-hold`・`blocked`）に該当するアイテムを除外 | `jq` |
+| type フィルタリング | `ITEM_TYPE` に応じて Issue / PR を絞り込み | `filter_items_by_type` |
+| state フィルタリング | `ITEM_STATE` に応じて open / closed を絞り込み | `filter_items_by_state` |
+| 除外フィルタリング | 除外ステータス（`Done`・`Backlog`）および除外ラベル（`on-hold`・`blocked`）に該当するアイテムを除外 | `jq` |
 | 滞留判定 | 各アイテムの `updatedAt` と現在日時の差分を計算し、ステータス別閾値を超過したアイテムを「滞留」と判定 | `jq`（`strptime`・`mktime` で日付計算） |
 | Workflow Summary 出力 | ステータス別（In Review → In Progress → Todo の優先度順）に Markdown テーブルを生成し `$GITHUB_STEP_SUMMARY` に追記。Markdown エスケープには共通ライブラリの `JQ_MD_ESCAPE` を使用 | `jq` + bash |
 | Artifact JSON 出力 | プロジェクト情報・閾値・集計・滞留アイテム詳細を含む JSON を `stale-items-report.json` に出力 | `jq` |

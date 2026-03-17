@@ -55,19 +55,19 @@ flowchart TD
     E -- "Yes" --> D
     E -- "No" --> F["DraftIssue を除外\nアイテムを正規化"]
 
-    F --> F2["type フィルタリング\n（ITEM_TYPE に応じて Issue/PR を絞り込み）"]
-    F2 --> F3["state フィルタリング\n（ITEM_STATE に応じて open/closed を絞り込み）"]
-    F3 --> G["工数集計"]
-    G --> G1["全体サマリー\n（総工数、乖離率、入力率）"]
-    G --> G2["担当者別集計"]
-    G --> G3["ステータス別集計"]
-    G --> G4["乖離アイテム抽出"]
-    G --> G5["リードタイム分析\n（日付データがある場合）"]
-    G --> G6["工数未入力アイテム抽出"]
-    G1 & G2 & G3 & G4 & G5 & G6 --> H["レポート生成"]
-    H --> I["Workflow Summary\n（Markdown + Mermaid チャート）"]
-    H --> J["Artifact\n（JSON ファイル）"]
-    I & J --> K["完了"]
+    F --> G["type フィルタリング\n（ITEM_TYPE に応じて Issue/PR を絞り込み）"]
+    G --> H["state フィルタリング\n（ITEM_STATE に応じて open/closed を絞り込み）"]
+    H --> I["工数集計"]
+    I --> J["全体サマリー\n（総工数、乖離率、入力率）"]
+    I --> K["担当者別集計"]
+    I --> L["ステータス別集計"]
+    I --> M["乖離アイテム抽出"]
+    I --> N["リードタイム分析\n（日付データがある場合）"]
+    I --> O["工数未入力アイテム抽出"]
+    J & K & L & M & N & O --> P["レポート生成"]
+    P --> Q["Workflow Summary\n（Markdown + Mermaid チャート）"]
+    P --> R["Artifact\n（JSON ファイル）"]
+    Q & R --> S["完了"]
 ```
 
 ## 📝 処理詳細
@@ -77,6 +77,8 @@ flowchart TD
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
 | アイテム取得 | GraphQL クエリで Project の全アイテムをページネーション付きで取得（100件/ページ、最大 50 ページ）。Issue・PR の基本情報に加え、Status・見積もり工数(h)・実績工数(h)・終了期日・開始予定・終了予定・開始実績・終了実績のフィールド値を取得 | `gh api graphql` — `projectV2.items(first: 100)` |
 | データ正規化 | `DraftIssue`（`__typename` が null）を除外し、各アイテムを統一フォーマットの JSON オブジェクトに変換。`fieldValues` から各フィールドの値を抽出 | `jq` |
+| type フィルタリング | `ITEM_TYPE` に応じて Issue / PR を絞り込み | `filter_items_by_type` |
+| state フィルタリング | `ITEM_STATE` に応じて open / closed を絞り込み | `filter_items_by_state` |
 | 全体サマリー | 総見積もり工数・総実績工数・全体乖離率・工数入力率を算出 | `jq` + `awk` |
 | 担当者別集計 | 担当者ごとの見積もり・実績工数合計・乖離率を算出。複数担当者のアイテムは各担当者に同一工数を計上 | `jq` |
 | ステータス別集計 | ステータスごとの見積もり・実績工数合計を算出。Done ステータスの消化率を計算 | `jq` |
