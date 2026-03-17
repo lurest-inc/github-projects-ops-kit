@@ -80,4 +80,4 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 
 ## 🔄 使用ワークフロー
 
-- [④ Project アイテム エクスポート](../workflows/04-export-project-items)
+- [⑩ 統合プロジェクト分析](../workflows/10-analyze-project)（`report_types: export`）

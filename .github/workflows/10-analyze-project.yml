@@ -8,7 +8,7 @@ on:
         required: true
         type: number
       report_types:
-        description: "実行する分析タイプ（all: 全分析, stale: 滞留検知, summary: サマリー, effort: 工数集計）"
+        description: "実行するレポート/機能タイプ（all: 全機能, stale: 滞留検知, summary: サマリー, effort: 工数集計, export: アイテムエクスポート）"
         required: false
         type: choice
         default: "all"
@@ -17,6 +17,7 @@ on:
           - stale
           - summary
           - effort
+          - export
       output_format:
         description: "出力形式"
         required: false
@@ -137,8 +138,37 @@ jobs:
           if-no-files-found: ignore
           retention-days: 90
 
+  export-items:
+    if: >-
+      inputs.report_types == 'all' || inputs.report_types == 'export'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.PROJECT_PAT }}
+      PROJECT_OWNER: ${{ github.repository_owner }}
+      PROJECT_NUMBER: ${{ inputs.project_number }}
+      OUTPUT_FORMAT: ${{ inputs.output_format }}
+      ITEM_TYPE: ${{ inputs.item_type }}
+      ITEM_STATE: ${{ inputs.item_state }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: Project アイテムをエクスポート
+        run: |
+          chmod +x scripts/export-project-items.sh
+          bash scripts/export-project-items.sh
+
+      - name: アーティファクトをアップロード
+        if: always()
+        uses: actions/upload-artifact@v7.0.0
+        with:
+          name: export-items-${{ inputs.project_number }}
+          path: export-*
+          if-no-files-found: ignore
+          retention-days: 7
+
   workflow-summary-failure:
-    needs: [detect-stale-items, generate-summary-report, generate-effort-report]
+    needs: [detect-stale-items, generate-summary-report, generate-effort-report, export-items]
     if: always() && contains(needs.*.result, 'failure')
     runs-on: ubuntu-latest
     steps:
@@ -152,10 +182,10 @@ jobs:
           project-owner: ${{ github.repository_owner }}
           project-number: ${{ inputs.project_number }}
           job-results: |
-            {"detect-stale-items": "${{ needs.detect-stale-items.result }}", "generate-summary-report": "${{ needs.generate-summary-report.result }}", "generate-effort-report": "${{ needs.generate-effort-report.result }}"}
+            {"detect-stale-items": "${{ needs.detect-stale-items.result }}", "generate-summary-report": "${{ needs.generate-summary-report.result }}", "generate-effort-report": "${{ needs.generate-effort-report.result }}", "export-items": "${{ needs.export-items.result }}"}
 
   workflow-summary-success:
-    needs: [detect-stale-items, generate-summary-report, generate-effort-report]
+    needs: [detect-stale-items, generate-summary-report, generate-effort-report, export-items]
     if: always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     steps:
@@ -169,4 +199,4 @@ jobs:
           project-owner: ${{ github.repository_owner }}
           project-number: ${{ inputs.project_number }}
           job-results: |
-            {"detect-stale-items": "${{ needs.detect-stale-items.result }}", "generate-summary-report": "${{ needs.generate-summary-report.result }}", "generate-effort-report": "${{ needs.generate-effort-report.result }}"}
+            {"detect-stale-items": "${{ needs.detect-stale-items.result }}", "generate-summary-report": "${{ needs.generate-summary-report.result }}", "generate-effort-report": "${{ needs.generate-effort-report.result }}", "export-items": "${{ needs.export-items.result }}"}

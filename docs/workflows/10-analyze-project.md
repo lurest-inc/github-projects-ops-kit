@@ -3,7 +3,7 @@
 <!-- START doctoc -->
 <!-- END doctoc -->
 
-指定した GitHub `Project` のアイテムを走査し、滞留アイテム検知・プロジェクトサマリーレポート・工数集計レポートを 1 回の実行でまとめて生成します。`report_types` パラメータで実行する分析を選択することも可能です。
+指定した GitHub `Project` のアイテムを走査し、滞留アイテム検知・プロジェクトサマリーレポート・工数集計レポート・アイテムエクスポートを 1 回の実行でまとめて生成します。`report_types` パラメータで実行する機能を選択することも可能です。
 
 ## ✅ 前提
 
@@ -24,7 +24,7 @@
 | パラメータ | 説明 | 必須 | タイプ | デフォルト | 例 |
 |------------|------|:----:|--------|-----------|-----|
 | `project_number` | 対象 `Project` の Number | ✅ | `number` | — | `1` |
-| `report_types` | 実行する分析タイプ | — | `choice` | `all` | `stale` |
+| `report_types` | 実行する機能 | — | `choice` | `all` | `stale` |
 | `output_format` | 出力形式 | — | `choice` | `json` | `markdown` |
 | `item_type` | 対象アイテムの種別 | — | `choice` | `all` | `issues` |
 | `item_state` | 対象アイテムの状態 | — | `choice` | `all` | `open` |
@@ -33,10 +33,11 @@
 
 | 値 | 説明 |
 |------|------|
-| `all` | 全分析（滞留検知 + サマリー + 工数集計）を実行 |
+| `all` | 全機能（滞留検知 + サマリー + 工数集計 + エクスポート）を実行 |
 | `stale` | 滞留アイテム検知のみ実行 |
 | `summary` | プロジェクトサマリーレポートのみ実行 |
 | `effort` | 工数集計レポートのみ実行 |
+| `export` | アイテムエクスポートのみ実行 |
 
 ### `output_format` の選択肢
 
@@ -214,6 +215,36 @@
 
 ---
 
+## 📤 アイテムエクスポート（export）
+
+Project に紐づく Issue / Pull Request の一覧を取得し、エクスポートします。DraftIssue は出力対象外です。
+
+> **Note:** この機能はワークフロー④（Project アイテム エクスポート）から統合されたものです。
+
+### 出力項目
+
+| 項目 | 説明 |
+|------|------|
+| type | 種別（`Issue` / `PullRequest`） |
+| number | 番号 |
+| title | タイトル |
+| url | URL |
+| state | 状態（OPEN / CLOSED / MERGED） |
+| repository | リポジトリ名 |
+| author | 作成者 |
+| assignees | アサイン |
+| labels | ラベル |
+| created_at | 作成日時 |
+| updated_at | 更新日時 |
+
+### 出力
+
+#### Artifact
+
+`export-{number}-items.{json|md|csv|tsv}` が artifact としてダウンロード可能です（保持期間: 7 日）。出力形式は `output_format` パラメータで選択できます。
+
+---
+
 ## 📊 処理フロー
 
 ```mermaid
@@ -222,7 +253,8 @@ flowchart TD
     B -- "all or stale" --> C["detect-stale-items ジョブ\n滞留アイテム検知"]
     B -- "all or summary" --> D["generate-summary-report ジョブ\nサマリーレポート生成"]
     B -- "all or effort" --> E["generate-effort-report ジョブ\n工数集計レポート生成"]
-    C & D & E --> F{"結果判定"}
+    B -- "all or export" --> I["export-items ジョブ\nアイテムエクスポート"]
+    C & D & E & I --> F{"結果判定"}
     F -- "成功" --> G["workflow-summary-success ジョブ\n成功サマリーを出力"]
     F -- "失敗" --> H["workflow-summary-failure ジョブ\n失敗サマリーを出力"]
 ```
