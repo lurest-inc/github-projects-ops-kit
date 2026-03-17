@@ -56,7 +56,18 @@ permissions:
   contents: read
 
 jobs:
+  validate-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: retention_days の範囲チェック（1〜7）
+        run: |
+          if [ "${{ inputs.retention_days }}" -lt 1 ] || [ "${{ inputs.retention_days }}" -gt 7 ]; then
+            echo "::error::retention_days は 1〜7 の範囲で指定してください（入力値: ${{ inputs.retention_days }}）"
+            exit 1
+          fi
+
   generate-summary-report:
+    needs: [validate-inputs]
     if: >-
       inputs.report_types == 'all' || inputs.report_types == 'summary'
     runs-on: ubuntu-latest
@@ -86,6 +97,7 @@ jobs:
           retention-days: ${{ inputs.retention_days }}
 
   generate-effort-report:
+    needs: [validate-inputs]
     if: >-
       inputs.report_types == 'all' || inputs.report_types == 'effort'
     runs-on: ubuntu-latest
@@ -115,6 +127,7 @@ jobs:
           retention-days: ${{ inputs.retention_days }}
 
   detect-stale-items:
+    needs: [validate-inputs]
     if: >-
       inputs.report_types == 'all' || inputs.report_types == 'stale'
     runs-on: ubuntu-latest
@@ -144,6 +157,7 @@ jobs:
           retention-days: ${{ inputs.retention_days }}
 
   export-items:
+    needs: [validate-inputs]
     if: >-
       inputs.report_types == 'all' || inputs.report_types == 'export'
     runs-on: ubuntu-latest
@@ -173,7 +187,7 @@ jobs:
           retention-days: ${{ inputs.retention_days }}
 
   workflow-summary-failure:
-    needs: [generate-summary-report, generate-effort-report, detect-stale-items, export-items]
+    needs: [validate-inputs, generate-summary-report, generate-effort-report, detect-stale-items, export-items]
     if: always() && contains(needs.*.result, 'failure')
     runs-on: ubuntu-latest
     steps:
@@ -190,7 +204,7 @@ jobs:
             {"generate-summary-report": "${{ needs.generate-summary-report.result }}", "generate-effort-report": "${{ needs.generate-effort-report.result }}", "detect-stale-items": "${{ needs.detect-stale-items.result }}", "export-items": "${{ needs.export-items.result }}"}
 
   workflow-summary-success:
-    needs: [generate-summary-report, generate-effort-report, detect-stale-items, export-items]
+    needs: [validate-inputs, generate-summary-report, generate-effort-report, detect-stale-items, export-items]
     if: always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     steps:
