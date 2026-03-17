@@ -1,5 +1,7 @@
 # サポート
 
+本プロジェクトに関するサポート情報です。
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
@@ -10,8 +12,6 @@
   - [Issue と Discussion の使い分け](#issue-%E3%81%A8-discussion-%E3%81%AE%E4%BD%BF%E3%81%84%E5%88%86%E3%81%91)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-本プロジェクトに関するサポート情報です。
 
 ## ドキュメント
 

@@ -5,6 +5,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Platform: macOS/Windows](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-blue.svg)
 
+GitHub Projects の初期セットアップを GitHub Actions で自動実行するためのスターターキットです。
+本リポジトリを fork し、GitHub Actions を手動実行することで、GitHub Project の作成から分析までを一貫して行えます。
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
@@ -16,9 +19,6 @@
 - [📄 ライセンス](#-%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-GitHub Projects の初期セットアップを GitHub Actions で自動実行するためのスターターキットです。
-本リポジトリを fork し、GitHub Actions を手動実行することで、GitHub Project の作成から分析までを一貫して行えます。
 
 ## 🚀 このキットでできること
 

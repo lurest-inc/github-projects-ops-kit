@@ -1,5 +1,7 @@
 # コントリビューションガイド
 
+本プロジェクトへのコントリビューションを歓迎します。
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
@@ -10,8 +12,6 @@
 - [行動規範](#%E8%A1%8C%E5%8B%95%E8%A6%8F%E7%AF%84)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-本プロジェクトへのコントリビューションを歓迎します。
 
 ## Issue の起票
 
