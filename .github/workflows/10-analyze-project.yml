@@ -8,7 +8,7 @@ on:
         required: true
         type: number
       report_types:
-        description: "実行する分析タイプ（all: 全分析, stale: 滞留検知, summary: サマリー, effort: 工数集計, export: アイテムエクスポート）"
+        description: "実行するレポート/機能タイプ（all: 全機能, stale: 滞留検知, summary: サマリー, effort: 工数集計, export: アイテムエクスポート）"
         required: false
         type: choice
         default: "all"
