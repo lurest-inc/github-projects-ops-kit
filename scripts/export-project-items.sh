@@ -19,15 +19,7 @@ source "${SCRIPT_DIR}/lib/common.sh"
 
 # --- バリデーション ---
 
-validate_common_project_env
-
-OUTPUT_FORMAT="${OUTPUT_FORMAT:-markdown}"
-validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
-
-ITEM_TYPE="${ITEM_TYPE:-all}"
-ITEM_STATE="${ITEM_STATE:-all}"
-validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
-validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
+validate_analysis_env "markdown"
 
 # --- フォーマッター関数 ---
 

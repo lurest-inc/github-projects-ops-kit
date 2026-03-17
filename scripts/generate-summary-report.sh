@@ -17,18 +17,9 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib/common.sh"
 
-# --- スクリプト内定数 ---
-
-ITEM_TYPE="${ITEM_TYPE:-all}"
-ITEM_STATE="${ITEM_STATE:-all}"
-
 # --- バリデーション ---
 
-validate_common_project_env
-validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
-validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
-OUTPUT_FORMAT="${OUTPUT_FORMAT:-json}"
-validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
+validate_analysis_env
 
 # --- アイテム取得 ---
 
@@ -154,21 +145,14 @@ read -r OPEN_COUNT CLOSED_COUNT MERGED_COUNT < <(echo "${ITEMS}" | jq -r '[
 ] | @tsv')
 
 # ステータス別集計
-STATUS_SUMMARY=$(echo "${ITEMS}" | jq --argjson total "${TOTAL_COUNT}" '
+STATUS_SUMMARY=$(echo "${ITEMS}" | jq --argjson total "${TOTAL_COUNT}" "${JQ_STATUS_ORDER}"'
   sort_by(.status // "(未設定)") | group_by(.status // "(未設定)")
   | map({
       status: .[0].status // "(未設定)",
       count: length,
       percentage: (if $total > 0 then (length / $total * 1000 | round / 10) else 0 end)
     })
-  | sort_by(
-      if .status == "Backlog" then 0
-      elif .status == "Todo" then 1
-      elif .status == "In Progress" then 2
-      elif .status == "In Review" then 3
-      elif .status == "Done" then 4
-      else 5 end
-    )
+  | sort_by(status_order(.status))
 ')
 
 # 担当者別集計
@@ -200,21 +184,14 @@ HAS_EFFORT=$(echo "${ITEMS}" | jq '[.[] | select(.estimated_hours != null or .ac
 
 EFFORT_SUMMARY=""
 if [[ "${HAS_EFFORT}" == "true" ]]; then
-  EFFORT_SUMMARY=$(echo "${ITEMS}" | jq '
+  EFFORT_SUMMARY=$(echo "${ITEMS}" | jq "${JQ_STATUS_ORDER}"'
     sort_by(.status // "(未設定)") | group_by(.status // "(未設定)")
     | map({
         status: .[0].status // "(未設定)",
         estimated_hours: ([.[] | .estimated_hours // 0] | add),
         actual_hours: ([.[] | .actual_hours // 0] | add)
       })
-    | sort_by(
-        if .status == "Backlog" then 0
-        elif .status == "Todo" then 1
-        elif .status == "In Progress" then 2
-        elif .status == "In Review" then 3
-        elif .status == "Done" then 4
-        else 5 end
-      )
+    | sort_by(status_order(.status))
   ')
 fi
 

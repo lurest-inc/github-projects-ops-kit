@@ -23,16 +23,10 @@ STALE_DAYS_TODO=14
 STALE_DAYS_IN_PROGRESS=7
 STALE_DAYS_IN_REVIEW=3
 EXCLUDE_LABELS="on-hold,blocked"
-ITEM_TYPE="${ITEM_TYPE:-all}"
-ITEM_STATE="${ITEM_STATE:-all}"
 
 # --- バリデーション ---
 
-validate_common_project_env
-validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
-validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
-OUTPUT_FORMAT="${OUTPUT_FORMAT:-json}"
-validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
+validate_analysis_env
 
 # --- ヘルパー関数 ---
 

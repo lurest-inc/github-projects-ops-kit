@@ -270,6 +270,11 @@ validate_common_project_env() {
 # パイプ文字および Markdown 特殊文字（\, `, *, _, [, ], <, >, ~）をバックスラッシュでエスケープ
 JQ_MD_ESCAPE='def md_escape: gsub("\\\\"; "\\\\") | gsub("`"; "\\`") | gsub("\\*"; "\\*") | gsub("_"; "\\_") | gsub("\\["; "\\[") | gsub("\\]"; "\\]") | gsub("<"; "\\<") | gsub(">"; "\\>") | gsub("~"; "\\~") | gsub("\\|"; "\\|");'
 
+# ステータス順序付け用 jq 関数定義
+# Backlog → Todo → In Progress → In Review → Done の順でソートする
+# 使用例: echo "${DATA}" | jq "${JQ_STATUS_ORDER}"'sort_by(status_order(.status))'
+JQ_STATUS_ORDER='def status_order(s): if s == "Backlog" then 0 elif s == "Todo" then 1 elif s == "In Progress" then 2 elif s == "In Review" then 3 elif s == "Done" then 4 else 5 end;'
+
 # ITEM_TYPE フィルタ用ヘルパー関数
 # ITEM_TYPE 環境変数の値に応じて Issue / PR を含めるかどうかを判定する
 should_include_issues() { [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "issues" ]]; }
@@ -374,6 +379,25 @@ fetch_all_project_items() {
   fi
 
   echo "${_FAPI_ALL_ITEMS}"
+}
+
+# 分析系スクリプト共通の環境変数バリデーションを一括実行する
+# validate_common_project_env に加え、ITEM_TYPE / ITEM_STATE / OUTPUT_FORMAT のチェックを行う
+# 引数:
+#   $1 - OUTPUT_FORMAT のデフォルト値（省略時: "json"）
+# 使用例: validate_analysis_env "markdown"
+validate_analysis_env() {
+  local default_format="${1:-json}"
+
+  validate_common_project_env
+
+  ITEM_TYPE="${ITEM_TYPE:-all}"
+  ITEM_STATE="${ITEM_STATE:-all}"
+  OUTPUT_FORMAT="${OUTPUT_FORMAT:-${default_format}}"
+
+  validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
+  validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
+  validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
 }
 
 # 環境変数の値が許可リストに含まれるかチェックする

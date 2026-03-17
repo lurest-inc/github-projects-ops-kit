@@ -21,16 +21,10 @@ source "${SCRIPT_DIR}/lib/common.sh"
 
 VARIANCE_THRESHOLD=10
 VARIANCE_TOP_N=10
-ITEM_TYPE="${ITEM_TYPE:-all}"
-ITEM_STATE="${ITEM_STATE:-all}"
 
 # --- バリデーション ---
 
-validate_common_project_env
-validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
-validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
-OUTPUT_FORMAT="${OUTPUT_FORMAT:-json}"
-validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
+validate_analysis_env
 
 # --- アイテム取得 ---
 
@@ -199,7 +193,7 @@ ASSIGNEE_EFFORT=$(echo "${ITEMS}" | jq '
 ')
 
 # ステータス別工数集計
-STATUS_EFFORT=$(echo "${ITEMS}" | jq --argjson total_estimated "${TOTAL_ESTIMATED}" '
+STATUS_EFFORT=$(echo "${ITEMS}" | jq --argjson total_estimated "${TOTAL_ESTIMATED}" "${JQ_STATUS_ORDER}"'
   [.[] | select(.estimated_hours != null or .actual_hours != null)]
   | sort_by(.status // "(未設定)") | group_by(.status // "(未設定)")
   | map({
@@ -215,14 +209,7 @@ STATUS_EFFORT=$(echo "${ITEMS}" | jq --argjson total_estimated "${TOTAL_ESTIMATE
         else null end
       )
     })
-  | sort_by(
-      if .status == "Backlog" then 0
-      elif .status == "Todo" then 1
-      elif .status == "In Progress" then 2
-      elif .status == "In Review" then 3
-      elif .status == "Done" then 4
-      else 5 end
-    )
+  | sort_by(status_order(.status))
 ')
 
 # 乖離アイテム抽出（乖離率の絶対値が閾値以上）

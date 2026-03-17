@@ -19,19 +19,13 @@ source "${SCRIPT_DIR}/lib/common.sh"
 
 # --- スクリプト内定数 ---
 
-ITEM_TYPE="${ITEM_TYPE:-all}"
-ITEM_STATE="${ITEM_STATE:-all}"
 VELOCITY_WEEKS="${VELOCITY_WEEKS:-8}"
 # 先頭ゼロを除去（例: "08" → "8"）し、jq の --argjson で安全に扱えるようにする
 VELOCITY_WEEKS="$((10#${VELOCITY_WEEKS}))"
 
 # --- バリデーション ---
 
-validate_common_project_env
-validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
-validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
-OUTPUT_FORMAT="${OUTPUT_FORMAT:-json}"
-validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
+validate_analysis_env
 
 if ! [[ "${VELOCITY_WEEKS}" =~ ^[0-9]+$ ]] || [[ "${VELOCITY_WEEKS}" -lt 1 || "${VELOCITY_WEEKS}" -gt 52 ]]; then
   echo "::error::VELOCITY_WEEKS の値が不正です: ${VELOCITY_WEEKS}（1〜52 の範囲で指定してください）"
