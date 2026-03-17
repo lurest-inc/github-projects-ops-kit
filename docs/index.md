@@ -1,5 +1,15 @@
 # 📖 GitHub Projects Starter Kit ドキュメント
 
+![Platform: macOS/Windows](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-blue.svg)
+![GitHub Top Language](https://img.shields.io/github/languages/top/mabubu0203/github-projects-starter-kit)
+[![GitHub Release](https://img.shields.io/github/v/release/mabubu0203/github-projects-starter-kit)](https://github.com/mabubu0203/github-projects-starter-kit/releases)
+[![GitHub Release Date](https://img.shields.io/github/release-date/mabubu0203/github-projects-starter-kit)](https://github.com/mabubu0203/github-projects-starter-kit/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/mabubu0203/github-projects-starter-kit/blob/main/LICENSE)
+
+[![GitHub Stars](https://img.shields.io/github/stars/mabubu0203/github-projects-starter-kit)](https://github.com/mabubu0203/github-projects-starter-kit/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/mabubu0203/github-projects-starter-kit)](https://github.com/mabubu0203/github-projects-starter-kit/forks)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com/mabubu0203/github-projects-starter-kit/pulls)
+
 GitHub Projects の初期セットアップを GitHub Actions で自動実行するための **スターターキット** です。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
