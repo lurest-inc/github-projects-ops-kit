@@ -148,7 +148,7 @@ read -r OPEN_COUNT CLOSED_COUNT MERGED_COUNT < <(echo "${ITEMS}" | jq -r '[
 STATUS_SUMMARY=$(echo "${ITEMS}" | jq --argjson total "${TOTAL_COUNT}" "${JQ_STATUS_ORDER}"'
   sort_by(.status // "(未設定)") | group_by(.status // "(未設定)")
   | map({
-      status: .[0].status // "(未設定)",
+      status: (.[0].status // "(未設定)"),
       count: length,
       percentage: (if $total > 0 then (length / $total * 1000 | round / 10) else 0 end)
     })
@@ -187,7 +187,7 @@ if [[ "${HAS_EFFORT}" == "true" ]]; then
   EFFORT_SUMMARY=$(echo "${ITEMS}" | jq "${JQ_STATUS_ORDER}"'
     sort_by(.status // "(未設定)") | group_by(.status // "(未設定)")
     | map({
-        status: .[0].status // "(未設定)",
+        status: (.[0].status // "(未設定)"),
         estimated_hours: ([.[] | .estimated_hours // 0] | add),
         actual_hours: ([.[] | .actual_hours // 0] | add)
       })
