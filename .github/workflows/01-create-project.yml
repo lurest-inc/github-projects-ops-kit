@@ -1,7 +1,7 @@
 # ---------------------------------------------------------
 # secrets.PROJECT_PAT には GitHub の Personal Access Token を設定します。
 # PATの形式（ghp_ または github_pat_ で始まる）を検証し、
-# 無効な値の場合はジョブをスキップします。
+# 無効な値の場合はステップをスキップします。
 # ---------------------------------------------------------
 name: "① GitHub Project 新規作成"
 
@@ -52,6 +52,7 @@ jobs:
 
   extend-project:
     needs: create-project
+    if: ${{ needs.create-project.outputs.project_number != '' }}
     uses: ./.github/workflows/_reusable-extend-project.yml
     with:
       project_number: ${{ fromJSON(needs.create-project.outputs.project_number) }}
