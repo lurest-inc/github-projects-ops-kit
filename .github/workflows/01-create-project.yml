@@ -1,3 +1,8 @@
+# ---------------------------------------------------------
+# secrets.PROJECT_PAT には GitHub の Personal Access Token を設定します。
+# PATの形式（ghp_ または github_pat_ で始まる）を検証し、
+# 無効な値の場合はステップをスキップします。
+# ---------------------------------------------------------
 name: "① GitHub Project 新規作成"
 
 on:
@@ -27,6 +32,7 @@ jobs:
     env:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
       PROJECT_OWNER: ${{ github.repository_owner }}
+      PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     # 前提: ubuntu-latest には gh (GitHub CLI) と jq がプリインストール済み
     # スクリプト内の require_command チェックはローカル実行時の UX 向上目的で残している
     steps:
@@ -34,6 +40,7 @@ jobs:
         uses: actions/checkout@v6.0.2
 
       - name: Project を作成
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         id: create
         env:
           PROJECT_TITLE: ${{ inputs.project_title }}
@@ -45,6 +52,7 @@ jobs:
 
   extend-project:
     needs: create-project
+    if: ${{ needs.create-project.outputs.project_number != '' }}
     uses: ./.github/workflows/_reusable-extend-project.yml
     with:
       project_number: ${{ fromJSON(needs.create-project.outputs.project_number) }}

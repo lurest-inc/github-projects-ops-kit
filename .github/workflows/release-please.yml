@@ -7,6 +7,8 @@
 #
 # secrets.PROJECT_PAT には GitHub の Personal Access Token を設定します。
 # 他のワークフローと同じトークンを使用しています。
+# PATの形式（ghp_ または github_pat_ で始まる）を検証し、
+# 無効な値の場合はステップをスキップします。
 # ---------------------------------------------------------
 on:
   workflow_dispatch: {}
@@ -25,12 +27,15 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    env:
+      PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     # release-please が作成した PR（タイトルが "chore: release" で始まる）のみ実行
     if: |
       github.event_name == 'workflow_dispatch' ||
       (github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'chore: release'))
     steps:
       - uses: googleapis/release-please-action@v4.4.0
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         with:
           token: ${{ secrets.PROJECT_PAT }}
           config-file: release-please-config.json

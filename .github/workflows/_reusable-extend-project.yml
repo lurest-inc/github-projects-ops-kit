@@ -1,3 +1,8 @@
+# ---------------------------------------------------------
+# secrets.PROJECT_PAT には GitHub の Personal Access Token を設定します。
+# PATの形式（ghp_ または github_pat_ で始まる）を検証し、
+# 無効な値の場合はステップをスキップします。
+# ---------------------------------------------------------
 name: "Project 拡張（再利用可能）"
 
 on:
@@ -19,6 +24,7 @@ jobs:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
       PROJECT_OWNER: ${{ github.repository_owner }}
       PROJECT_NUMBER: ${{ inputs.project_number }}
+      PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     # 前提: ubuntu-latest には gh (GitHub CLI) と jq がプリインストール済み
     # スクリプト内の require_command チェックはローカル実行時の UX 向上目的で残している
     steps:
@@ -26,10 +32,13 @@ jobs:
         uses: actions/checkout@v6.0.2
 
       - name: ステータスカラムを設定
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         run: bash scripts/setup-project-status.sh
 
       - name: カスタムフィールドを作成
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         run: bash scripts/setup-project-fields.sh
 
       - name: View を作成
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         run: bash scripts/setup-project-views.sh

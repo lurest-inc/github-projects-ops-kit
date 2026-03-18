@@ -413,9 +413,12 @@ flowchart TD
 | `GH_TOKEN` | `secrets.PROJECT_PAT` | GitHub PAT（Projects 操作権限） |
 | `PROJECT_OWNER` | `github.repository_owner` | Project オーナー |
 | `PROJECT_NUMBER` | `inputs.project_number` | 対象 Project Number |
+| `PROJECT_PAT` | `secrets.PROJECT_PAT` | PAT 形式検証用（`ghp_` または `github_pat_` で始まるか検証） |
 | `OUTPUT_FORMAT` | `inputs.output_format` | 出力形式 |
 | `ITEM_TYPE` | `inputs.item_type` | アイテム種別フィルタ |
 | `ITEM_STATE` | `inputs.item_state` | アイテム状態フィルタ |
+
+> **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
 
 ### ジョブ構成
 

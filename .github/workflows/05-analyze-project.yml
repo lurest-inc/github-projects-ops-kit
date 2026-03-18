@@ -1,3 +1,8 @@
+# ---------------------------------------------------------
+# secrets.PROJECT_PAT には GitHub の Personal Access Token を設定します。
+# PATの形式（ghp_ または github_pat_ で始まる）を検証し、
+# 無効な値の場合はステップをスキップします。
+# ---------------------------------------------------------
 name: "⑤ 統合プロジェクト分析"
 
 on:
@@ -79,11 +84,13 @@ jobs:
       OUTPUT_FORMAT: ${{ inputs.output_format }}
       ITEM_TYPE: ${{ inputs.item_type }}
       ITEM_STATE: ${{ inputs.item_state }}
+      PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
 
       - name: サマリーレポート生成
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         run: bash scripts/generate-summary-report.sh
 
       - name: アーティファクトをアップロード
@@ -107,11 +114,13 @@ jobs:
       OUTPUT_FORMAT: ${{ inputs.output_format }}
       ITEM_TYPE: ${{ inputs.item_type }}
       ITEM_STATE: ${{ inputs.item_state }}
+      PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
 
       - name: 工数集計レポート生成
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         run: bash scripts/generate-effort-report.sh
 
       - name: アーティファクトをアップロード
@@ -135,11 +144,13 @@ jobs:
       OUTPUT_FORMAT: ${{ inputs.output_format }}
       ITEM_TYPE: ${{ inputs.item_type }}
       ITEM_STATE: ${{ inputs.item_state }}
+      PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
 
       - name: 滞留アイテム検知
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         run: bash scripts/detect-stale-items.sh
 
       - name: アーティファクトをアップロード
@@ -163,11 +174,13 @@ jobs:
       OUTPUT_FORMAT: ${{ inputs.output_format }}
       ITEM_TYPE: ${{ inputs.item_type }}
       ITEM_STATE: ${{ inputs.item_state }}
+      PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
 
       - name: ベロシティレポート生成
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         run: bash scripts/generate-velocity-report.sh
 
       - name: アーティファクトをアップロード
@@ -191,11 +204,13 @@ jobs:
       OUTPUT_FORMAT: ${{ inputs.output_format }}
       ITEM_TYPE: ${{ inputs.item_type }}
       ITEM_STATE: ${{ inputs.item_state }}
+      PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
 
       - name: Project アイテムをエクスポート
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         run: bash scripts/export-project-items.sh
 
       - name: アーティファクトをアップロード

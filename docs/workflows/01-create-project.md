@@ -53,9 +53,12 @@
 
 ```mermaid
 flowchart TD
-    A["workflow_dispatch\n（タイトル・公開範囲）"] --> B["create-project ジョブ\nProject を新規作成し project_number を出力"]
+    A["workflow_dispatch\n（タイトル・公開範囲）"] --> P{"PAT 形式検証"}
+    P -- "有効" --> B["create-project ジョブ\nProject を新規作成し project_number を出力"]
+    P -- "無効/未設定" --> S["ステップスキップ\n（project_number 空）"]
     B -- "成功" --> C["extend-project ジョブ\nフィールド・ステータス・View を一括セットアップ"]
     B -- "失敗" --> D["extend-project スキップ"]
+    S --> D
     C --> E{"全体結果判定"}
     D --> E
     E -- "成功" --> F["workflow-summary-success ジョブ\n成功サマリーを出力"]
@@ -78,8 +81,11 @@ flowchart TD
 |----------|--------|------|
 | `GH_TOKEN` | `secrets.PROJECT_PAT` | GitHub PAT（Projects 操作権限） |
 | `PROJECT_OWNER` | `github.repository_owner` | Project オーナー |
+| `PROJECT_PAT` | `secrets.PROJECT_PAT` | PAT 形式検証用（`ghp_` または `github_pat_` で始まるか検証） |
 | `PROJECT_TITLE` | `inputs.project_title` | Project タイトル |
 | `PROJECT_VISIBILITY` | `inputs.visibility` | Project 公開範囲 |
+
+> **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。また、`project_number` が空の場合は後続の `extend-project` ジョブもスキップされます。
 
 ### ジョブ構成
 

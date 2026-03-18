@@ -70,6 +70,9 @@ flowchart TD
 |----------|--------|------|
 | `GH_TOKEN` | `secrets.PROJECT_PAT` | GitHub PAT（`repo` または `public_repo` スコープ） |
 | `TARGET_REPO` | `inputs.target_repo` | 対象リポジトリ |
+| `PROJECT_PAT` | `secrets.PROJECT_PAT` | PAT 形式検証用（`ghp_` または `github_pat_` で始まるか検証） |
+
+> **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
 
 ### ジョブ構成
 
