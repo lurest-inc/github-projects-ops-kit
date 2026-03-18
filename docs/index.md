@@ -15,18 +15,20 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<details><summary>（ここをクリック）目次</summary>
-<ul>
 
+<details><summary>（ここをクリック）目次</summary><ul>
 <li><a href="#-%E3%81%AF%E3%81%98%E3%82%81%E3%81%A6%E3%81%AE%E6%96%B9%E3%81%B8">🚀 はじめての方へ</a></li>
-<li><a href="#-%E3%82%84%E3%82%8A%E3%81%9F%E3%81%84%E3%81%93%E3%81%A8%E5%88%A5%E3%82%AC%E3%82%A4%E3%83%89">📋 やりたいこと別ガイド</a></li>
-<li><a href="#-%E5%9B%B0%E3%81%A3%E3%81%9F%E3%81%A8%E3%81%8D%E3%81%AF">🔧 困ったときは</a></li>
-<li><a href="#-%E8%A9%B3%E3%81%97%E3%81%8F%E7%9F%A5%E3%82%8A%E3%81%9F%E3%81%84%E6%96%B9%E3%81%B8">📚 詳しく知りたい方へ</a></li>
-<li><a href="#-%E9%96%8B%E7%99%BA%E8%80%85%E5%90%91%E3%81%91">👨‍💻 開発者向け</a></li>
-<li><a href="#-%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA">🏠 リポジトリ</a></li>
 
-</ul>
-</details>
+<li><a href="#-%E3%82%84%E3%82%8A%E3%81%9F%E3%81%84%E3%81%93%E3%81%A8%E5%88%A5%E3%82%AC%E3%82%A4%E3%83%89">📋 やりたいこと別ガイド</a></li>
+
+<li><a href="#-%E5%9B%B0%E3%81%A3%E3%81%9F%E3%81%A8%E3%81%8D%E3%81%AF">🔧 困ったときは</a></li>
+
+<li><a href="#-%E8%A9%B3%E3%81%97%E3%81%8F%E7%9F%A5%E3%82%8A%E3%81%9F%E3%81%84%E6%96%B9%E3%81%B8">📚 詳しく知りたい方へ</a></li>
+
+<li><a href="#-%E9%96%8B%E7%99%BA%E8%80%85%E5%90%91%E3%81%91">👨‍💻 開発者向け</a></li>
+
+<li><a href="#-%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA">🏠 リポジトリ</a></li>
+</ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

@@ -6,19 +6,22 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<details><summary>（ここをクリック）目次</summary>
-<ul>
 
+<details><summary>（ここをクリック）目次</summary><ul>
 <li><a href="#-%E5%89%8D%E6%8F%90%E6%9D%A1%E4%BB%B6">✅ 前提条件</a></li>
-<li><a href="#1--%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%82%92-fork-%E3%81%99%E3%82%8B">1. 🍴 リポジトリを fork する</a></li>
-<li><a href="#2--pat-%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">2. 🔑 PAT を作成する</a></li>
-<li><a href="#3--secrets-%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B">3. 🔒 Secrets を設定する</a></li>
-<li><a href="#4--github-actions-%E3%82%92%E6%9C%89%E5%8A%B9%E5%8C%96%E3%81%99%E3%82%8B">4. ⚡ GitHub Actions を有効化する</a></li>
-<li><a href="#5--%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">5. ▶️ ワークフローを実行する</a></li>
-<li><a href="#-%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC%E5%AE%9F%E8%A1%8C%E7%8A%B6%E6%B3%81%E3%81%AE%E7%A2%BA%E8%AA%8D">👀 ワークフロー実行状況の確認</a></li>
 
-</ul>
-</details>
+<li><a href="#1--%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%82%92-fork-%E3%81%99%E3%82%8B">1. 🍴 リポジトリを fork する</a></li>
+
+<li><a href="#2--pat-%E3%82%92%E4%BD%9C%E6%88%90%E3%81%99%E3%82%8B">2. 🔑 PAT を作成する</a></li>
+
+<li><a href="#3--secrets-%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B">3. 🔒 Secrets を設定する</a></li>
+
+<li><a href="#4--github-actions-%E3%82%92%E6%9C%89%E5%8A%B9%E5%8C%96%E3%81%99%E3%82%8B">4. ⚡ GitHub Actions を有効化する</a></li>
+
+<li><a href="#5--%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B">5. ▶️ ワークフローを実行する</a></li>
+
+<li><a href="#-%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC%E5%AE%9F%E8%A1%8C%E7%8A%B6%E6%B3%81%E3%81%AE%E7%A2%BA%E8%AA%8D">👀 ワークフロー実行状況の確認</a></li>
+</ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

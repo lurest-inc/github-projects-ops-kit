@@ -5,17 +5,18 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<details><summary>（ここをクリック）目次</summary>
-<ul>
 
+<details><summary>（ここをクリック）目次</summary><ul>
 <li><a href="#-%E6%A6%82%E8%A6%81">📋 概要</a></li>
-<li><a href="#-inputs">⚙️ Inputs</a></li>
-<li><a href="#-%E5%87%BA%E5%8A%9B%E5%86%85%E5%AE%B9">📤 出力内容</a></li>
-<li><a href="#-%E4%BD%BF%E7%94%A8%E4%BE%8B">💡 使用例</a></li>
-<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用ワークフロー</a></li>
 
-</ul>
-</details>
+<li><a href="#-inputs">⚙️ Inputs</a></li>
+
+<li><a href="#-%E5%87%BA%E5%8A%9B%E5%86%85%E5%AE%B9">📤 出力内容</a></li>
+
+<li><a href="#-%E4%BD%BF%E7%94%A8%E4%BE%8B">💡 使用例</a></li>
+
+<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用ワークフロー</a></li>
+</ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

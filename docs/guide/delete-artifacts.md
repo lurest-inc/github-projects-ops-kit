@@ -6,15 +6,14 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<details><summary>（ここをクリック）目次</summary>
-<ul>
 
+<details><summary>（ここをクリック）目次</summary><ul>
 <li><a href="#-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85">⚠️ 注意事項</a></li>
-<li><a href="#-gui-%E3%81%A7%E5%89%8A%E9%99%A4%E3%81%99%E3%82%8B">🖥️ GUI で削除する</a></li>
-<li><a href="#-cli--api-%E3%81%A7%E5%89%8A%E9%99%A4%E3%81%99%E3%82%8B">💻 CLI / API で削除する</a></li>
 
-</ul>
-</details>
+<li><a href="#-gui-%E3%81%A7%E5%89%8A%E9%99%A4%E3%81%99%E3%82%8B">🖥️ GUI で削除する</a></li>
+
+<li><a href="#-cli--api-%E3%81%A7%E5%89%8A%E9%99%A4%E3%81%99%E3%82%8B">💻 CLI / API で削除する</a></li>
+</ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

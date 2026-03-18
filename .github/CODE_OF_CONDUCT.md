@@ -4,18 +4,20 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-<details><summary>（ここをクリック）目次</summary>
-<ul>
 
+<details><summary>（ここをクリック）目次</summary><ul>
 <li><a href="#%E7%A7%81%E3%81%9F%E3%81%A1%E3%81%AE%E8%AA%93%E3%81%84">私たちの誓い</a></li>
-<li><a href="#%E7%A7%81%E3%81%9F%E3%81%A1%E3%81%AE%E5%9F%BA%E6%BA%96">私たちの基準</a></li>
-<li><a href="#%E8%B2%AC%E4%BB%BB">責任</a></li>
-<li><a href="#%E9%81%A9%E7%94%A8%E7%AF%84%E5%9B%B2">適用範囲</a></li>
-<li><a href="#%E5%9F%B7%E8%A1%8C">執行</a></li>
-<li><a href="#%E5%B8%B0%E5%B1%9E">帰属</a></li>
 
-</ul>
-</details>
+<li><a href="#%E7%A7%81%E3%81%9F%E3%81%A1%E3%81%AE%E5%9F%BA%E6%BA%96">私たちの基準</a></li>
+
+<li><a href="#%E8%B2%AC%E4%BB%BB">責任</a></li>
+
+<li><a href="#%E9%81%A9%E7%94%A8%E7%AF%84%E5%9B%B2">適用範囲</a></li>
+
+<li><a href="#%E5%9F%B7%E8%A1%8C">執行</a></li>
+
+<li><a href="#%E5%B8%B0%E5%B1%9E">帰属</a></li>
+</ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
