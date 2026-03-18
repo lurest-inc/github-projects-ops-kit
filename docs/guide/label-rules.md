@@ -8,11 +8,11 @@
 <details><summary>（ここをクリック）目次</summary><ul>
 <li><a href="#-label-%E3%81%AE%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E5%88%86%E9%A1%9E">📋 Label のカテゴリ分類</a></li>
 
-<li><a href="#-%E5%90%84-label%E3%81%AE%E7%94%A8%E9%80%94%E3%81%A8%E4%BB%98%E4%B8%8E%E3%82%BF%E3%82%A4%E3%83%9F%E3%83%B3%E3%82%B0">🏷️ 各 Labelの用途と付与タイミング</a></li>
+<li><a href="#-%E5%90%84-label-%E3%81%AE%E7%94%A8%E9%80%94%E3%81%A8%E4%BB%98%E4%B8%8E%E3%82%BF%E3%82%A4%E3%83%9F%E3%83%B3%E3%82%B0">🏷️ 各 Label の用途と付与タイミング</a></li>
 
-<li><a href="#-%E7%8A%B6%E6%85%8Blabel%E3%81%A8%E3%82%AB%E3%83%B3%E3%83%90%E3%83%B3status%E3%81%AE%E9%96%A2%E4%BF%82">🔄 状態LabelとカンバンStatusの関係</a></li>
+<li><a href="#-%E7%8A%B6%E6%85%8B-label-%E3%81%A8%E3%82%AB%E3%83%B3%E3%83%90%E3%83%B3-status-%E3%81%AE%E9%96%A2%E4%BF%82">🔄 状態 Label とカンバン Status の関係</a></li>
 
-<li><a href="#-%E5%84%AA%E5%85%88%E5%BA%A6label%E3%81%AE%E9%81%8B%E7%94%A8%E5%9F%BA%E6%BA%96">⚡ 優先度Labelの運用基準</a></li>
+<li><a href="#-%E5%84%AA%E5%85%88%E5%BA%A6-label-%E3%81%AE%E9%81%8B%E7%94%A8%E5%9F%BA%E6%BA%96">⚡ 優先度 Label の運用基準</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

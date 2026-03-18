@@ -12,7 +12,7 @@
 
 <li><a href="#-%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF">⚙️ パラメータ</a></li>
 
-<li><a href="#-%E6%BB%9E%E7%95%99item%E6%A4%9C%E7%9F%A5stale">🔍 滞留Item検知（stale）</a></li>
+<li><a href="#-%E6%BB%9E%E7%95%99-item-%E6%A4%9C%E7%9F%A5stale">🔍 滞留 Item 検知（stale）</a></li>
 
 <li><a href="#-%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E3%82%B5%E3%83%9E%E3%83%AA%E3%83%BC%E3%83%AC%E3%83%9D%E3%83%BC%E3%83%88summary">📊 プロジェクトサマリーレポート（summary）</a></li>
 
@@ -20,13 +20,13 @@
 
 <li><a href="#-%E3%83%99%E3%83%AD%E3%82%B7%E3%83%86%E3%82%A3%E3%83%AC%E3%83%9D%E3%83%BC%E3%83%88velocity">📈 ベロシティレポート（velocity）</a></li>
 
-<li><a href="#-item%E3%82%A8%E3%82%AF%E3%82%B9%E3%83%9D%E3%83%BC%E3%83%88export">📤 Itemエクスポート（export）</a></li>
+<li><a href="#-item-%E3%82%A8%E3%82%AF%E3%82%B9%E3%83%9D%E3%83%BC%E3%83%88export">📤 Item エクスポート（export）</a></li>
 
-<li><a href="#-artifact%E3%81%AE%E5%85%AC%E9%96%8B%E7%AF%84%E5%9B%B2%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85">⚠️ Artifactの公開範囲に関する注意事項</a></li>
+<li><a href="#-artifact-%E3%81%AE%E5%85%AC%E9%96%8B%E7%AF%84%E5%9B%B2%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85">⚠️ Artifact の公開範囲に関する注意事項</a></li>
 
 <li><a href="#-%E5%87%A6%E7%90%86%E3%83%95%E3%83%AD%E3%83%BC">📊 処理フロー</a></li>
 
-<li><a href="#-workflow%E4%BB%95%E6%A7%98">🔧 Workflow仕様</a></li>
+<li><a href="#-workflow-%E4%BB%95%E6%A7%98">🔧 Workflow 仕様</a></li>
 
 <li><a href="#-%E9%96%A2%E9%80%A3%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88">📜 関連スクリプト</a></li>
 </ul></details>

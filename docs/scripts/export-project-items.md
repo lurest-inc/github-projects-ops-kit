@@ -17,7 +17,7 @@ DraftIssue は出力対象外となります。
 
 <li><a href="#-%E5%87%BA%E5%8A%9B%E5%BD%A2%E5%BC%8F%E3%81%94%E3%81%A8%E3%81%AE%E3%82%A8%E3%82%B9%E3%82%B1%E3%83%BC%E3%83%97%E4%BB%95%E6%A7%98">📝 出力形式ごとのエスケープ仕様</a></li>
 
-<li><a href="#-%E4%BD%BF%E7%94%A8workflow">🔄 使用Workflow</a></li>
+<li><a href="#-%E4%BD%BF%E7%94%A8-workflow">🔄 使用 Workflow</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

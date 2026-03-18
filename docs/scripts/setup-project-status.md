@@ -9,7 +9,7 @@ Project の `Status Field` にカラムを設定するスクリプトです。
 <details><summary>（ここをクリック）目次</summary><ul>
 <li><a href="#-%E7%92%B0%E5%A2%83%E5%A4%89%E6%95%B0">🔧 環境変数</a></li>
 
-<li><a href="#-%E8%A8%AD%E5%AE%9A%E3%81%95%E3%82%8C%E3%82%8Bstatus%E3%82%AB%E3%83%A9%E3%83%A0">📋 設定されるStatusカラム</a></li>
+<li><a href="#-%E8%A8%AD%E5%AE%9A%E3%81%95%E3%82%8C%E3%82%8B-status-%E3%82%AB%E3%83%A9%E3%83%A0">📋 設定される Status カラム</a></li>
 
 <li><a href="#-%E5%87%A6%E7%90%86%E3%83%95%E3%83%AD%E3%83%BC">📊 処理フロー</a></li>
 
@@ -17,7 +17,7 @@ Project の `Status Field` にカラムを設定するスクリプトです。
 
 <li><a href="#-api-%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">📚 API リファレンス</a></li>
 
-<li><a href="#-%E4%BD%BF%E7%94%A8workflow">🔄 使用Workflow</a></li>
+<li><a href="#-%E4%BD%BF%E7%94%A8-workflow">🔄 使用 Workflow</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
