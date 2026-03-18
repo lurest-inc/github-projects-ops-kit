@@ -20,8 +20,9 @@
 # 有効な PAT を設定後、ワークフローを有効化してください。
 # ---------------------------------------------------------
 on:
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
+  push:
+    branches:
+      - main
 
 name: TOC Generator
 
@@ -34,4 +35,6 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.PROJECT_PAT }}
           TARGET_PATHS: README.md,docs/**/*.md,.github/**/*.md
+          MAX_HEADER_LEVEL: 2
+          FOLDING: true
           CREATE_PR: true
