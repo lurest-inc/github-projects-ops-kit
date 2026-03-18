@@ -235,7 +235,7 @@ run_graphql_paginated() {
 
     IFS=$'\t' read -r _pgn_has_next _pgn_cursor < <(
       echo "${_pgn_result}" | jq -r --arg owner "${OWNER_QUERY_FIELD}" \
-        "[${page_info_jq}.hasNextPage // false, ${page_info_jq}.endCursor // \"\"] | @tsv" 2>/dev/null || echo "false	"
+        "[${page_info_jq}.hasNextPage // false, ${page_info_jq}.endCursor // \"\"] | @tsv" 2>/dev/null || printf '%s\t%s\n' false ""
     )
   done
 }
