@@ -45,7 +45,7 @@ jobs:
           TARGET_PATHS: README.md,docs/**/*.md,.github/**/*.md
           MAX_HEADER_LEVEL: 2
           CUSTOM_MODE: true
-          CUSTOM_TEMPLATE: "<details><summary>（ここをクリック）目次</summary>\n<ul>\n${ITEMS}\n</ul>\n</details>"
+          CUSTOM_TEMPLATE: "<details><summary>（ここをクリック）目次</summary><ul>${ITEMS}</ul></details>"
           ITEM_TEMPLATE: '<li><a href="${LINK}">${TEXT}</a></li>'
           SEPARATOR: "\n"
           TOC_TITLE: ""
