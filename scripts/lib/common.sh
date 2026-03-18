@@ -8,7 +8,7 @@
 
 REST_API_VERSION="2022-11-28"
 
-# GitHub Actions ワークフローコマンドインジェクションを防ぐためのサニタイズ関数
+# GitHub Actions Workflow コマンドインジェクションを防ぐためのサニタイズ関数
 sanitize_for_workflow_command() {
   local value="$1"
   value="${value//'%'/'%25'}"
