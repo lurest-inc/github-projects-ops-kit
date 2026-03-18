@@ -30,7 +30,7 @@ flowchart LR
     A["1. Fork"] --> B["2. PAT 作成"]
     B --> C["3. Secrets 設定"]
     C --> D["4. Actions 有効化"]
-    D --> E["5. ワークフロー実行"]
+    D --> E["5. Workflow 実行"]
 ```
 
 ## ✅ 前提条件
@@ -38,7 +38,7 @@ flowchart LR
 - [GitHub CLI (`gh`)](https://cli.github.com/) がインストール済みであること
 - `gh auth login` で認証済みであること
 
-## 1. 🍴 リポジトリを fork する
+## 1. 🍴 Repository を Fork する
 
 ```bash
 gh repo fork mabubu0203/github-projects-starter-kit --clone
@@ -63,7 +63,7 @@ gh secret set PROJECT_PAT --repo <owner>/github-projects-starter-kit
 
 ## 4. ⚡ GitHub Actions を有効化する
 
-フォークしたリポジトリでは `GitHub Actions` がデフォルトで無効になっています。
+Fork した Repository では `GitHub Actions` がデフォルトで無効になっています。
 
 ```bash
 gh api repos/<owner>/github-projects-starter-kit/actions/permissions \
@@ -72,9 +72,9 @@ gh api repos/<owner>/github-projects-starter-kit/actions/permissions \
   --field allowed_actions="all"
 ```
 
-> **Note:** 詳しくは [トラブルシューティング > フォーク後に GitHub Actions が動かない](troubleshooting#フォーク後に-github-actions-が動かない) を参照してください。
+> **Note:** 詳しくは [トラブルシューティング > Fork 後に GitHub Actions が動かない](troubleshooting#fork-後に-github-actions-が動かない) を参照してください。
 
-## 5. ▶️ ワークフローを実行する
+## 5. ▶️ Workflow を実行する
 
 ### ① GitHub Project 新規作成
 
@@ -108,7 +108,7 @@ gh workflow run 04-add-items-to-project.yml \
   --field item_state="open"
 ```
 
-## 👀 ワークフロー実行状況の確認
+## 👀 Workflow 実行状況の確認
 
 ```bash
 # 実行一覧を表示
@@ -118,7 +118,7 @@ gh run list
 gh run watch
 ```
 
-各ワークフローの詳細は個別ページをご参照ください。
+各 Workflow の詳細は個別ページをご参照ください。
 
 - [① GitHub Project 新規作成](workflows/01-create-project)
 - [② GitHub Project 拡張](workflows/02-extend-project)

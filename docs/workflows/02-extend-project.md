@@ -15,7 +15,7 @@
 
 <li><a href="#-%E5%87%A6%E7%90%86%E3%83%95%E3%83%AD%E3%83%BC">📊 処理フロー</a></li>
 
-<li><a href="#-%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC%E4%BB%95%E6%A7%98">🔧 ワークフロー仕様</a></li>
+<li><a href="#-%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC%E4%BB%95%E6%A7%98">🔧 Workflow仕様</a></li>
 
 <li><a href="#-%E9%96%A2%E9%80%A3%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%97%E3%83%88">📜 関連スクリプト</a></li>
 </ul></details>
@@ -24,7 +24,7 @@
 
 ## ✅ 前提
 
-このワークフローを実行する前に、クイックスタートを完了してください。
+このWorkflowを実行する前に、クイックスタートを完了してください。
 
 - [クイックスタート（GUI）](../quickstart-gui)
 - [クイックスタート（CLI）](../quickstart-cli)
@@ -46,13 +46,13 @@
 
 ```mermaid
 flowchart TD
-    A["workflow_dispatch\n（project_number）"] --> B["extend-project ジョブ\n既存 Project にフィールド・ステータス・View を追加"]
+    A["workflow_dispatch\n（project_number）"] --> B["extend-project Job\n既存 Project にフィールド・ステータス・View を追加"]
     B --> C{"結果判定"}
-    C -- "成功" --> D["workflow-summary-success ジョブ\n成功サマリーを出力"]
-    C -- "失敗" --> E["workflow-summary-failure ジョブ\n失敗サマリーを出力"]
+    C -- "成功" --> D["workflow-summary-success Job\n成功サマリーを出力"]
+    C -- "失敗" --> E["workflow-summary-failure Job\n失敗サマリーを出力"]
 ```
 
-## 🔧 ワークフロー仕様
+## 🔧 Workflow仕様
 
 ### ファイル
 
@@ -71,20 +71,20 @@ flowchart TD
 | `PROJECT_NUMBER` | `inputs.project_number` | 対象 Project Number |
 | `PROJECT_PAT` | `secrets.PROJECT_PAT` | PAT 形式検証用（`ghp_` または `github_pat_` で始まるか検証） |
 
-> **Note:** 環境変数は再利用ワークフロー `_reusable-extend-project.yml` 内で設定されます。`PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
+> **Note:** 環境変数はReusable Workflow `_reusable-extend-project.yml` 内で設定されます。`PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
 
-### ジョブ構成
+### Job構成
 
 ```
 .github/workflows/02-extend-project.yml
-  ├── extend-project ジョブ
+  ├── extend-project Job
   │   └── _reusable-extend-project.yml             # フィールド・ステータス・View セットアップ
   │       ├── scripts/setup-project-status.sh      # ステータスカラム設定
   │       ├── scripts/setup-project-fields.sh      # カスタムフィールド作成
   │       └── scripts/setup-project-views.sh       # View 作成
-  ├── workflow-summary-failure ジョブ（失敗時）
+  ├── workflow-summary-failure Job（失敗時）
   │   └── .github/actions/workflow-summary         # 失敗サマリー出力
-  └── workflow-summary-success ジョブ（成功時）
+  └── workflow-summary-success Job（成功時）
       └── .github/actions/workflow-summary         # 成功サマリー出力
 ```
 

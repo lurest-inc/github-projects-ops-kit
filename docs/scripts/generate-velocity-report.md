@@ -19,7 +19,7 @@
 
 <li><a href="#-api-%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">📚 API リファレンス</a></li>
 
-<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用ワークフロー</a></li>
+<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用Workflow</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -120,6 +120,6 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 | `fieldValues(first: N)` | 20 | 1アイテムあたりのフィールド値取得数 |
 | `assignees(first: N)` | 100 | 1アイテムあたりのアサイン取得数 |
 
-## 🔄 使用ワークフロー
+## 🔄 使用Workflow
 
 - [⑤ 統合プロジェクト分析](../workflows/05-analyze-project)

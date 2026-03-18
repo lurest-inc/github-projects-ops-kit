@@ -1,6 +1,6 @@
 # 📝 入力値ガイド
 
-ワークフロー実行時に入力するパラメータの確認方法をまとめています。
+Workflow 実行時に入力するパラメータの確認方法をまとめています。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -51,7 +51,7 @@ gh project list
 
 ## 📂 `target_repo` の確認方法
 
-リポジトリページの URL から `owner/repo` 形式で指定します。
+Repository ページの URL から `owner/repo` 形式で指定します。
 
 **例:** `https://github.com/octocat/my-app` → `target_repo` は **octocat/my-app**
 
@@ -59,7 +59,7 @@ gh project list
 <summary>（ここをクリック）<code>target_repo</code> の確認例（スクリーンショット）を表示</summary>
 
 <blockquote>
-<strong>参考画像:</strong> リポジトリページのヘッダーに <code>owner/repo</code> 形式で表示されています。
+<strong>参考画像:</strong> Repository ページのヘッダーに <code>owner/repo</code> 形式で表示されています。
 <br><br>
 <img src="../assets/images/faq-target-repo.png" alt="target_repo の確認例" width="50%">
 </blockquote>
@@ -72,13 +72,13 @@ gh project list
 gh repo list
 ```
 
-出力にリポジトリが `owner/repo` 形式で表示されます。
+出力に Repository が `owner/repo` 形式で表示されます。
 
 ---
 
 ## 🎫 Issue や Pull Request の確認方法
 
-リポジトリページ上部のタブから確認できます。
+Repository ページ上部のタブから確認できます。
 
 | タブ | URL 形式 |
 |------|----------|

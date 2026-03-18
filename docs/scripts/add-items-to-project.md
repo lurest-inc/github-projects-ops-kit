@@ -1,6 +1,6 @@
 # 📜 add-items-to-project.sh
 
-リポジトリの `Issue`/`PR` を `Project` に一括追加するスクリプトです。
+Repositoryの `Issue`/`PR` を `Project` に一括追加するスクリプトです。
 既に `Project` に追加済みのアイテムは自動的にスキップされます。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -15,7 +15,7 @@
 
 <li><a href="#-api-%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">📚 API リファレンス</a></li>
 
-<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用ワークフロー</a></li>
+<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用Workflow</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -27,7 +27,7 @@
 | `GH_TOKEN` | GitHub PAT（Projects 操作権限が必要） | ✅ |
 | `PROJECT_OWNER` | `Project` の所有者 | ✅ |
 | `PROJECT_NUMBER` | 対象 `Project` の Number（数値） | ✅ |
-| `TARGET_REPO` | 対象リポジトリ（owner/repo 形式） | ✅ |
+| `TARGET_REPO` | 対象Repository（owner/repo 形式） | ✅ |
 | `ITEM_TYPE` | 対象アイテムの種別（`all`/`issues`/`prs`） | ❌（デフォルト: `all`） |
 | `ITEM_STATE` | 取得するアイテムの状態（`open`/`closed`/`all`） | ❌（デフォルト: `open`） |
 | `ITEM_LABEL` | 絞り込みラベル | ❌ |
@@ -101,6 +101,6 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 | `--limit` | 100 | `gh issue list` / `gh pr list` の最大取得件数 |
 | `sleep` | 1秒 | アイテム追加間のレート制限回避待機時間 |
 
-## 🔄 使用ワークフロー
+## 🔄 使用Workflow
 
 - [④ Issue/PR 一括紐付け](../workflows/04-add-items-to-project)

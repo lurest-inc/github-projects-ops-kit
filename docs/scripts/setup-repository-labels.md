@@ -1,6 +1,6 @@
 # 📜 setup-repository-labels.sh
 
-指定リポジトリに対して、設定ファイルで定義した Issue ラベルを一括作成するスクリプトです。
+指定Repositoryに対して、設定ファイルで定義した Issue ラベルを一括作成するスクリプトです。
 既存ラベルと同名のラベルが存在する場合はスキップします。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -17,7 +17,7 @@
 
 <li><a href="#-api-%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">📚 API リファレンス</a></li>
 
-<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用ワークフロー</a></li>
+<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用Workflow</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -26,8 +26,8 @@
 
 | 環境変数 | 説明 | 必須 |
 |----------|------|:----:|
-| `GH_TOKEN` | GitHub PAT（`repo` または `public_repo` スコープが必要） | ✅ |
-| `TARGET_REPO` | 対象リポジトリ（`owner/repo` 形式） | ✅ |
+| `GH_TOKEN` | GitHub PAT（`repo` または `public_repo` Scopeが必要） | ✅ |
+| `TARGET_REPO` | 対象Repository（`owner/repo` 形式） | ✅ |
 
 ## 📋 ラベル定義ファイル
 
@@ -168,7 +168,7 @@ flowchart TD
 | コマンド存在チェック | `require_command` で `gh`, `jq` の存在を確認 | `common.sh` |
 | ラベル定義ファイル読み込み | `scripts/config/repository-label-definitions.json` を読み込み | `jq` |
 | JSON バリデーション | 必須フィールドの存在チェック、`color` の HEX 形式チェック | `jq` |
-| 既存ラベル取得 | リポジトリの既存ラベル名一覧を事前に取得し、重複チェック用にキャッシュ | `gh label list --json name` |
+| 既存ラベル取得 | Repositoryの既存ラベル名一覧を事前に取得し、重複チェック用にキャッシュ | `gh label list --json name` |
 | ラベル定義の事前解析 | ループ前に全ラベル定義を1回の `jq` で TSV に変換し、ループ内の `jq` 呼び出しを削減 | `jq -r '.[] \| [...] \| @tsv'` |
 | 重複チェック | 既存ラベル名リストと定義済みラベル名を `grep -Fqx` で完全一致比較 | — |
 | ラベル作成 | 重複していないラベルを `gh label create` で作成 | `gh label create -R` |
@@ -183,7 +183,7 @@ flowchart TD
 =========================================
   完了サマリー
 =========================================
-  リポジトリ: owner/repo
+  Repository: owner/repo
   作成:     5 件
   スキップ:  2 件
   失敗:     0 件
@@ -205,14 +205,14 @@ flowchart TD
 | `gh label create` | ラベルの作成 | [gh label create](https://cli.github.com/manual/gh_label_create) |
 | `gh label list` | 既存ラベルの一覧取得（デバッグ用） | [gh label list](https://cli.github.com/manual/gh_label_list) |
 
-### PAT スコープ要件
+### PAT Scope要件
 
-| スコープ | 用途 | 備考 |
+| Scope | 用途 | 備考 |
 |---------|------|------|
-| `repo` | ラベルの作成 | Classic PAT の場合。プライベートリポジトリ含む全リポジトリへのアクセス |
-| `public_repo` | ラベルの作成 | Classic PAT でパブリックリポジトリのみの場合 |
+| `repo` | ラベルの作成 | Classic PAT の場合。プライベートRepository含む全Repositoryへのアクセス |
+| `public_repo` | ラベルの作成 | Classic PAT でパブリックRepositoryのみの場合 |
 
-Fine-grained PAT の場合は、対象リポジトリに対する **Issues** の `Read and write` 権限が必要です。
+Fine-grained PAT の場合は、対象Repositoryに対する **Issues** の `Read and write` 権限が必要です。
 
 ### API レート制限
 
@@ -223,6 +223,6 @@ Fine-grained PAT の場合は、対象リポジトリに対する **Issues** の
 `gh label create` は 1 ラベルあたり 1〜2 リクエストを消費します。
 ラベル定義が 100 件以下であればレート制限の影響はありません。
 
-## 🔄 使用ワークフロー
+## 🔄 使用Workflow
 
 - [③ Issue ラベル一括追加](../workflows/03-setup-repository-labels)
