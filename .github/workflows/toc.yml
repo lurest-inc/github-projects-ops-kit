@@ -32,10 +32,12 @@ name: TOC Generator
 jobs:
   generateTOC:
     name: TOC Generator
-    if: ${{ startsWith(secrets.PROJECT_PAT, 'ghp_') || startsWith(secrets.PROJECT_PAT, 'github_pat_') }}
     runs-on: ubuntu-latest
+    env:
+      PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - uses: technote-space/toc-generator@v4.3.1
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         with:
           GITHUB_TOKEN: ${{ secrets.PROJECT_PAT }}
           TARGET_PATHS: README.md,docs/**/*.md,.github/**/*.md
