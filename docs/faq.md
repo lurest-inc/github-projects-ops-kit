@@ -6,21 +6,18 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+<details><summary>（ここをクリック）目次</summary>
+<ul>
 
-<details><summary>Table of Contents</summary>\n<ul>\n
 <li><a href="#-q1-%E3%83%95%E3%82%A9%E3%83%BC%E3%82%AF%E5%BE%8C%E3%81%AB-github-actions-%E3%81%8C%E5%8B%95%E3%81%8D%E3%81%BE%E3%81%9B%E3%82%93">💡 Q1. フォーク後に GitHub Actions が動きません</a></li>
-\n
 <li><a href="#-q2-%E6%A8%A9%E9%99%90%E3%82%A8%E3%83%A9%E3%83%BC%E3%81%A7%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC%E3%81%8C%E5%A4%B1%E6%95%97%E3%81%97%E3%81%BE%E3%81%99">💡 Q2. 権限エラーでワークフローが失敗します</a></li>
-\n
 <li><a href="#-q3-%E6%97%A2%E5%AD%98%E3%81%AE-project-%E3%81%AB%E5%AF%BE%E3%81%97%E3%81%A6%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC-%E2%91%A0-%E3%82%92%E5%AE%9F%E8%A1%8C%E3%81%97%E3%81%A6%E3%81%97%E3%81%BE%E3%81%84%E3%81%BE%E3%81%97%E3%81%9F">💡 Q3. 既存の Project に対してワークフロー ① を実行してしまいました</a></li>
-\n
 <li><a href="#-q4-%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC-%E2%91%A2-%E3%81%A7%E7%95%B0%E3%81%AA%E3%82%8B-organization-%E3%81%AE%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B">💡 Q4. ワークフロー ③ で異なる Organization のリポジトリを指定できますか？</a></li>
-\n
 <li><a href="#-q5-%E3%82%A8%E3%82%AF%E3%82%B9%E3%83%9D%E3%83%BC%E3%83%88%E3%81%97%E3%81%9F%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%AF%E3%81%A9%E3%81%93%E3%81%8B%E3%82%89%E3%83%80%E3%82%A6%E3%83%B3%E3%83%AD%E3%83%BC%E3%83%89%E3%81%A7%E3%81%8D%E3%81%BE%E3%81%99%E3%81%8B">💡 Q5. エクスポートしたファイルはどこからダウンロードできますか？</a></li>
-\n
 <li><a href="#-q6-%E5%90%8C%E3%81%98-issuepr-%E3%82%92%E8%A4%87%E6%95%B0%E5%9B%9E%E8%BF%BD%E5%8A%A0%E3%81%97%E3%81%A6%E3%81%97%E3%81%BE%E3%81%84%E3%81%BE%E3%81%9B%E3%82%93%E3%81%8B">💡 Q6. 同じ Issue/PR を複数回追加してしまいませんか？</a></li>
-\n</ul>\n</details>
+
+</ul>
+</details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

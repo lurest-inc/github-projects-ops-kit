@@ -5,21 +5,18 @@ DraftIssue は出力対象外となります。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+<details><summary>（ここをクリック）目次</summary>
+<ul>
 
-<details><summary>Table of Contents</summary>\n<ul>\n
 <li><a href="#-%E7%92%B0%E5%A2%83%E5%A4%89%E6%95%B0">🔧 環境変数</a></li>
-\n
 <li><a href="#-%E5%87%A6%E7%90%86%E3%83%95%E3%83%AD%E3%83%BC">📊 処理フロー</a></li>
-\n
 <li><a href="#-%E5%87%A6%E7%90%86%E8%A9%B3%E7%B4%B0">📝 処理詳細</a></li>
-\n
 <li><a href="#-api-%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">📚 API リファレンス</a></li>
-\n
 <li><a href="#-%E5%87%BA%E5%8A%9B%E5%BD%A2%E5%BC%8F%E3%81%94%E3%81%A8%E3%81%AE%E3%82%A8%E3%82%B9%E3%82%B1%E3%83%BC%E3%83%97%E4%BB%95%E6%A7%98">📝 出力形式ごとのエスケープ仕様</a></li>
-\n
 <li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用ワークフロー</a></li>
-\n</ul>\n</details>
+
+</ul>
+</details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

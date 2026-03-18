@@ -4,15 +4,15 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+<details><summary>（ここをクリック）目次</summary>
+<ul>
 
-<details><summary>Table of Contents</summary>\n<ul>\n
 <li><a href="#-project_number-%E3%81%AE%E7%A2%BA%E8%AA%8D%E6%96%B9%E6%B3%95">🔢 `project_number` の確認方法</a></li>
-\n
 <li><a href="#-target_repo-%E3%81%AE%E7%A2%BA%E8%AA%8D%E6%96%B9%E6%B3%95">📂 `target_repo` の確認方法</a></li>
-\n
 <li><a href="#-issue-%E3%82%84-pull-request-%E3%81%AE%E7%A2%BA%E8%AA%8D%E6%96%B9%E6%B3%95">🎫 Issue や Pull Request の確認方法</a></li>
-\n</ul>\n</details>
+
+</ul>
+</details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

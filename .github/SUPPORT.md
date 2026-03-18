@@ -4,15 +4,15 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+<details><summary>（ここをクリック）目次</summary>
+<ul>
 
-<details><summary>Table of Contents</summary>\n<ul>\n
 <li><a href="#%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88">ドキュメント</a></li>
-\n
 <li><a href="#%E8%B3%AA%E5%95%8F%E3%83%BB%E7%9B%B8%E8%AB%87">質問・相談</a></li>
-\n
 <li><a href="#%E3%83%90%E3%82%B0%E5%A0%B1%E5%91%8A%E3%83%BB%E6%A9%9F%E8%83%BD%E3%83%AA%E3%82%AF%E3%82%A8%E3%82%B9%E3%83%88">バグ報告・機能リクエスト</a></li>
-\n</ul>\n</details>
+
+</ul>
+</details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

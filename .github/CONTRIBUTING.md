@@ -4,15 +4,15 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+<details><summary>（ここをクリック）目次</summary>
+<ul>
 
-<details><summary>Table of Contents</summary>\n<ul>\n
 <li><a href="#issue-%E3%81%AE%E8%B5%B7%E7%A5%A8">Issue の起票</a></li>
-\n
 <li><a href="#pull-request-%E3%81%AE%E4%BD%9C%E6%88%90">Pull Request の作成</a></li>
-\n
 <li><a href="#%E8%A1%8C%E5%8B%95%E8%A6%8F%E7%AF%84">行動規範</a></li>
-\n</ul>\n</details>
+
+</ul>
+</details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

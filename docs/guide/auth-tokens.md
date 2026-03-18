@@ -4,15 +4,15 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+<details><summary>（ここをクリック）目次</summary>
+<ul>
 
-<details><summary>Table of Contents</summary>\n<ul>\n
 <li><a href="#-q-pat-%E3%81%AB%E3%81%AF%E3%81%A9%E3%81%AE%E6%A8%A9%E9%99%90%E3%81%8C%E5%BF%85%E8%A6%81%E3%81%A7%E3%81%99%E3%81%8B">🔐 Q. PAT にはどの権限が必要ですか？</a></li>
-\n
 <li><a href="#-q-fine-grained-token-%E3%81%A8-classic-token-%E3%81%AE%E3%81%A9%E3%81%A1%E3%82%89%E3%82%92%E4%BD%BF%E3%81%86%E3%81%B9%E3%81%8D%E3%81%A7%E3%81%99%E3%81%8B">🤔 Q. Fine-grained token と Classic token のどちらを使うべきですか？</a></li>
-\n
 <li><a href="#-fine-grained-token-%E3%81%AE%E5%88%B6%E7%B4%84%E4%BA%8B%E9%A0%85">⚠️ Fine-grained token の制約事項</a></li>
-\n</ul>\n</details>
+
+</ul>
+</details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

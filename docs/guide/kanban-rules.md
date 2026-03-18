@@ -4,17 +4,16 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+<details><summary>（ここをクリック）目次</summary>
+<ul>
 
-<details><summary>Table of Contents</summary>\n<ul>\n
 <li><a href="#-%E3%82%AB%E3%83%B3%E3%83%90%E3%83%B3%E3%81%AE%E3%83%95%E3%83%AD%E3%83%BC">📊 カンバンのフロー</a></li>
-\n
 <li><a href="#-%E6%89%8B%E6%88%BB%E3%82%8A%E6%99%82%E3%81%AE%E9%81%8B%E7%94%A8%E3%83%AB%E3%83%BC%E3%83%AB">🔄 手戻り時の運用ルール</a></li>
-\n
 <li><a href="#-%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%A0%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB%E3%83%89">🏷️ カスタムフィールド</a></li>
-\n
 <li><a href="#-view-%E6%A7%8B%E6%88%90">👁️ View 構成</a></li>
-\n</ul>\n</details>
+
+</ul>
+</details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
