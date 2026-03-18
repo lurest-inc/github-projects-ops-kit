@@ -48,7 +48,7 @@ cd github-projects-starter-kit
 
 GitHub の [Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens) から `PAT` を作成します。
 
-必要な権限の詳細は [認証・トークンガイド](guide/auth-tokens) を参照してください。Fine-grained token の制約事項については [Fine-grained token の制約事項](guide/auth-tokens#fine-grained-token-の制約事項) も合わせてご確認ください。
+必要な権限の詳細は [認証・トークンガイド](guide/auth-tokens) を参照してください。`Fine-grained token` の制約事項については [`Fine-grained token` の制約事項](guide/auth-tokens#fine-grained-token-の制約事項) も合わせてご確認ください。
 
 ## 3. 🔒 Secrets を設定する
 
@@ -60,7 +60,7 @@ gh secret set PROJECT_PAT --repo <owner>/github-projects-starter-kit
 
 ## 4. ⚡ GitHub Actions を有効化する
 
-フォークしたリポジトリでは GitHub Actions がデフォルトで無効になっています。
+フォークしたリポジトリでは `GitHub Actions` がデフォルトで無効になっています。
 
 ```bash
 gh api repos/<owner>/github-projects-starter-kit/actions/permissions \

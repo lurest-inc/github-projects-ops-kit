@@ -34,8 +34,8 @@
 | 用語 | 説明 |
 |------|------|
 | **PAT（Personal Access Token）** | GitHub API やワークフローから GitHub の機能にアクセスするための認証トークン |
-| **Fine-grained token** | 必要な権限だけを細かく設定できる新しいタイプの PAT。GitHub が推奨している |
-| **Classic token** | 従来型の PAT。スコープ単位で権限を設定する。Fine-grained token より権限の粒度が粗い |
+| **`Fine-grained token`** | 必要な権限だけを細かく設定できる新しいタイプの PAT。GitHub が推奨している |
+| **`Classic token`** | 従来型の PAT。スコープ単位で権限を設定する。`Fine-grained token` より権限の粒度が粗い |
 | **Secrets（シークレット）** | リポジトリに安全に保存できる暗号化された環境変数。PAT などの機密情報をワークフローから参照する際に使用する |
 | **Scope（スコープ）** | Classic token で設定する権限の範囲（例: `project`、`read:org`、`repo`） |
 
@@ -45,8 +45,8 @@
 
 | 用語 | 説明 |
 |------|------|
-| **GitHub Projects** | Issue や Pull Request をボード形式やテーブル形式で管理できるプロジェクト管理ツール。GitHub に組み込まれている |
-| **Project（プロジェクト）** | GitHub Projects で作成する管理ボード。複数のリポジトリの Issue/PR をまとめて管理できる |
+| **`GitHub Projects`** | Issue や Pull Request をボード形式やテーブル形式で管理できるプロジェクト管理ツール。GitHub に組み込まれている |
+| **`Project`（プロジェクト）** | `GitHub Projects` で作成する管理ボード。複数のリポジトリの Issue/PR をまとめて管理できる |
 | **Project Number** | 各 Project に割り当てられる一意の番号。Project の URL 末尾に表示される |
 | **View（ビュー）** | Project 内のアイテム一覧の表示方法。`Table`（テーブル）、`Board`（ボード）、`Roadmap`（ロードマップ）の 3 種類がある |
 | **Board View（ボードビュー）** | カンバン形式でアイテムをステータスごとに列で表示する View |
@@ -75,12 +75,12 @@
 
 | 用語 | 説明 |
 |------|------|
-| **GitHub Actions** | GitHub に組み込まれた CI/CD（自動化）プラットフォーム。ワークフローを定義して自動実行できる |
-| **Workflow（ワークフロー）** | GitHub Actions で実行される自動化処理の定義。YAML ファイルで記述する |
-| **workflow_dispatch** | ワークフローを手動で実行するためのトリガー。Actions タブから「Run workflow」ボタンで起動する |
+| **`GitHub Actions`** | GitHub に組み込まれた CI/CD（自動化）プラットフォーム。ワークフローを定義して自動実行できる |
+| **`Workflow`（ワークフロー）** | `GitHub Actions` で実行される自動化処理の定義。YAML ファイルで記述する |
+| **workflow_dispatch** | ワークフローを手動で実行するためのトリガー。`Actions` タブから「Run workflow」ボタンで起動する |
 | **Job（ジョブ）** | ワークフロー内の実行単位。1 つのワークフローに複数のジョブを定義できる |
 | **Artifact（アーティファクト）** | ワークフローの実行結果として出力されるファイル。エクスポートしたデータのダウンロードなどに使用する |
-| **Actions タブ** | リポジトリページ上部にあるタブ。ワークフローの実行・監視・管理を行う画面 |
+| **`Actions` タブ** | リポジトリページ上部にあるタブ。ワークフローの実行・監視・管理を行う画面 |
 
 ---
 
@@ -103,8 +103,8 @@
 | 用語 | 説明 |
 |------|------|
 | **CLI（Command Line Interface）** | ターミナル（コマンドライン）から操作するインターフェース |
-| **GitHub CLI (`gh`)** | GitHub 公式のコマンドラインツール。ターミナルから GitHub の操作を実行できる |
-| **GraphQL API** | GitHub が提供する高度なデータ取得 API。GitHub Projects の操作に使用される |
+| **`GitHub CLI` (`gh`)** | GitHub 公式のコマンドラインツール。ターミナルから GitHub の操作を実行できる |
+| **`GraphQL API`** | GitHub が提供する高度なデータ取得 API。`GitHub Projects` の操作に使用される |
 
 ---
 
@@ -112,5 +112,5 @@
 
 | 用語 | 説明 |
 |------|------|
-| **カンバン** | タスクをステータスごとの列に分けて管理する手法。GitHub Projects の Board View で実現できる |
+| **カンバン** | タスクをステータスごとの列に分けて管理する手法。`GitHub Projects` の `Board View` で実現できる |
 | **Visibility（公開範囲）** | Project やリポジトリの公開設定。`PRIVATE`（非公開）または `PUBLIC`（公開）を選択できる |

@@ -16,8 +16,8 @@
 [![Pages Deploy](https://github.com/mabubu0203/github-projects-starter-kit/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/mabubu0203/github-projects-starter-kit/actions/workflows/pages/pages-build-deployment)
 [![release-please](https://github.com/mabubu0203/github-projects-starter-kit/actions/workflows/release-please.yml/badge.svg)](https://github.com/mabubu0203/github-projects-starter-kit/actions/workflows/release-please.yml)
 
-GitHub Projects の初期セットアップを GitHub Actions で自動実行するためのスターターキットです。
-本リポジトリを fork し、GitHub Actions を手動実行することで、GitHub Project の作成から分析までを一貫して行えます。
+`GitHub Projects` の初期セットアップを `GitHub Actions` で自動実行するためのスターターキットです。
+本リポジトリを fork し、`GitHub Actions` を手動実行することで、`GitHub Project` の作成から分析までを一貫して行えます。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -53,7 +53,7 @@ GitHub Projects の初期セットアップを GitHub Actions で自動実行す
 | ④ Issue/PR 一括紐付け | Issue や PR を Project に一括追加（種別・状態・ラベルでフィルタ可能） |
 | ⑤ 統合プロジェクト分析 | エクスポート・滞留検知・各種レポートを生成（アーティファクトとしてダウンロード可能） |
 
-すべてのワークフローは GitHub Actions の手動実行（`workflow_dispatch`）で利用できます。
+すべてのワークフローは `GitHub Actions` の手動実行（`workflow_dispatch`）で利用できます。
 
 ## 📖 ドキュメント
 

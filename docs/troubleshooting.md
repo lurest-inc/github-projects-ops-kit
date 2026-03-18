@@ -20,11 +20,11 @@
 
 ## ⚠️ フォーク後に GitHub Actions が動かない
 
-フォークしたリポジトリでは、セキュリティ上の理由により **GitHub Actions がデフォルトで無効** になっています。以下の手順で有効化してください。
+フォークしたリポジトリでは、セキュリティ上の理由により **`GitHub Actions` がデフォルトで無効** になっています。以下の手順で有効化してください。
 
 ### 有効化手順（GUI）
 
-1. フォーク先リポジトリの **Actions** タブを開く
+1. フォーク先リポジトリの **`Actions`** タブを開く
 2. 「I understand my workflows, go ahead and enable them」ボタンをクリックする
 
 ### 有効化手順（CLI）
@@ -48,8 +48,8 @@ gh api repos/<owner>/github-projects-starter-kit/actions/permissions \
 
 - [ ] PAT に必要な権限が設定されているか（→ [認証・トークンガイド](guide/auth-tokens) で確認）
 - [ ] PAT がリポジトリの Secrets に正しく登録されているか（Secret 名: `PROJECT_PAT`）
-- [ ] Fine-grained token の場合、対象リポジトリへのアクセスが許可されているか
-- [ ] Classic token の場合、`read:org` スコープが含まれているか
+- [ ] `Fine-grained token` の場合、対象リポジトリへのアクセスが許可されているか
+- [ ] `Classic token` の場合、`read:org` スコープが含まれているか
 
 ### よくあるエラーメッセージ
 
@@ -63,8 +63,8 @@ gh api repos/<owner>/github-projects-starter-kit/actions/permissions \
 
 ## 🔎 ワークフローが見つからない
 
-Actions タブにワークフローが表示されない場合は、以下を確認してください。
+`Actions` タブにワークフローが表示されない場合は、以下を確認してください。
 
-- フォーク後に Actions を有効化しているか（上記「フォーク後に GitHub Actions が動かない」を参照）
+- フォーク後に `GitHub Actions` を有効化しているか（上記「フォーク後に GitHub Actions が動かない」を参照）
 - リポジトリの `.github/workflows/` ディレクトリにワークフローファイルが存在するか
 - デフォルトブランチ（`main`）にワークフローファイルがあるか

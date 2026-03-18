@@ -1,6 +1,6 @@
 # 📊 workflow-summary アクション
 
-ワークフローの実行結果（成功・失敗）に応じたサマリーレポートを GitHub Actions の Job Summary に出力する複合アクションです。
+ワークフローの実行結果（成功・失敗）に応じたサマリーレポートを `GitHub Actions` の Job Summary に出力する複合アクションです。
 全4ワークフローの終了時ジョブで共通的に使用されています。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->

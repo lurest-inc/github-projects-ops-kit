@@ -11,7 +11,7 @@
 [![Issues Welcome](https://img.shields.io/badge/Issues-welcome-brightgreen)](https://github.com/mabubu0203/github-projects-starter-kit/issues)
 [![Discussions Welcome](https://img.shields.io/badge/Discussions-welcome-brightgreen)](https://github.com/mabubu0203/github-projects-starter-kit/discussions)
 
-GitHub Projects の初期セットアップを GitHub Actions で自動実行するための **スターターキット** です。
+`GitHub Projects` の初期セットアップを `GitHub Actions` で自動実行するための **スターターキット** です。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -32,7 +32,7 @@ GitHub Projects の初期セットアップを GitHub Actions で自動実行す
 
 ## 🚀 はじめての方へ
 
-GitHub Projects を使ったプロジェクト管理をすぐに始められます。以下のステップで進めてください。
+`GitHub Projects` を使ったプロジェクト管理をすぐに始められます。以下のステップで進めてください。
 
 ```mermaid
 flowchart LR
