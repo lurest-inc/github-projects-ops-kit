@@ -1,6 +1,6 @@
 # ① 📝 GitHub Project 新規作成
 
-新しい `Project` を作成し、カスタムField・Statusカラム・`View` を一括でセットアップします。
+新しい `Project` を作成し、Field・Status・View を一括でセットアップします。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -23,7 +23,7 @@
 
 ## ✅ 前提
 
-このWorkflowを実行する前に、クイックスタートを完了してください。
+この Workflow を実行する前に、クイックスタートを完了してください。
 
 - [クイックスタート（GUI）](../quickstart-gui)
 - [クイックスタート（CLI）](../quickstart-cli)
@@ -39,8 +39,8 @@
 
 | パラメータ | 説明 | 必須 | タイプ | 例 |
 |------------|------|:----:|--------|-----|
-| `project_title` | `Project` のタイトル | ✅ | `string` | `My Project Board` |
-| `visibility` | `Project` の公開範囲 | ✅ | `choice` | `PRIVATE`（デフォルト） |
+| `project_title` | Project のタイトル | ✅ | `string` | `My Project Board` |
+| `visibility` | Project の公開範囲 | ✅ | `choice` | `PRIVATE`（デフォルト） |
 
 ### 公開範囲
 
@@ -95,8 +95,8 @@ flowchart TD
   │   └── scripts/setup-github-project.sh         # Project 新規作成
   ├── extend-project Job（成功時）
   │   └── _reusable-extend-project.yml             # Field・Status・View セットアップ
-  │       ├── scripts/setup-project-status.sh      # Statusカラム設定
-  │       ├── scripts/setup-project-fields.sh      # カスタムField作成
+  │       ├── scripts/setup-project-status.sh      # カスタム Status 作成
+  │       ├── scripts/setup-project-fields.sh      # カスタム Field 作成
   │       └── scripts/setup-project-views.sh       # View 作成
   ├── workflow-summary-failure Job（失敗時）
   │   └── .github/actions/workflow-summary         # 失敗サマリー出力
@@ -107,6 +107,6 @@ flowchart TD
 ## 📜 関連スクリプト
 
 - [setup-github-project.sh](../scripts/setup-github-project) — Project 新規作成スクリプト
-- [setup-project-status.sh](../scripts/setup-project-status) — Statusカラム設定スクリプト
-- [setup-project-fields.sh](../scripts/setup-project-fields) — カスタムField作成スクリプト
+- [setup-project-status.sh](../scripts/setup-project-status) — カスタム Status 作成スクリプト
+- [setup-project-fields.sh](../scripts/setup-project-fields) — カスタム Field 作成スクリプト
 - [setup-project-views.sh](../scripts/setup-project-views) — View 作成スクリプト

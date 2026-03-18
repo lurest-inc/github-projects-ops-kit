@@ -1,7 +1,7 @@
 # ② 🔧 GitHub Project 拡張
 
-既存の `Project` にカスタムField・Statusカラム・`View` を追加します。
-[① GitHub Project 新規作成](01-create-project) を実行していない既存 `Project` 向けです。
+既存の Project に Field・Status・View を追加します。
+[① GitHub Project 新規作成](01-create-project) を実行していない既存 Project 向けです。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -24,7 +24,7 @@
 
 ## ✅ 前提
 
-このWorkflowを実行する前に、クイックスタートを完了してください。
+この Workflow を実行する前に、クイックスタートを完了してください。
 
 - [クイックスタート（GUI）](../quickstart-gui)
 - [クイックスタート（CLI）](../quickstart-cli)
@@ -71,7 +71,7 @@ flowchart TD
 | `PROJECT_NUMBER` | `inputs.project_number` | 対象 Project Number |
 | `PROJECT_PAT` | `secrets.PROJECT_PAT` | PAT 形式検証用（`ghp_` または `github_pat_` で始まるか検証） |
 
-> **Note:** 環境変数はReusable Workflow `_reusable-extend-project.yml` 内で設定されます。`PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
+> **Note:** 環境変数は Reusable Workflow `_reusable-extend-project.yml` 内で設定されます。`PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
 
 ### Job構成
 
@@ -90,6 +90,6 @@ flowchart TD
 
 ## 📜 関連スクリプト
 
-- [setup-project-status.sh](../scripts/setup-project-status) — Statusカラム設定スクリプト
-- [setup-project-fields.sh](../scripts/setup-project-fields) — カスタムField作成スクリプト
+- [setup-project-status.sh](../scripts/setup-project-status) — カスタム Status 作成スクリプト
+- [setup-project-fields.sh](../scripts/setup-project-fields) — カスタム Field 作成スクリプト
 - [setup-project-views.sh](../scripts/setup-project-views) — View 作成スクリプト

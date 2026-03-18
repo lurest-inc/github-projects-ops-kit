@@ -1,7 +1,7 @@
 # ④ 🔗 Issue/PR 一括紐付け
 
-Repositoryの `Issue`/`PR` を `Project` に一括追加します。
-また、Repositoryと `Project` のリンク（紐付け）を自動的に行い、Repositoryの「Projects」タブから `Project` へアクセスできるようにします。
+Project に Repository の `Issue`/`PR` を一括追加します。
+また、 Repository と Project のリンク（紐付け）を自動的に行い、 Repository の `Projects` タブから Project へアクセスできるようにします。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -24,7 +24,7 @@ Repositoryの `Issue`/`PR` を `Project` に一括追加します。
 
 ## ✅ 前提
 
-このWorkflowを実行する前に、クイックスタートを完了してください。
+この Workflow を実行する前に、クイックスタートを完了してください。
 
 - [クイックスタート（GUI）](../quickstart-gui)
 - [クイックスタート（CLI）](../quickstart-cli)
@@ -40,11 +40,11 @@ Repositoryの `Issue`/`PR` を `Project` に一括追加します。
 
 | パラメータ | 説明 | 必須 | タイプ | 例 |
 |------------|------|:----:|--------|-----|
-| `project_number` | 対象 `Project` の Number | ✅ | `number` | `1` |
-| `target_repo` | 対象Repository（owner/repo 形式） | ✅ | `string` | `myorg/myrepo` |
-| `item_type` | 対象Itemの種別 | ✅ | `choice` | `all`（デフォルト） |
-| `item_state` | 取得するItemの状態 | ✅ | `choice` | `open`（デフォルト） |
-| `item_label` | 絞り込みLabel（指定Labelのみ追加） | - | `string` | `bug` |
+| `project_number` | 対象 Project の Number | ✅ | `number` | `1` |
+| `target_repo` | 対象 Repository（`owner/repo` 形式） | ✅ | `string` | `myorg/myrepo` |
+| `item_type` | 対象 Item の種別 | ✅ | `choice` | `all`（デフォルト） |
+| `item_state` | 取得する Item の状態 | ✅ | `choice` | `open`（デフォルト） |
+| `item_label` | 絞り込み Label（指定 Label のみ追加） | - | `string` | `bug` |
 
 ### Item種別
 
@@ -59,12 +59,11 @@ Repositoryの `Issue`/`PR` を `Project` に一括追加します。
 | 選択肢 | 説明 |
 |--------|------|
 | `open` | オープン状態のもの |
-| `closed` | クローズ状態のもの（CLOSED + MERGED を含む） |
+| `closed` | クローズ状態のもの（`CLOSED` + `MERGED` を含む） |
 | `all` | すべての状態 |
 
-> **Note:** 既に `Project` に追加済みのItemは自動的にスキップされます。
-
-> **Note:** Repositoryと `Project` のリンクは自動的に行われます。既にリンク済みの場合はスキップされます。
+> **Note:** 既に Project に追加済みのItemは自動的にスキップされます。
+> **Note:** Repository と Project のリンクは自動的に行われます。既にリンク済みの場合はスキップされます。
 
 ## 📊 処理フロー
 
@@ -95,10 +94,10 @@ flowchart TD
 | `PROJECT_OWNER` | `github.repository_owner` | Project オーナー |
 | `PROJECT_NUMBER` | `inputs.project_number` | 対象 Project Number |
 | `PROJECT_PAT` | `secrets.PROJECT_PAT` | PAT 形式検証用（`ghp_` または `github_pat_` で始まるか検証） |
-| `TARGET_REPO` | `inputs.target_repo` | 対象Repository |
-| `ITEM_TYPE` | `inputs.item_type` | Item種別フィルタ |
-| `ITEM_STATE` | `inputs.item_state` | Item状態フィルタ |
-| `ITEM_LABEL` | `inputs.item_label` | Labelフィルタ |
+| `TARGET_REPO` | `inputs.target_repo` | 対象 Repository |
+| `ITEM_TYPE` | `inputs.item_type` | Item 種別フィルタ |
+| `ITEM_STATE` | `inputs.item_state` | Item 状態フィルタ |
+| `ITEM_LABEL` | `inputs.item_label` | Label フィルタ |
 
 > **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
 

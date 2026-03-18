@@ -1,7 +1,7 @@
 # ③ 🏷️ Issue Label一括追加
 
-指定Repositoryに対して、設定ファイルで定義した Issue Labelを一括作成します。
-既存Labelと同名のLabelが存在する場合はスキップします。
+指定 Repository に対して、設定ファイルで定義した Issue Label を一括作成します。
+既存 Label と同名の Label が存在する場合はスキップします。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -24,7 +24,7 @@
 
 ## ✅ 前提
 
-このWorkflowを実行する前に、クイックスタートを完了してください。
+この Workflow を実行する前に、クイックスタートを完了してください。
 
 - [クイックスタート（GUI）](../quickstart-gui)
 - [クイックスタート（CLI）](../quickstart-cli)
@@ -42,7 +42,7 @@
 |------------|------|:----:|--------|-----|
 | `target_repo` | 対象Repository（owner/repo 形式） | ✅ | `string` | `myorg/myrepo` |
 
-> **Note:** 既存Labelと同名のLabelが存在する場合はスキップされます。定義ファイルに含まれない既存Labelは削除されません。追加のみの安全設計です。
+> **Note:** 既存 Label と同名の Label が存在する場合はスキップされます。定義ファイルに含まれない既存 Label は削除されません。追加のみの安全設計です。
 
 ## 📊 処理フロー
 
@@ -69,7 +69,7 @@ flowchart TD
 | 環境変数 | ソース | 説明 |
 |----------|--------|------|
 | `GH_TOKEN` | `secrets.PROJECT_PAT` | GitHub PAT（`repo` または `public_repo` Scope） |
-| `TARGET_REPO` | `inputs.target_repo` | 対象Repository |
+| `TARGET_REPO` | `inputs.target_repo` | 対象 Repository  |
 | `PROJECT_PAT` | `secrets.PROJECT_PAT` | PAT 形式検証用（`ghp_` または `github_pat_` で始まるか検証） |
 
 > **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
@@ -79,7 +79,7 @@ flowchart TD
 ```
 .github/workflows/03-setup-repository-labels.yml
   ├── setup-repository-labels Job
-  │   └── scripts/setup-repository-labels.sh    # Label一括作成
+  │   └── scripts/setup-repository-labels.sh     # Issue Label 一括作成
   ├── workflow-summary-failure Job（失敗時）
   │   └── .github/actions/workflow-summary       # 失敗サマリー出力
   └── workflow-summary-success Job（成功時）
@@ -88,4 +88,4 @@ flowchart TD
 
 ## 📜 関連スクリプト
 
-- [setup-repository-labels.sh](../scripts/setup-repository-labels) — Label一括作成スクリプト
+- [setup-repository-labels.sh](../scripts/setup-repository-labels) — Issue Label一括作成スクリプト
