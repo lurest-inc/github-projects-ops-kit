@@ -100,7 +100,7 @@ flowchart TD
 | 乖離 Item 抽出 | 乖離率の絶対値が閾値以上の Item を抽出し、乖離率の絶対値で降順ソート | `jq` |
 | リードタイム分析 | 開始実績・終了実績がある場合にリードタイム・日あたり工数を算出（条件付き） | `jq` |
 | 工数未入力 Item 抽出 | 見積もり・実績ともに未入力の Item を抽出。 Done Status の Item を優先表示 | `jq` |
-| レポート出力 | `build_output_filename` で出力ファイルパスを構築し、`OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。 Markdown 形式では Mermaid 円グラフを含む | `build_output_filename` + `jq` + bash |
+| レポート出力 | `build_output_filename` で出力ファイルパスを構築し、`OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。 CSV / TSV 形式では共通ライブラリの `format_items_csv()` / `format_items_tsv()` に委譲。 Markdown 形式では Mermaid 円グラフを含む | `build_output_filename` + `format_items_csv` / `format_items_tsv` + `jq` + bash |
 | Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記。`OUTPUT_FORMAT=markdown` の場合は出力ファイルを再利用 | `append_to_workflow_summary` |
 
 ## 📚 API リファレンス

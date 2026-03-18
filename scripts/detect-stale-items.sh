@@ -238,14 +238,18 @@ format_stale_markdown() {
 
 format_stale_csv() {
   local stale_items="$1"
-  echo "type,number,title,url,status,repository,assignees,updated_at,days_stale,threshold"
-  echo "${stale_items}" | jq -r '.[] | [.type, .number, .title, .url, .status, .repository, .assignees, .updated_at, .days_stale, .threshold] | @csv'
+  format_items_csv \
+    "type,number,title,url,status,repository,assignees,updated_at,days_stale,threshold" \
+    '.[] | [.type, .number, .title, .url, .status, .repository, .assignees, .updated_at, .days_stale, .threshold]' \
+    "${stale_items}"
 }
 
 format_stale_tsv() {
   local stale_items="$1"
-  echo -e "type\tnumber\ttitle\turl\tstatus\trepository\tassignees\tupdated_at\tdays_stale\tthreshold"
-  echo "${stale_items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .status, .repository, .assignees, .updated_at, (.days_stale | tostring), (.threshold | tostring)] | @tsv'
+  format_items_tsv \
+    "type\tnumber\ttitle\turl\tstatus\trepository\tassignees\tupdated_at\tdays_stale\tthreshold" \
+    '.[] | [.type, (.number | tostring), .title, .url, .status, .repository, .assignees, .updated_at, (.days_stale | tostring), (.threshold | tostring)]' \
+    "${stale_items}"
 }
 
 # --- レポート出力 ---

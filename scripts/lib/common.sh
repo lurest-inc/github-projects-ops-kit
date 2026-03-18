@@ -426,6 +426,183 @@ validate_analysis_env() {
   validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
 }
 
+# 汎用 CSV フォーマッタ
+# ヘッダー行とデータ行を @csv で出力する
+# 使用例: format_items_csv "type,number,title" '.[] | [.type, .number, .title]' "${ITEMS}"
+format_items_csv() {
+  local header="$1"
+  local row_filter="$2"
+  local items="$3"
+  echo "${header}"
+  echo "${items}" | jq -r "${row_filter} | @csv"
+}
+
+# 汎用 TSV フォーマッタ
+# ヘッダー行とデータ行を @tsv で出力する
+# 使用例: format_items_tsv "type\tnumber\ttitle" '.[] | [.type, .number, .title]' "${ITEMS}"
+format_items_tsv() {
+  local header="$1"
+  local row_filter="$2"
+  local items="$3"
+  echo -e "${header}"
+  echo "${items}" | jq -r "${row_filter} | @tsv"
+}
+
+# Repository 定義 JSON のバリデーションを行う
+# 引数:
+#   $1 - definitions_json: Repository 定義の JSON 文字列
+#   $2 - allowed_visibilities: 許可される visibility の値（例: "public/private/internal" または "public/private"）
+# 戻り値: バリデーションエラーがある場合は非ゼロを返す
+# 使用例: validate_repo_definitions "${REPO_DEFINITIONS}" "public/private/internal"
+validate_repo_definitions() {
+  local definitions_json="$1"
+  local allowed_visibilities="$2"
+
+  echo ""
+  echo "Repository 定義ファイルを検証しています..."
+
+  # 許可される visibility を JSON 配列に変換（例: "public/private/internal" → '["public","private","internal"]'）
+  local allowed_json
+  allowed_json=$(echo "${allowed_visibilities}" | jq -R 'split("/")')
+
+  # 許可値の表示用文字列（例: public / private / internal）
+  local allowed_display
+  allowed_display=$(echo "${allowed_visibilities}" | sed 's|/| / |g')
+
+  local validation_errors
+  if ! validation_errors=$(echo "${definitions_json}" | jq -r \
+    --argjson allowed "${allowed_json}" \
+    --arg allowed_display "${allowed_display}" '
+    if type != "array" then
+      "Repository 定義ファイルが JSON 配列ではありません。"
+    else
+      [to_entries[] |
+        .key as $i |
+        .value |
+        (if .name_template == null or .name_template == "" then "[\($i)]: name_template が未定義または空です。" else empty end),
+        (if .description == null then "[\($i)]: description が未定義です。" else empty end),
+        (if .visibility == null or .visibility == "" then "[\($i)]: visibility が未定義または空です。" else empty end),
+        (if .visibility != null and .visibility != "" and (.visibility as $v | $allowed | any(. == $v) | not) then "[\($i)]: visibility の値が不正です: \(.visibility)（\($allowed_display) を指定してください）" else empty end),
+        (if .auto_init == null then "[\($i)]: auto_init が未定義です。" else empty end),
+        (if .auto_init != null and (.auto_init | type) != "boolean" then "[\($i)]: auto_init は boolean で指定してください。" else empty end)
+      ] | join("\n")
+    end
+  ' 2>&1); then
+    echo "::error::Repository 定義ファイルの解析に失敗しました: $(sanitize_for_workflow_command "${validation_errors}")"
+    return 1
+  fi
+
+  if [[ -n "${validation_errors}" ]]; then
+    echo "::error::Repository 定義ファイルのバリデーションに失敗しました:"
+    echo "${validation_errors}" | while IFS= read -r line; do
+      echo "::error::  ${line}"
+    done
+    return 1
+  fi
+
+  return 0
+}
+
+# Repository 一括作成の共通処理
+# 引数:
+#   $1 - definitions_json: Repository 定義の JSON 文字列
+#   $2 - owner_type_label: オーナータイプのラベル（例: "Organization" または "User"）
+#   $3 - api_creator_func: Repository 作成 API を呼び出すコールバック関数名
+#        コールバック引数: REPO_NAME, REPO_DESCRIPTION, REPO_VISIBILITY, REPO_AUTO_INIT
+#        コールバック戻り値: 0=成功, 1=失敗, 2=不正な visibility
+# 使用例: create_repos_batch "${REPO_DEFINITIONS}" "Organization" _create_org_repo
+create_repos_batch() {
+  local definitions_json="$1"
+  local owner_type_label="$2"
+  local api_creator_func="$3"
+
+  local repo_count
+  repo_count=$(echo "${definitions_json}" | jq 'length')
+  echo "  ${repo_count} 件の Repository 定義を読み込みました。"
+
+  # オーナータイプに応じたラベルを設定
+  local type_label_ja
+  if [[ "${owner_type_label}" == "Organization" ]]; then
+    type_label_ja="Organization 用"
+  else
+    type_label_ja="個人アカウント用"
+  fi
+
+  echo ""
+  echo "${type_label_ja}の特殊 Repository を作成します..."
+  echo "  オーナー: ${PROJECT_OWNER}"
+  echo "  定義数: ${repo_count} 件"
+
+  if [[ "${repo_count}" -eq 0 ]]; then
+    echo ""
+    echo "Repository 定義が空のため、処理をスキップします。"
+    print_summary "Owner" "${PROJECT_OWNER}" "作成" "0 件" "スキップ" "0 件" "失敗" "0 件"
+    exit 0
+  fi
+
+  # --- Repository の一括作成 ---
+
+  local parsed_repos
+  parsed_repos=$(echo "${definitions_json}" | jq -r --arg owner "${PROJECT_OWNER}" \
+    '.[] | [(.name_template | gsub("\\{\\{owner\\}\\}"; $owner)), .description, .visibility, (.auto_init | tostring)] | @tsv')
+
+  local created_count=0
+  local skipped_count=0
+  local failed_count=0
+  local repo_index=0
+
+  while IFS=$'\t' read -r REPO_NAME REPO_DESCRIPTION REPO_VISIBILITY REPO_AUTO_INIT; do
+    repo_index=$((repo_index + 1))
+
+    echo ""
+    echo "  [${repo_index}/${repo_count}] ${PROJECT_OWNER}/${REPO_NAME} (${REPO_VISIBILITY})"
+
+    # 既存 Repository の重複チェック
+    if gh api "repos/${PROJECT_OWNER}/${REPO_NAME}" \
+      -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
+      >/dev/null 2>&1; then
+      echo "    → 既存 Repository のためスキップしました。"
+      skipped_count=$((skipped_count + 1))
+      continue
+    fi
+
+    # コールバック関数で Repository を作成（0=成功, 1=失敗, 2=不正な visibility）
+    local _cb_status=0
+    "${api_creator_func}" "${REPO_NAME}" "${REPO_DESCRIPTION}" "${REPO_VISIBILITY}" "${REPO_AUTO_INIT}" || _cb_status=$?
+
+    case "${_cb_status}" in
+      0) created_count=$((created_count + 1)) ;;
+      2) failed_count=$((failed_count + 1)) ;;
+      *) failed_count=$((failed_count + 1)) ;;
+    esac
+  done <<< "${parsed_repos}"
+
+  # --- サマリー出力 ---
+
+  if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+    {
+      echo "## ${type_label_ja}特殊 Repository 一括作成完了"
+      echo ""
+      echo "| 項目 | 件数 |"
+      echo "|------|------|"
+      echo "| 作成 | ${created_count} |"
+      echo "| スキップ | ${skipped_count} |"
+      echo "| 失敗 | ${failed_count} |"
+    } >> "${GITHUB_STEP_SUMMARY}"
+  fi
+
+  print_summary "Owner" "${PROJECT_OWNER}" "タイプ" "${owner_type_label}" "作成" "${created_count} 件" "スキップ" "${skipped_count} 件" "失敗" "${failed_count} 件"
+
+  if [[ "${failed_count}" -gt 0 ]]; then
+    echo ""
+    echo "::error::${failed_count} 件の Repository 作成に失敗しました。"
+    exit 1
+  fi
+
+  echo ""
+  echo "セットアップが完了しました。"
+}
+
 # 環境変数の値が許可リストに含まれるかチェックする
 # 使用例: validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
 validate_enum() {

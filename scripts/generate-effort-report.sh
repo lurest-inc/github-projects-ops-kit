@@ -421,14 +421,18 @@ format_effort_markdown() {
 
 format_effort_csv() {
   local items="$1"
-  echo "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at,status,estimated_hours,actual_hours,due_date,planned_start,planned_end,actual_start,actual_end"
-  echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // ""), (.planned_start // ""), (.planned_end // ""), (.actual_start // ""), (.actual_end // "")] | @csv'
+  format_items_csv \
+    "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at,status,estimated_hours,actual_hours,due_date,planned_start,planned_end,actual_start,actual_end" \
+    '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // ""), (.planned_start // ""), (.planned_end // ""), (.actual_start // ""), (.actual_end // "")]' \
+    "${items}"
 }
 
 format_effort_tsv() {
   local items="$1"
-  echo -e "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at\tstatus\testimated_hours\tactual_hours\tdue_date\tplanned_start\tplanned_end\tactual_start\tactual_end"
-  echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // ""), (.planned_start // ""), (.planned_end // ""), (.actual_start // ""), (.actual_end // "")] | @tsv'
+  format_items_tsv \
+    "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at\tstatus\testimated_hours\tactual_hours\tdue_date\tplanned_start\tplanned_end\tactual_start\tactual_end" \
+    '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // ""), (.planned_start // ""), (.planned_end // ""), (.actual_start // ""), (.actual_end // "")]' \
+    "${items}"
 }
 
 # --- レポート出力 ---

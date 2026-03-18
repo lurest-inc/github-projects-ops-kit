@@ -89,7 +89,7 @@ flowchart TD
 | Label 別集計 | 各 Label の Item 数を集計。 Label なし Item も含む | `jq` |
 | 工数集計 | Status 別の見積もり工数合計・実績工数合計を算出（カスタム Field が設定されている場合のみ） | `jq` |
 | 期日超過判定 | 終了期日を過ぎた未完了（Done 以外の）Item を検出し超過日数を計算（カスタム Field が設定されている場合のみ） | `jq` |
-| レポート出力 | `build_output_filename` で出力ファイルパスを構築し、`OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。 Markdown 形式では Mermaid 円グラフを含む | `build_output_filename` + `jq` + bash |
+| レポート出力 | `build_output_filename` で出力ファイルパスを構築し、`OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。 CSV / TSV 形式では共通ライブラリの `format_items_csv()` / `format_items_tsv()` に委譲。 Markdown 形式では Mermaid 円グラフを含む | `build_output_filename` + `format_items_csv` / `format_items_tsv` + `jq` + bash |
 | Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記。`OUTPUT_FORMAT=markdown` の場合は出力ファイルを再利用 | `append_to_workflow_summary` |
 
 ## 📚 API リファレンス

@@ -95,7 +95,7 @@ flowchart TD
 | 週別集計 | 各週にマッチする Done Item の完了数・完了工数を集計 | `jq` |
 | 担当者別集計 | 担当者ごとの完了数・完了工数合計を算出。複数担当者の Item は各担当者に計上。未アサインの Item は「(未アサイン)」として集計 | `jq` |
 | 平均ベロシティ算出 | 集計週数で完了数・完了工数を除算 | `jq` |
-| レポート出力 | `build_output_filename` で出力ファイルパスを構築し、`OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。 Markdown 形式では Mermaid 棒グラフ・円グラフを含む | `build_output_filename` + `jq` + bash |
+| レポート出力 | `build_output_filename` で出力ファイルパスを構築し、`OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。 CSV / TSV 形式では共通ライブラリの `format_items_csv()` / `format_items_tsv()` に委譲。 Markdown 形式では Mermaid 棒グラフ・円グラフを含む | `build_output_filename` + `format_items_csv` / `format_items_tsv` + `jq` + bash |
 | Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記。`OUTPUT_FORMAT=markdown` の場合は出力ファイルを再利用 | `append_to_workflow_summary` |
 
 ## 📚 API リファレンス

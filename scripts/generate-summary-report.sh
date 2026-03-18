@@ -299,14 +299,18 @@ format_summary_markdown() {
 
 format_summary_csv() {
   local items="$1"
-  echo "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at,status,estimated_hours,actual_hours,due_date"
-  echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // "")] | @csv'
+  format_items_csv \
+    "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at,status,estimated_hours,actual_hours,due_date" \
+    '.[] | [.type, .number, .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // "")]' \
+    "${items}"
 }
 
 format_summary_tsv() {
   local items="$1"
-  echo -e "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at\tstatus\testimated_hours\tactual_hours\tdue_date"
-  echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // "")] | @tsv'
+  format_items_tsv \
+    "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at\tstatus\testimated_hours\tactual_hours\tdue_date" \
+    '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, (.assignees | join("; ")), (.labels | join("; ")), .created_at, .updated_at, (.status // ""), (.estimated_hours // "" | tostring), (.actual_hours // "" | tostring), (.due_date // "")]' \
+    "${items}"
 }
 
 # --- レポート出力 ---

@@ -331,14 +331,18 @@ format_velocity_markdown() {
 
 format_velocity_csv() {
   local items="$1"
-  echo "week_label,week_start,week_end,count,actual_hours"
-  echo "${items}" | jq -r '.[] | [.week_label, .week_start, .week_end, .count, .actual_hours] | @csv'
+  format_items_csv \
+    "week_label,week_start,week_end,count,actual_hours" \
+    '.[] | [.week_label, .week_start, .week_end, .count, .actual_hours]' \
+    "${items}"
 }
 
 format_velocity_tsv() {
   local items="$1"
-  echo -e "week_label\tweek_start\tweek_end\tcount\tactual_hours"
-  echo "${items}" | jq -r '.[] | [.week_label, .week_start, .week_end, (.count | tostring), (.actual_hours | tostring)] | @tsv'
+  format_items_tsv \
+    "week_label\tweek_start\tweek_end\tcount\tactual_hours" \
+    '.[] | [.week_label, .week_start, .week_end, (.count | tostring), (.actual_hours | tostring)]' \
+    "${items}"
 }
 
 # --- レポート出力 ---

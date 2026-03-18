@@ -41,83 +41,29 @@ REPO_DEFINITIONS=$(cat "${REPO_DEFINITIONS_FILE}")
 
 # --- JSON バリデーション ---
 
-echo ""
-echo "Repository 定義ファイルを検証しています..."
-
-VALIDATION_ERRORS=$(echo "${REPO_DEFINITIONS}" | jq -r '
-  if type != "array" then
-    "Repository 定義ファイルが JSON 配列ではありません。"
-  else
-    [to_entries[] |
-      .key as $i |
-      .value |
-      (if .name_template == null or .name_template == "" then "[\($i)]: name_template が未定義または空です。" else empty end),
-      (if .description == null then "[\($i)]: description が未定義です。" else empty end),
-      (if .visibility == null or .visibility == "" then "[\($i)]: visibility が未定義または空です。" else empty end),
-      (if .visibility != null and .visibility != "" and (.visibility | IN("public", "private", "internal") | not) then "[\($i)]: visibility の値が不正です: \(.visibility)（public / private / internal を指定してください）" else empty end),
-      (if .auto_init == null then "[\($i)]: auto_init が未定義です。" else empty end),
-      (if .auto_init != null and (.auto_init | type) != "boolean" then "[\($i)]: auto_init は boolean で指定してください。" else empty end)
-    ] | join("\n")
-  end
-')
-
-if [[ -n "${VALIDATION_ERRORS}" ]]; then
-  echo "::error::Repository 定義ファイルのバリデーションに失敗しました:"
-  echo "${VALIDATION_ERRORS}" | while IFS= read -r line; do
-    echo "::error::  ${line}"
-  done
+if ! validate_repo_definitions "${REPO_DEFINITIONS}" "public/private/internal"; then
   exit 1
 fi
 
-REPO_COUNT=$(echo "${REPO_DEFINITIONS}" | jq 'length')
-echo "  ${REPO_COUNT} 件のRepository 定義を読み込みました。"
+# --- Organization 用 Repository 作成コールバック ---
+# 引数: REPO_NAME, REPO_DESCRIPTION, REPO_VISIBILITY, REPO_AUTO_INIT
+# 戻り値: 0=成功, 1=失敗, 2=不正な visibility
 
-echo ""
-echo "Organization 用の特殊 Repository を作成します..."
-echo "  オーナー: ${PROJECT_OWNER}"
-echo "  定義数: ${REPO_COUNT} 件"
-
-if [[ "${REPO_COUNT}" -eq 0 ]]; then
-  echo ""
-  echo "Repository 定義が空のため、処理をスキップします。"
-  print_summary "Owner" "${PROJECT_OWNER}" "作成" "0 件" "スキップ" "0 件" "失敗" "0 件"
-  exit 0
-fi
-
-# --- Repository の一括作成 ---
-
-PARSED_REPOS=$(echo "${REPO_DEFINITIONS}" | jq -r --arg owner "${PROJECT_OWNER}" \
-  '.[] | [(.name_template | gsub("\\{\\{owner\\}\\}"; $owner)), .description, .visibility, (.auto_init | tostring)] | @tsv')
-
-CREATED_COUNT=0
-SKIPPED_COUNT=0
-FAILED_COUNT=0
-REPO_INDEX=0
-
-while IFS=$'\t' read -r REPO_NAME REPO_DESCRIPTION REPO_VISIBILITY REPO_AUTO_INIT; do
-  REPO_INDEX=$((REPO_INDEX + 1))
-
-  echo ""
-  echo "  [${REPO_INDEX}/${REPO_COUNT}] ${PROJECT_OWNER}/${REPO_NAME} (${REPO_VISIBILITY})"
-
-  # 既存 Repository の重複チェック
-  if gh api "repos/${PROJECT_OWNER}/${REPO_NAME}" \
-    -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
-    >/dev/null 2>&1; then
-    echo "    → 既存 Repository のためスキップしました。"
-    SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
-    continue
-  fi
+_create_org_repo() {
+  local repo_name="$1"
+  local repo_description="$2"
+  local repo_visibility="$3"
+  local repo_auto_init="$4"
 
   # visibility の検証
-  case "${REPO_VISIBILITY}" in
+  case "${repo_visibility}" in
     public|private|internal) ;;
     *)
-      echo "    → 不正な visibility: ${REPO_VISIBILITY}"
-      SAFE_REPO_NAME=$(sanitize_for_workflow_command "${REPO_NAME}")
-      echo "::error::Repository '${PROJECT_OWNER}/${SAFE_REPO_NAME}' の visibility が不正です: ${REPO_VISIBILITY}（public / private / internal を指定してください）"
-      FAILED_COUNT=$((FAILED_COUNT + 1))
-      continue
+      echo "    → 不正な visibility: ${repo_visibility}"
+      local safe_repo_name
+      safe_repo_name=$(sanitize_for_workflow_command "${repo_name}")
+      echo "::error::Repository '${PROJECT_OWNER}/${safe_repo_name}' の visibility が不正です: ${repo_visibility}（public / private / internal を指定してください）"
+      return 2
       ;;
   esac
 
@@ -125,42 +71,22 @@ while IFS=$'\t' read -r REPO_NAME REPO_DESCRIPTION REPO_VISIBILITY REPO_AUTO_INI
   if gh api "orgs/${PROJECT_OWNER}/repos" \
     -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
     --method POST \
-    -f name="${REPO_NAME}" \
-    -f description="${REPO_DESCRIPTION}" \
-    -f visibility="${REPO_VISIBILITY}" \
-    -F auto_init="${REPO_AUTO_INIT}" \
+    -f name="${repo_name}" \
+    -f description="${repo_description}" \
+    -f visibility="${repo_visibility}" \
+    -F auto_init="${repo_auto_init}" \
     >/dev/null 2>&1; then
     echo "    → 作成しました。"
-    CREATED_COUNT=$((CREATED_COUNT + 1))
+    return 0
   else
     echo "    → 作成に失敗しました。"
-    SAFE_REPO_NAME=$(sanitize_for_workflow_command "${REPO_NAME}")
-    echo "::error::Repository '${PROJECT_OWNER}/${SAFE_REPO_NAME}' の作成に失敗しました。"
-    FAILED_COUNT=$((FAILED_COUNT + 1))
+    local safe_repo_name
+    safe_repo_name=$(sanitize_for_workflow_command "${repo_name}")
+    echo "::error::Repository '${PROJECT_OWNER}/${safe_repo_name}' の作成に失敗しました。"
+    return 1
   fi
-done <<< "${PARSED_REPOS}"
+}
 
-# --- サマリー出力 ---
+# --- Repository の一括作成 ---
 
-if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  {
-    echo "## Organization 用特殊 Repository 一括作成完了"
-    echo ""
-    echo "| 項目 | 件数 |"
-    echo "|------|------|"
-    echo "| 作成 | ${CREATED_COUNT} |"
-    echo "| スキップ | ${SKIPPED_COUNT} |"
-    echo "| 失敗 | ${FAILED_COUNT} |"
-  } >> "${GITHUB_STEP_SUMMARY}"
-fi
-
-print_summary "Owner" "${PROJECT_OWNER}" "タイプ" "Organization" "作成" "${CREATED_COUNT} 件" "スキップ" "${SKIPPED_COUNT} 件" "失敗" "${FAILED_COUNT} 件"
-
-if [[ "${FAILED_COUNT}" -gt 0 ]]; then
-  echo ""
-  echo "::error::${FAILED_COUNT} 件の Repository 作成に失敗しました。"
-  exit 1
-fi
-
-echo ""
-echo "セットアップが完了しました。"
+create_repos_batch "${REPO_DEFINITIONS}" "Organization" _create_org_repo

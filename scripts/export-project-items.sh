@@ -64,14 +64,18 @@ format_markdown() {
 
 format_csv() {
   local items="$1"
-  echo "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at"
-  echo "${items}" | jq -r '.[] | [.type, .number, .title, .url, .state, .repository, .author, .assignees, .labels, .created_at, .updated_at] | @csv'
+  format_items_csv \
+    "type,number,title,url,state,repository,author,assignees,labels,created_at,updated_at" \
+    '.[] | [.type, .number, .title, .url, .state, .repository, .author, .assignees, .labels, .created_at, .updated_at]' \
+    "${items}"
 }
 
 format_tsv() {
   local items="$1"
-  echo -e "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at"
-  echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, .assignees, .labels, .created_at, .updated_at] | @tsv'
+  format_items_tsv \
+    "type\tnumber\ttitle\turl\tstate\trepository\tauthor\tassignees\tlabels\tcreated_at\tupdated_at" \
+    '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, .assignees, .labels, .created_at, .updated_at]' \
+    "${items}"
 }
 
 # --- Item 取得 ---

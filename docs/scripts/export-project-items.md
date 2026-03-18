@@ -47,8 +47,8 @@ flowchart TD
     F --> G["type / state フィルタリング\n（ITEM_TYPE, ITEM_STATE）"]
     G --> H{"OUTPUT_FORMAT"}
     H -- "markdown" --> I["Markdown テーブル形式\n（Issue / PR 別セクション）"]
-    H -- "csv" --> J["CSV 形式\n（@csv フィルタ）"]
-    H -- "tsv" --> K["TSV 形式\n（@tsv フィルタ）"]
+    H -- "csv" --> J["CSV 形式\n（format_items_csv）"]
+    H -- "tsv" --> K["TSV 形式\n（format_items_tsv）"]
     H -- "json" --> L["JSON 形式\n（整形出力）"]
 
     I & J & K & L --> M["ファイルに出力\nexport-{number}-items.{ext}"]
@@ -63,7 +63,7 @@ flowchart TD
 | Item 取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全 Item をページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、 Issue ・ PR の `number`・`title`・`url`・`state`・`author`・`assignees`・`labels` 等を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
 | type / state フィルタリング | `ITEM_TYPE` による種別フィルタ、`ITEM_STATE` による状態フィルタ（`closed` は `CLOSED` + `MERGED` を含む）を1回の jq 呼び出しで一括適用 | `filter_items` |
 | Markdown 出力 | Issue と PR を別セクションに分け、テーブル形式で出力。タイトル・ Label ・アサイン内の Markdown 特殊文字をエスケープ。エスケープには共通ライブラリの `JQ_MD_ESCAPE` を使用 | `format_markdown` 関数 |
-| CSV / TSV 出力 | jq の `@csv` / `@tsv` フィルタで変換 | `format_csv` / `format_tsv` 関数 |
+| CSV / TSV 出力 | 共通ライブラリの `format_items_csv()` / `format_items_tsv()` に委譲し、ヘッダー行付きで `@csv` / `@tsv` フィルタで変換 | `format_items_csv` / `format_items_tsv` |
 | JSON 出力 | jq で整形して出力 | `jq '.'` |
 | 出力ファイル構築 | `build_output_filename` で出力ファイルパスを構築 | `build_output_filename` |
 
