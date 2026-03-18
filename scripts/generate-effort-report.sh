@@ -139,7 +139,7 @@ echo "工数集計を実行しています..."
 
 EXECUTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-# 工数データの有無判定・全体サマリー（1回の jq で算出）
+# 工数データの有無判定・全体サマリー（1 回の jq で算出）
 read -r ITEMS_WITH_EFFORT_COUNT ITEMS_WITHOUT_EFFORT_COUNT TOTAL_ESTIMATED TOTAL_ACTUAL < <(echo "${ITEMS}" | jq -r '
   ([.[] | select(.estimated_hours != null or .actual_hours != null)] | length) as $with |
   ([.[] | select(.estimated_hours == null and .actual_hours == null)] | length) as $without |

@@ -316,7 +316,7 @@ fetch_and_add_items() {
     fi
   fi
 
-  # 1回の取得で処理するアイテム数の上限
+  # 1 回の取得で処理するアイテム数の上限
   local list_args=(--repo "${TARGET_REPO}" --state "${ITEM_STATE}" --limit 100 --json url,state --jq '.[] | [.url, .state] | @tsv')
   if [[ -n "${ITEM_LABEL}" ]]; then
     list_args+=(--label "${ITEM_LABEL}")

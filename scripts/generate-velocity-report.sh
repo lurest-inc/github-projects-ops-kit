@@ -199,7 +199,7 @@ WEEKLY_VELOCITY=$(jq -n \
 # 工数データの有無を判定
 HAS_HOURS=$(echo "${DONE_ITEMS}" | jq '[.[] | select(.actual_hours != null and .actual_hours > 0)] | length > 0')
 
-# 平均ベロシティ（件数・工数を1回の jq で算出）
+# 平均ベロシティ（件数・工数を 1 回の jq で算出）
 read -r AVG_COUNT AVG_HOURS < <(echo "${WEEKLY_VELOCITY}" | jq -r --argjson weeks "${VELOCITY_WEEKS}" '
   (([.[].count] | add // 0) / $weeks * 10 | round / 10) as $avg_count |
   (([.[].actual_hours] | add // 0) / $weeks * 10 | round / 10) as $avg_hours |

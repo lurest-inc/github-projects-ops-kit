@@ -106,7 +106,7 @@ fi
 echo ""
 echo "View を作成します..."
 
-# ループ前に View 定義を1回の jq で事前解析する
+# ループ前に View 定義を 1 回の jq で事前解析する
 # 各行: name\tlayout\tfilter\tvisible_fields(JSON)
 VIEW_COUNT=$(echo "${VIEW_DEFINITIONS}" | jq -r 'length')
 if [[ "${VIEW_COUNT}" -eq 0 ]]; then

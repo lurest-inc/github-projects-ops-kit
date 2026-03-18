@@ -131,7 +131,7 @@ echo "集計処理を実行しています..."
 EXECUTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 TODAY=$(date -u +"%Y-%m-%d")
 
-# タイプ別・状態別件数（1回の jq で算出）
+# タイプ別・状態別件数（1 回の jq で算出）
 read -r ISSUE_COUNT PR_COUNT OPEN_COUNT CLOSED_COUNT MERGED_COUNT < <(echo "${ITEMS}" | jq -r '[
   ([.[] | select(.type == "Issue")] | length),
   ([.[] | select(.type == "PullRequest")] | length),
@@ -175,7 +175,7 @@ LABEL_SUMMARY=$(echo "${ITEMS}" | jq '
   | sort_by(-.count)
 ')
 
-# Field 集計（工数）・期日超過アイテムのフラグを1回の jq で判定
+# Field 集計（工数）・期日超過アイテムのフラグを 1 回の jq で判定
 read -r HAS_EFFORT HAS_DUE_DATE < <(echo "${ITEMS}" | jq -r '[
   ([.[] | select(.estimated_hours != null or .actual_hours != null)] | length > 0),
   ([.[] | select(.due_date != null)] | length > 0)

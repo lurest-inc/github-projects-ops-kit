@@ -281,7 +281,7 @@ should_include_issues() { [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "issue
 should_include_prs() { [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "prs" ]]; }
 
 # ITEM_TYPE と ITEM_STATE に基づいてアイテム JSON 配列を一括フィルタリングする
-# type フィルタと state フィルタを1回の jq 呼び出しで実行する
+# type フィルタと state フィルタを 1 回の jq 呼び出しで実行する
 # 標準入力から JSON 配列を受け取り、フィルタ後の JSON 配列を標準出力に返す
 # 使用例: ITEMS=$(echo "${ITEMS}" | filter_items)
 filter_items() {

@@ -92,7 +92,7 @@ fi
 echo ""
 echo "リポジトリ ${TARGET_REPO} にラベルを作成します..."
 
-# ループ前にラベル定義を1回の jq で事前解析する
+# ループ前にラベル定義を 1 回の jq で事前解析する
 PARSED_LABELS=$(echo "${LABEL_DEFINITIONS}" | jq -r '.[] | [.name, .color, .description] | @tsv')
 
 CREATED=0
