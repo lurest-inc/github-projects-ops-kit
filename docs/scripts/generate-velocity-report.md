@@ -1,6 +1,6 @@
 # 📜 generate-velocity-report.sh
 
-指定した GitHub Project の Done Itemを週別に集計し、ベロシティ（完了数・完了工数）の推移を可視化するレポートを生成するスクリプトです。
+指定した GitHub Project の Done Item を週別に集計し、ベロシティ（完了数・完了工数）の推移を可視化するレポートを生成するスクリプトです。
 担当者別のベロシティ集計も行います。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -19,7 +19,7 @@
 
 <li><a href="#-api-%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">📚 API リファレンス</a></li>
 
-<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用Workflow</a></li>
+<li><a href="#-%E4%BD%BF%E7%94%A8workflow">🔄 使用Workflow</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

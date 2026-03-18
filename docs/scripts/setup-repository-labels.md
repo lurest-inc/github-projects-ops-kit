@@ -1,7 +1,7 @@
 # 📜 setup-repository-labels.sh
 
-指定Repositoryに対して、設定ファイルで定義した Issue Labelを一括作成するスクリプトです。
-既存Labelと同名のLabelが存在する場合はスキップします。
+指定 Repository に対して、設定ファイルで定義した Issue Label を一括作成するスクリプトです。
+既存 Label と同名の Label が存在する場合はスキップします。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -9,7 +9,7 @@
 <details><summary>（ここをクリック）目次</summary><ul>
 <li><a href="#-%E7%92%B0%E5%A2%83%E5%A4%89%E6%95%B0">🔧 環境変数</a></li>
 
-<li><a href="#-%E3%83%A9%E3%83%99%E3%83%AB%E5%AE%9A%E7%BE%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB">📋 Label定義ファイル</a></li>
+<li><a href="#-label%E5%AE%9A%E7%BE%A9%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB">📋 Label定義ファイル</a></li>
 
 <li><a href="#-%E5%87%A6%E7%90%86%E3%83%95%E3%83%AD%E3%83%BC">📊 処理フロー</a></li>
 
@@ -17,7 +17,7 @@
 
 <li><a href="#-api-%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">📚 API リファレンス</a></li>
 
-<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用Workflow</a></li>
+<li><a href="#-%E4%BD%BF%E7%94%A8workflow">🔄 使用Workflow</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

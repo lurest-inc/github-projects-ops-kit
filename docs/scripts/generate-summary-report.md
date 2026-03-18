@@ -1,7 +1,7 @@
 # 📜 generate-summary-report.sh
 
-指定した GitHub Project のItemを走査し、Status別・担当者別・Label別の集計レポートを生成するスクリプトです。
-カスタムField（工数・期日）が設定されている場合は、工数サマリーと期日超過Itemの集計も行います。
+指定した GitHub Project のItemを走査し、Status 別・担当者別・Label 別の集計レポートを生成するスクリプトです。
+カスタム Field （工数・期日）が設定されている場合は、工数サマリーと期日超過Itemの集計も行います。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -17,7 +17,7 @@
 
 <li><a href="#-api-%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">📚 API リファレンス</a></li>
 
-<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用Workflow</a></li>
+<li><a href="#-%E4%BD%BF%E7%94%A8workflow">🔄 使用Workflow</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

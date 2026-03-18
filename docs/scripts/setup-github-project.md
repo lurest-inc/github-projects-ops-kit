@@ -1,7 +1,7 @@
 # 📜 setup-github-project.sh
 
-`GitHub Projects` V2 の `Project` を新規作成するスクリプトです。
-Owner の種別（`Organization` / `User`）を自動判定し、適切な GraphQL ミューテーションで `Project` を作成します。
+`GitHub Projects` V2 の Project を新規作成するスクリプトです。
+Owner の種別（`Organization` / `User`）を自動判定し、適切な GraphQL ミューテーションで Project を作成します。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -15,7 +15,7 @@ Owner の種別（`Organization` / `User`）を自動判定し、適切な Graph
 
 <li><a href="#-api-%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">📚 API リファレンス</a></li>
 
-<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用Workflow</a></li>
+<li><a href="#-%E4%BD%BF%E7%94%A8workflow">🔄 使用Workflow</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

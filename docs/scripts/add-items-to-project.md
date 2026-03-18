@@ -1,7 +1,7 @@
 # 📜 add-items-to-project.sh
 
 Repositoryの `Issue`/`PR` を `Project` に一括追加するスクリプトです。
-既に `Project` に追加済みのItemは自動的にスキップされます。
+既に `Project` に追加済みの Item は自動的にスキップされます。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -15,7 +15,7 @@ Repositoryの `Issue`/`PR` を `Project` に一括追加するスクリプトで
 
 <li><a href="#-api-%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">📚 API リファレンス</a></li>
 
-<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用Workflow</a></li>
+<li><a href="#-%E4%BD%BF%E7%94%A8workflow">🔄 使用Workflow</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -25,8 +25,8 @@ Repositoryの `Issue`/`PR` を `Project` に一括追加するスクリプトで
 | 環境変数 | 説明 | 必須 |
 |----------|------|:----:|
 | `GH_TOKEN` | GitHub PAT（Projects 操作権限が必要） | ✅ |
-| `PROJECT_OWNER` | `Project` の所有者 | ✅ |
-| `PROJECT_NUMBER` | 対象 `Project` の Number（数値） | ✅ |
+| `PROJECT_OWNER` | Project の所有者 | ✅ |
+| `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
 | `TARGET_REPO` | 対象Repository（owner/repo 形式） | ✅ |
 | `ITEM_TYPE` | 対象Itemの種別（`all`/`issues`/`prs`） | ❌（デフォルト: `all`） |
 | `ITEM_STATE` | 取得するItemの状態（`open`/`closed`/`all`） | ❌（デフォルト: `open`） |
@@ -72,21 +72,21 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別 | `gh api users/{owner}` |
-| `Status` Field取得 | GraphQL で `Project` ID・`Status` Field ID・各Statusの Option ID を一括抽出 | `gh api graphql` — `projectV2.fields` |
-| 既存Item取得 | GraphQL クエリで `Project` に紐づく全Itemの URL をページネーション付きで取得。重複防止に使用 | `gh api graphql` — `projectV2.items(first: 100)` |
-| Item取得・追加 | `fetch_and_add_items` 関数で `Issue` / `PR` を共通処理。`ITEM_STATE`・`ITEM_LABEL` で絞り込んで一覧を取得し、重複チェック・追加・Status設定を実行（`Issue` / `PR` 各種別ごとに最大 100 件、1件ごとに 1秒の sleep） | `gh issue list` / `gh pr list`・`gh project item-add`・`updateProjectV2ItemFieldValue` |
-| Status設定 | 追加したItemにStatusを自動付与。open → Backlog、closed/merged → Done | `gh api graphql` — `updateProjectV2ItemFieldValue` |
+| `Status` Field取得 | GraphQL で `Project ID`・`Status Field ID`・各 Status の `Option ID` を一括抽出 | `gh api graphql` — `projectV2.fields` |
+| 既存 Item 取得 | GraphQL クエリで Project に紐づく全 Item の URL をページネーション付きで取得。重複防止に使用 | `gh api graphql` — `projectV2.items(first: 100)` |
+| Item 取得・追加 | `fetch_and_add_items` 関数で `Issue` / `PR` を共通処理。`ITEM_STATE`・`ITEM_LABEL` で絞り込んで一覧を取得し、重複チェック・追加・Status設定を実行（`Issue` / `PR` 各種別ごとに最大 100 件、1件ごとに 1秒の sleep） | `gh issue list` / `gh pr list`・`gh project item-add`・`updateProjectV2ItemFieldValue` |
+| Status設定 | 追加した Item に Status を自動付与。`open → Backlog、closed/merged → Done` | `gh api graphql` — `updateProjectV2ItemFieldValue` |
 | サマリー出力 | `Issue`・`PR` それぞれの追加・スキップ・失敗件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
 
 ## 📚 API リファレンス
 
 | API / コマンド | 用途 | リファレンス |
 |---------------|------|-------------|
-| `projectV2.items` (GraphQL) | 既存Item URL の取得（重複防止） | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
-| `gh issue list` | `Issue` 一覧の取得 | [gh issue list](https://cli.github.com/manual/gh_issue_list) |
+| `projectV2.items` (GraphQL) | 既存 Item URL の取得（重複防止） | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
+| `gh issue list` | Issue 一覧の取得 | [gh issue list](https://cli.github.com/manual/gh_issue_list) |
 | `gh pr list` | `PR` 一覧の取得 | [gh pr list](https://cli.github.com/manual/gh_pr_list) |
-| `gh project item-add` | Itemの `Project` への追加 | [gh project item-add](https://cli.github.com/manual/gh_project_item-add) |
-| `projectV2.fields` (GraphQL) | `Status` Field ID・Option ID の取得 | [ProjectV2SingleSelectField](https://docs.github.com/en/graphql/reference/objects#projectv2singleselectfield) |
+| `gh project item-add` | Project へ Item の追加 | [gh project item-add](https://cli.github.com/manual/gh_project_item-add) |
+| `projectV2.fields` (GraphQL) | `Status Field ID`・`Option ID` の取得 | [ProjectV2SingleSelectField](https://docs.github.com/en/graphql/reference/objects#projectv2singleselectfield) |
 | `updateProjectV2ItemFieldValue` (GraphQL) | ItemのStatus設定 | [updateProjectV2ItemFieldValue](https://docs.github.com/en/graphql/reference/mutations#updateprojectv2itemfieldvalue) |
 
 ### API バージョン要件

@@ -1,7 +1,7 @@
 # 📜 setup-project-fields.sh
 
-`Project` にカスタムFieldを自動作成するスクリプトです。
-既に同名のFieldが存在する場合は自動的にスキップされます。
+Project にカスタム Field を自動作成するスクリプトです。
+既に同名の Field が存在する場合は自動的にスキップされます。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -9,9 +9,9 @@
 <details><summary>（ここをクリック）目次</summary><ul>
 <li><a href="#-%E7%92%B0%E5%A2%83%E5%A4%89%E6%95%B0">🔧 環境変数</a></li>
 
-<li><a href="#-%E4%BD%9C%E6%88%90%E3%81%95%E3%82%8C%E3%82%8B%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB%E3%83%89">📋 作成されるField</a></li>
+<li><a href="#-%E4%BD%9C%E6%88%90%E3%81%95%E3%82%8C%E3%82%8Bfield">📋 作成されるField</a></li>
 
-<li><a href="#-%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB%E3%83%89%E6%A7%8B%E6%88%90%E5%9B%B3">🗺️ Field構成図</a></li>
+<li><a href="#-field%E6%A7%8B%E6%88%90%E5%9B%B3">🗺️ Field構成図</a></li>
 
 <li><a href="#-%E5%87%A6%E7%90%86%E3%83%95%E3%83%AD%E3%83%BC">📊 処理フロー</a></li>
 
@@ -19,7 +19,7 @@
 
 <li><a href="#-api-%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">📚 API リファレンス</a></li>
 
-<li><a href="#-%E4%BD%BF%E7%94%A8%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC">🔄 使用Workflow</a></li>
+<li><a href="#-%E4%BD%BF%E7%94%A8workflow">🔄 使用Workflow</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

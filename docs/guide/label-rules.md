@@ -1,27 +1,27 @@
 # 🏷️ Label運用ルール
 
-本スターターキットで使用する Issue Labelの運用ルールについて説明します。
+本スターターキットで使用する Issue Label の運用ルールについて説明します。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 <details><summary>（ここをクリック）目次</summary><ul>
-<li><a href="#-%E3%83%A9%E3%83%99%E3%83%AB%E3%81%AE%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E5%88%86%E9%A1%9E">📋 Labelのカテゴリ分類</a></li>
+<li><a href="#-label%E3%81%AE%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E5%88%86%E9%A1%9E">📋 Labelのカテゴリ分類</a></li>
 
-<li><a href="#-%E5%90%84%E3%83%A9%E3%83%99%E3%83%AB%E3%81%AE%E7%94%A8%E9%80%94%E3%81%A8%E4%BB%98%E4%B8%8E%E3%82%BF%E3%82%A4%E3%83%9F%E3%83%B3%E3%82%B0">🏷️ 各Labelの用途と付与タイミング</a></li>
+<li><a href="#-%E5%90%84label%E3%81%AE%E7%94%A8%E9%80%94%E3%81%A8%E4%BB%98%E4%B8%8E%E3%82%BF%E3%82%A4%E3%83%9F%E3%83%B3%E3%82%B0">🏷️ 各Labelの用途と付与タイミング</a></li>
 
-<li><a href="#-%E7%8A%B6%E6%85%8B%E3%83%A9%E3%83%99%E3%83%AB%E3%81%A8%E3%82%AB%E3%83%B3%E3%83%90%E3%83%B3%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%E3%81%AE%E9%96%A2%E4%BF%82">🔄 状態LabelとカンバンStatusの関係</a></li>
+<li><a href="#-%E7%8A%B6%E6%85%8Blabel%E3%81%A8%E3%82%AB%E3%83%B3%E3%83%90%E3%83%B3status%E3%81%AE%E9%96%A2%E4%BF%82">🔄 状態LabelとカンバンStatusの関係</a></li>
 
-<li><a href="#-%E5%84%AA%E5%85%88%E5%BA%A6%E3%83%A9%E3%83%99%E3%83%AB%E3%81%AE%E9%81%8B%E7%94%A8%E5%9F%BA%E6%BA%96">⚡ 優先度Labelの運用基準</a></li>
+<li><a href="#-%E5%84%AA%E5%85%88%E5%BA%A6label%E3%81%AE%E9%81%8B%E7%94%A8%E5%9F%BA%E6%BA%96">⚡ 優先度Labelの運用基準</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ---
 
-## 📋 Labelのカテゴリ分類
+## 📋 Label のカテゴリ分類
 
-Labelは以下の 5 カテゴリに分類されます。
+Label は以下の**5**カテゴリに分類されます。
 
 | カテゴリ | Label | 概要 |
 |---------|--------|------|
@@ -33,9 +33,9 @@ Labelは以下の 5 カテゴリに分類されます。
 
 ---
 
-## 🏷️ 各Labelの用途と付与タイミング
+## 🏷️ 各 Labelの用途と付与タイミング
 
-### 種別Label
+### 種別 Label
 
 | Label | 用途 | 付与タイミング |
 |--------|------|---------------|
@@ -44,21 +44,21 @@ Labelは以下の 5 カテゴリに分類されます。
 | `documentation` | ドキュメントの追加・更新 | ドキュメントのみの変更を行うとき |
 | `question` | 質問・確認事項 | 仕様や設計に関する質問・議論を行うとき |
 
-### 状態Label
+### 状態 Label
 
 | Label | 用途 | 付与タイミング |
 |--------|------|---------------|
 | `on-hold` | 保留中 | 方針決定待ちなど、自チーム内の理由で作業を一時停止するとき |
 | `blocked` | ブロック中 | 外部チーム・依存タスクなど、外部要因で作業が進められないとき |
 
-### 優先度Label
+### 優先度 Label
 
 | Label | 用途 | 付与タイミング |
 |--------|------|---------------|
 | `priority: high` | 優先度：高 | 他タスクに先行して対応すべきとき |
 | `priority: low` | 優先度：低 | 急ぎではなく、余裕があるときに対応するとき |
 
-### コントリビューションLabel
+### コントリビューション Label
 
 | Label | 用途 | 付与タイミング |
 |--------|------|---------------|
@@ -77,7 +77,7 @@ Labelは以下の 5 カテゴリに分類されます。
 
 ## 🔄 状態LabelとカンバンStatusの関係
 
-状態Label（`on-hold`, `blocked`）は、カンバンのStatusを補足する役割を持ちます。Statusの変更は行わず、Labelで状況を可視化します。
+状態Label（`on-hold`, `blocked`）は、カンバンの Status を補足する役割を持ちます。Status の変更は行わず、Label で状況を可視化します。
 
 ```mermaid
 graph TD
@@ -91,8 +91,8 @@ graph TD
 
 ### 運用フロー
 
-1. 作業中のタスクが停止要因を持つ場合、カンバンのStatusは `In Progress` のまま、該当する状態Labelを付与する
-2. 停止要因が解消したら、状態Labelを削除して作業を再開する
+1. 作業中のタスクが停止要因を持つ場合、カンバンの Status は `In Progress` のまま、該当する状態 Label を付与する
+2. 停止要因が解消したら、状態 Label を削除して作業を再開する
 3. 停止の理由や見通しを Issue のコメントに記録する
 
 ---
