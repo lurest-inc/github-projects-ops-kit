@@ -1,7 +1,7 @@
 # 📜 setup-project-fields.sh
 
-`Project` にカスタムフィールドを自動作成するスクリプトです。
-既に同名のフィールドが存在する場合は自動的にスキップされます。
+`Project` にカスタムFieldを自動作成するスクリプトです。
+既に同名のFieldが存在する場合は自動的にスキップされます。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -9,9 +9,9 @@
 <details><summary>（ここをクリック）目次</summary><ul>
 <li><a href="#-%E7%92%B0%E5%A2%83%E5%A4%89%E6%95%B0">🔧 環境変数</a></li>
 
-<li><a href="#-%E4%BD%9C%E6%88%90%E3%81%95%E3%82%8C%E3%82%8B%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB%E3%83%89">📋 作成されるフィールド</a></li>
+<li><a href="#-%E4%BD%9C%E6%88%90%E3%81%95%E3%82%8C%E3%82%8B%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB%E3%83%89">📋 作成されるField</a></li>
 
-<li><a href="#-%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB%E3%83%89%E6%A7%8B%E6%88%90%E5%9B%B3">🗺️ フィールド構成図</a></li>
+<li><a href="#-%E3%83%95%E3%82%A3%E3%83%BC%E3%83%AB%E3%83%89%E6%A7%8B%E6%88%90%E5%9B%B3">🗺️ Field構成図</a></li>
 
 <li><a href="#-%E5%87%A6%E7%90%86%E3%83%95%E3%83%AD%E3%83%BC">📊 処理フロー</a></li>
 
@@ -32,12 +32,12 @@
 | `PROJECT_OWNER` | `Project` の所有者 | ✅ |
 | `PROJECT_NUMBER` | 対象 `Project` の Number（数値） | ✅ |
 
-## 📋 作成されるフィールド
+## 📋 作成されるField
 
-フィールド定義は `scripts/config/project-field-definitions.json` に外部化されています。
-デフォルトでは以下のフィールドが作成されます:
+Field定義は `scripts/config/project-field-definitions.json` に外部化されています。
+デフォルトでは以下のFieldが作成されます:
 
-| フィールド名 | データ型 | 選択肢 |
+| Field名 | データ型 | 選択肢 |
 |-------------|---------|--------|
 | 見積もり工数(h) | NUMBER | - |
 | 開始予定 | DATE | - |
@@ -48,7 +48,7 @@
 | 終了期日 | DATE | - |
 | 依頼元 | TEXT | - |
 
-## 🗺️ フィールド構成図
+## 🗺️ Field構成図
 
 ```mermaid
 graph TD
@@ -68,21 +68,21 @@ graph TD
 flowchart TD
     A["開始"] --> B["環境変数バリデーション"]
     B --> C["オーナータイプ判定"]
-    C --> D["フィールド定義ファイル読み込み\n（config/project-field-definitions.json）"]
-    D --> E["GraphQL で既存フィールド一覧を取得"]
+    C --> D["Field定義ファイル読み込み\n（config/project-field-definitions.json）"]
+    D --> E["GraphQL で既存Field一覧を取得"]
     E --> F{"取得成功?"}
     F -- "No" --> G["エラー出力"]
     G --> H["異常終了"]
 
-    F -- "Yes" --> I["フィールド定義をループ"]
-    I --> J{"同名フィールド\n既に存在?"}
+    F -- "Yes" --> I["Field定義をループ"]
+    I --> J{"同名Field\n既に存在?"}
     J -- "Yes" --> K["スキップ"]
-    J -- "No" --> L["GraphQL createProjectV2Field\nでフィールド作成"]
+    J -- "No" --> L["GraphQL createProjectV2Field\nでField作成"]
     L --> M{"作成成功?"}
     M -- "Yes" --> N["作成カウント +1"]
     M -- "No" --> O["失敗カウント +1"]
 
-    K & N & O --> P{"次のフィールド\nあり?"}
+    K & N & O --> P{"次のField\nあり?"}
     P -- "Yes" --> I
     P -- "No" --> Q["サマリー出力"]
     Q --> R{"失敗あり?"}
@@ -94,19 +94,19 @@ flowchart TD
 
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
-| オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別し、GraphQL クエリのフィールド名を決定 | `gh api users/{owner}` |
-| フィールド定義ファイル読み込み | `scripts/config/project-field-definitions.json` からフィールド定義を読み込み | `cat` |
-| 既存フィールド取得 | GraphQL クエリで `Project` ID と全フィールド（名前・データ型・選択肢）を一括取得 | `gh api graphql` — `projectV2.fields(first: 100)` |
-| 重複チェック | 既存フィールド名リストと定義済みフィールド名を `grep -Fqx` で完全一致比較 | — |
-| フィールド作成 | データ型に応じてフィールドを作成（`SINGLE_SELECT` の場合は `singleSelectOptions` で選択肢を付与） | `gh api graphql` — `createProjectV2Field` mutation |
+| オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別し、GraphQL クエリのField名を決定 | `gh api users/{owner}` |
+| Field定義ファイル読み込み | `scripts/config/project-field-definitions.json` からField定義を読み込み | `cat` |
+| 既存Field取得 | GraphQL クエリで `Project` ID と全Field（名前・データ型・選択肢）を一括取得 | `gh api graphql` — `projectV2.fields(first: 100)` |
+| 重複チェック | 既存Field名リストと定義済みField名を `grep -Fqx` で完全一致比較 | — |
+| Field作成 | データ型に応じてFieldを作成（`SINGLE_SELECT` の場合は `singleSelectOptions` で選択肢を付与） | `gh api graphql` — `createProjectV2Field` mutation |
 | サマリー出力 | 作成・スキップ・失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
 
 ## 📚 API リファレンス
 
 | API / コマンド | 用途 | リファレンス |
 |---------------|------|-------------|
-| `projectV2.fields` (GraphQL) | 既存フィールド一覧の取得 | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
-| `createProjectV2Field` (GraphQL) | カスタムフィールドの作成 | [createProjectV2Field](https://docs.github.com/en/graphql/reference/mutations#createprojectv2field) |
+| `projectV2.fields` (GraphQL) | 既存Field一覧の取得 | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
+| `createProjectV2Field` (GraphQL) | カスタムFieldの作成 | [createProjectV2Field](https://docs.github.com/en/graphql/reference/mutations#createprojectv2field) |
 
 ### API バージョン要件
 

@@ -42,11 +42,11 @@ Repositoryの `Issue`/`PR` を `Project` に一括追加します。
 |------------|------|:----:|--------|-----|
 | `project_number` | 対象 `Project` の Number | ✅ | `number` | `1` |
 | `target_repo` | 対象Repository（owner/repo 形式） | ✅ | `string` | `myorg/myrepo` |
-| `item_type` | 対象アイテムの種別 | ✅ | `choice` | `all`（デフォルト） |
-| `item_state` | 取得するアイテムの状態 | ✅ | `choice` | `open`（デフォルト） |
-| `item_label` | 絞り込みラベル（指定ラベルのみ追加） | - | `string` | `bug` |
+| `item_type` | 対象Itemの種別 | ✅ | `choice` | `all`（デフォルト） |
+| `item_state` | 取得するItemの状態 | ✅ | `choice` | `open`（デフォルト） |
+| `item_label` | 絞り込みLabel（指定Labelのみ追加） | - | `string` | `bug` |
 
-### アイテム種別
+### Item種別
 
 | 選択肢 | 説明 |
 |--------|------|
@@ -54,7 +54,7 @@ Repositoryの `Issue`/`PR` を `Project` に一括追加します。
 | `issues` | `Issue` のみ |
 | `prs` | `Pull Request` のみ |
 
-### アイテム状態
+### Item状態
 
 | 選択肢 | 説明 |
 |--------|------|
@@ -62,7 +62,7 @@ Repositoryの `Issue`/`PR` を `Project` に一括追加します。
 | `closed` | クローズ状態のもの（CLOSED + MERGED を含む） |
 | `all` | すべての状態 |
 
-> **Note:** 既に `Project` に追加済みのアイテムは自動的にスキップされます。
+> **Note:** 既に `Project` に追加済みのItemは自動的にスキップされます。
 
 > **Note:** Repositoryと `Project` のリンクは自動的に行われます。既にリンク済みの場合はスキップされます。
 
@@ -96,9 +96,9 @@ flowchart TD
 | `PROJECT_NUMBER` | `inputs.project_number` | 対象 Project Number |
 | `PROJECT_PAT` | `secrets.PROJECT_PAT` | PAT 形式検証用（`ghp_` または `github_pat_` で始まるか検証） |
 | `TARGET_REPO` | `inputs.target_repo` | 対象Repository |
-| `ITEM_TYPE` | `inputs.item_type` | アイテム種別フィルタ |
-| `ITEM_STATE` | `inputs.item_state` | アイテム状態フィルタ |
-| `ITEM_LABEL` | `inputs.item_label` | ラベルフィルタ |
+| `ITEM_TYPE` | `inputs.item_type` | Item種別フィルタ |
+| `ITEM_STATE` | `inputs.item_state` | Item状態フィルタ |
+| `ITEM_LABEL` | `inputs.item_label` | Labelフィルタ |
 
 > **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
 

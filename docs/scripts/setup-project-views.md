@@ -48,7 +48,7 @@
 | `name` | string | ✅ | `View` の名前 |
 | `layout` | string | ✅ | `table` / `board` / `roadmap` |
 | `filter` | string | - | フィルタクエリ（例: `is:issue`, `is:open`） |
-| `visible_fields` | array of integers | - | 表示するフィールドの ID 配列（`roadmap` レイアウトには非対応） |
+| `visible_fields` | array of integers | - | 表示するFieldの ID 配列（`roadmap` レイアウトには非対応） |
 
 ```json
 [

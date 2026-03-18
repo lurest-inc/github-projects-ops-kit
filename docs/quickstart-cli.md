@@ -91,7 +91,7 @@ gh workflow run 02-extend-project.yml \
   --field project_number="<PROJECT_NUMBER>"
 ```
 
-### ③ Issue ラベル一括追加
+### ③ Issue Label一括追加
 
 ```bash
 gh workflow run 03-setup-repository-labels.yml \
@@ -122,5 +122,5 @@ gh run watch
 
 - [① GitHub Project 新規作成](workflows/01-create-project)
 - [② GitHub Project 拡張](workflows/02-extend-project)
-- [③ Issue ラベル一括追加](workflows/03-setup-repository-labels)
+- [③ Issue Label一括追加](workflows/03-setup-repository-labels)
 - [④ Issue/PR 一括紐付け](workflows/04-add-items-to-project)

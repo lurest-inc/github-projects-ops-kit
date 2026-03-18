@@ -1,29 +1,29 @@
-# 🏷️ ラベル運用ルール
+# 🏷️ Label運用ルール
 
-本スターターキットで使用する Issue ラベルの運用ルールについて説明します。
+本スターターキットで使用する Issue Labelの運用ルールについて説明します。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 <details><summary>（ここをクリック）目次</summary><ul>
-<li><a href="#-%E3%83%A9%E3%83%99%E3%83%AB%E3%81%AE%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E5%88%86%E9%A1%9E">📋 ラベルのカテゴリ分類</a></li>
+<li><a href="#-%E3%83%A9%E3%83%99%E3%83%AB%E3%81%AE%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA%E5%88%86%E9%A1%9E">📋 Labelのカテゴリ分類</a></li>
 
-<li><a href="#-%E5%90%84%E3%83%A9%E3%83%99%E3%83%AB%E3%81%AE%E7%94%A8%E9%80%94%E3%81%A8%E4%BB%98%E4%B8%8E%E3%82%BF%E3%82%A4%E3%83%9F%E3%83%B3%E3%82%B0">🏷️ 各ラベルの用途と付与タイミング</a></li>
+<li><a href="#-%E5%90%84%E3%83%A9%E3%83%99%E3%83%AB%E3%81%AE%E7%94%A8%E9%80%94%E3%81%A8%E4%BB%98%E4%B8%8E%E3%82%BF%E3%82%A4%E3%83%9F%E3%83%B3%E3%82%B0">🏷️ 各Labelの用途と付与タイミング</a></li>
 
-<li><a href="#-%E7%8A%B6%E6%85%8B%E3%83%A9%E3%83%99%E3%83%AB%E3%81%A8%E3%82%AB%E3%83%B3%E3%83%90%E3%83%B3%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%E3%81%AE%E9%96%A2%E4%BF%82">🔄 状態ラベルとカンバンステータスの関係</a></li>
+<li><a href="#-%E7%8A%B6%E6%85%8B%E3%83%A9%E3%83%99%E3%83%AB%E3%81%A8%E3%82%AB%E3%83%B3%E3%83%90%E3%83%B3%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%E3%81%AE%E9%96%A2%E4%BF%82">🔄 状態LabelとカンバンStatusの関係</a></li>
 
-<li><a href="#-%E5%84%AA%E5%85%88%E5%BA%A6%E3%83%A9%E3%83%99%E3%83%AB%E3%81%AE%E9%81%8B%E7%94%A8%E5%9F%BA%E6%BA%96">⚡ 優先度ラベルの運用基準</a></li>
+<li><a href="#-%E5%84%AA%E5%85%88%E5%BA%A6%E3%83%A9%E3%83%99%E3%83%AB%E3%81%AE%E9%81%8B%E7%94%A8%E5%9F%BA%E6%BA%96">⚡ 優先度Labelの運用基準</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ---
 
-## 📋 ラベルのカテゴリ分類
+## 📋 Labelのカテゴリ分類
 
-ラベルは以下の 5 カテゴリに分類されます。
+Labelは以下の 5 カテゴリに分類されます。
 
-| カテゴリ | ラベル | 概要 |
+| カテゴリ | Label | 概要 |
 |---------|--------|------|
 | **種別** | `bug`, `enhancement`, `documentation`, `question` | Issue/PR の内容を分類する |
 | **状態** | `on-hold`, `blocked` | 作業の進行状況を補足する |
@@ -33,41 +33,41 @@
 
 ---
 
-## 🏷️ 各ラベルの用途と付与タイミング
+## 🏷️ 各Labelの用途と付与タイミング
 
-### 種別ラベル
+### 種別Label
 
-| ラベル | 用途 | 付与タイミング |
+| Label | 用途 | 付与タイミング |
 |--------|------|---------------|
 | `bug` | 不具合の報告 | バグを発見し Issue を起票するとき |
 | `enhancement` | 機能追加・改善 | 新機能や既存機能の改善を提案するとき |
 | `documentation` | ドキュメントの追加・更新 | ドキュメントのみの変更を行うとき |
 | `question` | 質問・確認事項 | 仕様や設計に関する質問・議論を行うとき |
 
-### 状態ラベル
+### 状態Label
 
-| ラベル | 用途 | 付与タイミング |
+| Label | 用途 | 付与タイミング |
 |--------|------|---------------|
 | `on-hold` | 保留中 | 方針決定待ちなど、自チーム内の理由で作業を一時停止するとき |
 | `blocked` | ブロック中 | 外部チーム・依存タスクなど、外部要因で作業が進められないとき |
 
-### 優先度ラベル
+### 優先度Label
 
-| ラベル | 用途 | 付与タイミング |
+| Label | 用途 | 付与タイミング |
 |--------|------|---------------|
 | `priority: high` | 優先度：高 | 他タスクに先行して対応すべきとき |
 | `priority: low` | 優先度：低 | 急ぎではなく、余裕があるときに対応するとき |
 
-### コントリビューションラベル
+### コントリビューションLabel
 
-| ラベル | 用途 | 付与タイミング |
+| Label | 用途 | 付与タイミング |
 |--------|------|---------------|
 | `good first issue` | 初めてのコントリビューター向け | Scope が小さく、初心者でも着手しやすい Issue に付与する |
 | `help wanted` | 協力を求めている Issue | チーム外からの協力を歓迎する Issue に付与する |
 
-### 解決方法ラベル
+### 解決方法Label
 
-| ラベル | 用途 | 付与タイミング |
+| Label | 用途 | 付与タイミング |
 |--------|------|---------------|
 | `duplicate` | 重複する Issue/PR | 既存の Issue/PR と重複しているためクローズするとき |
 | `invalid` | 無効な Issue/PR | 再現不可・対象外などの理由でクローズするとき |
@@ -75,34 +75,34 @@
 
 ---
 
-## 🔄 状態ラベルとカンバンステータスの関係
+## 🔄 状態LabelとカンバンStatusの関係
 
-状態ラベル（`on-hold`, `blocked`）は、カンバンのステータスを補足する役割を持ちます。ステータスの変更は行わず、ラベルで状況を可視化します。
+状態Label（`on-hold`, `blocked`）は、カンバンのStatusを補足する役割を持ちます。Statusの変更は行わず、Labelで状況を可視化します。
 
 ```mermaid
 graph TD
     InProgress["🟡 In Progress"]
 
-    InProgress -- "外部要因で停止" --> InProgress_Blocked["🟡 In Progress\n+ blocked ラベル"]
-    InProgress -- "方針決定待ちで停止" --> InProgress_OnHold["🟡 In Progress\n+ on-hold ラベル"]
+    InProgress -- "外部要因で停止" --> InProgress_Blocked["🟡 In Progress\n+ blocked Label"]
+    InProgress -- "方針決定待ちで停止" --> InProgress_OnHold["🟡 In Progress\n+ on-hold Label"]
     InProgress_Blocked -- "ブロック解消" --> InProgress
     InProgress_OnHold -- "方針決定" --> InProgress
 ```
 
 ### 運用フロー
 
-1. 作業中のタスクが停止要因を持つ場合、カンバンのステータスは `In Progress` のまま、該当する状態ラベルを付与する
-2. 停止要因が解消したら、状態ラベルを削除して作業を再開する
+1. 作業中のタスクが停止要因を持つ場合、カンバンのStatusは `In Progress` のまま、該当する状態Labelを付与する
+2. 停止要因が解消したら、状態Labelを削除して作業を再開する
 3. 停止の理由や見通しを Issue のコメントに記録する
 
 ---
 
-## ⚡ 優先度ラベルの運用基準
+## ⚡ 優先度Labelの運用基準
 
-| ラベル | 基準 | 例 |
+| Label | 基準 | 例 |
 |--------|------|-----|
 | `priority: high` | サービス影響・期限が迫っているなど、即時対応が求められるもの | 本番障害、セキュリティ脆弱性、リリースブロッカー |
 | `priority: low` | 対応が望ましいが、急ぎではないもの | リファクタリング、軽微な UI 改善、ドキュメント整備 |
-| （ラベルなし） | 通常の優先度。大半の Issue はこの状態で運用する | — |
+| （Labelなし） | 通常の優先度。大半の Issue はこの状態で運用する | — |
 
-> **補足**: 優先度ラベルは例外的なケースにのみ付与し、通常の Issue には付与しません。大半の Issue が `priority: high` になっている場合は、基準の見直しを検討してください。
+> **補足**: 優先度Labelは例外的なケースにのみ付与し、通常の Issue には付与しません。大半の Issue が `priority: high` になっている場合は、基準の見直しを検討してください。

@@ -1,7 +1,7 @@
 # 📜 setup-project-status.sh
 
-`Project` の `Status` フィールドにカラムを設定するスクリプトです。
-既存の `Status` フィールドに対して、定義済みのカラムを追加・更新します。
+`Project` の `Status` Fieldにカラムを設定するスクリプトです。
+既存の `Status` Fieldに対して、定義済みのカラムを追加・更新します。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -9,7 +9,7 @@
 <details><summary>（ここをクリック）目次</summary><ul>
 <li><a href="#-%E7%92%B0%E5%A2%83%E5%A4%89%E6%95%B0">🔧 環境変数</a></li>
 
-<li><a href="#-%E8%A8%AD%E5%AE%9A%E3%81%95%E3%82%8C%E3%82%8B%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AB%E3%83%A9%E3%83%A0">📋 設定されるステータスカラム</a></li>
+<li><a href="#-%E8%A8%AD%E5%AE%9A%E3%81%95%E3%82%8C%E3%82%8B%E3%82%B9%E3%83%86%E3%83%BC%E3%82%BF%E3%82%B9%E3%82%AB%E3%83%A9%E3%83%A0">📋 設定されるStatusカラム</a></li>
 
 <li><a href="#-%E5%87%A6%E7%90%86%E3%83%95%E3%83%AD%E3%83%BC">📊 処理フロー</a></li>
 
@@ -30,9 +30,9 @@
 | `PROJECT_OWNER` | `Project` の所有者 | ✅ |
 | `PROJECT_NUMBER` | 対象 `Project` の Number（数値） | ✅ |
 
-## 📋 設定されるステータスカラム
+## 📋 設定されるStatusカラム
 
-ステータスカラム定義は `scripts/config/project-status-options.json` に外部化されています。
+Statusカラム定義は `scripts/config/project-status-options.json` に外部化されています。
 デフォルトでは以下のカラムが設定されます:
 
 | カラム名 | カラー | 説明 | 用途 |
@@ -49,10 +49,10 @@
 flowchart TD
     A["開始"] --> B["環境変数バリデーション"]
     B --> C["オーナータイプ判定"]
-    C --> D["ステータス定義ファイル読み込み\n（config/project-status-options.json）"]
-    D --> E["GraphQL で Project ID・\nStatus フィールド ID を一括取得"]
+    C --> D["Status定義ファイル読み込み\n（config/project-status-options.json）"]
+    D --> E["GraphQL で Project ID・\nStatus Field ID を一括取得"]
 
-    E --> F{"Status フィールド\nが見つかる?"}
+    E --> F{"Status Field\nが見つかる?"}
     F -- "No" --> G["エラー終了"]
     F -- "Yes" --> H["設定するカラム定義を構築\n（Backlog, Todo, In Progress,\nIn Review, Done）"]
 
@@ -69,8 +69,8 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別 | `gh api users/{owner}` |
-| ステータス定義ファイル読み込み | `scripts/config/project-status-options.json` からステータスカラム定義を読み込み | `cat` |
-| `Status` フィールド取得 | GraphQL クエリで `Project` ID と `Status` フィールド ID を一括取得し、現在のカラム一覧を表示 | `gh api graphql` — `projectV2.fields(first: 100)` |
+| Status定義ファイル読み込み | `scripts/config/project-status-options.json` からStatusカラム定義を読み込み | `cat` |
+| `Status` Field取得 | GraphQL クエリで `Project` ID と `Status` Field ID を一括取得し、現在のカラム一覧を表示 | `gh api graphql` — `projectV2.fields(first: 100)` |
 | カラム更新 | `singleSelectOptions` に Backlog（GRAY）・Todo（BLUE）・In Progress（YELLOW）・In Review（ORANGE）・Done（GREEN）を指定して一括更新 | `gh api graphql` — `updateProjectV2Field` mutation |
 | サマリー出力 | カラム構成（`Backlog → Todo → In Progress → In Review → Done`）をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
 
@@ -78,8 +78,8 @@ flowchart TD
 
 | API / コマンド | 用途 | リファレンス |
 |---------------|------|-------------|
-| `ProjectV2SingleSelectField` (GraphQL) | `Status` フィールド情報の取得 | [ProjectV2SingleSelectField](https://docs.github.com/en/graphql/reference/objects#projectv2singleselectfield) |
-| `updateProjectV2Field` (GraphQL Mutation) | ステータスカラムの一括更新 | [updateProjectV2Field](https://docs.github.com/en/graphql/reference/mutations#updateprojectv2field) |
+| `ProjectV2SingleSelectField` (GraphQL) | `Status` Field情報の取得 | [ProjectV2SingleSelectField](https://docs.github.com/en/graphql/reference/objects#projectv2singleselectfield) |
+| `updateProjectV2Field` (GraphQL Mutation) | Statusカラムの一括更新 | [updateProjectV2Field](https://docs.github.com/en/graphql/reference/mutations#updateprojectv2field) |
 
 ### API バージョン要件
 
@@ -89,7 +89,7 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 
 | パラメータ | 現在の値 | 備考 |
 |-----------|---------|------|
-| `fields(first: N)` | 100 | `Status` フィールド検索用（ビルトイン＋カスタムフィールドを取得） |
+| `fields(first: N)` | 100 | `Status` Field検索用（ビルトイン＋カスタムFieldを取得） |
 
 ## 🔄 使用Workflow
 

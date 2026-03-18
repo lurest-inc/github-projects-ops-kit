@@ -1,6 +1,6 @@
 # ② 🔧 GitHub Project 拡張
 
-既存の `Project` にカスタムフィールド・ステータスカラム・`View` を追加します。
+既存の `Project` にカスタムField・Statusカラム・`View` を追加します。
 [① GitHub Project 新規作成](01-create-project) を実行していない既存 `Project` 向けです。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -46,7 +46,7 @@
 
 ```mermaid
 flowchart TD
-    A["workflow_dispatch\n（project_number）"] --> B["extend-project Job\n既存 Project にフィールド・ステータス・View を追加"]
+    A["workflow_dispatch\n（project_number）"] --> B["extend-project Job\n既存 Project にField・Status・View を追加"]
     B --> C{"結果判定"}
     C -- "成功" --> D["workflow-summary-success Job\n成功サマリーを出力"]
     C -- "失敗" --> E["workflow-summary-failure Job\n失敗サマリーを出力"]
@@ -78,9 +78,9 @@ flowchart TD
 ```
 .github/workflows/02-extend-project.yml
   ├── extend-project Job
-  │   └── _reusable-extend-project.yml             # フィールド・ステータス・View セットアップ
-  │       ├── scripts/setup-project-status.sh      # ステータスカラム設定
-  │       ├── scripts/setup-project-fields.sh      # カスタムフィールド作成
+  │   └── _reusable-extend-project.yml             # Field・Status・View セットアップ
+  │       ├── scripts/setup-project-status.sh      # Statusカラム設定
+  │       ├── scripts/setup-project-fields.sh      # カスタムField作成
   │       └── scripts/setup-project-views.sh       # View 作成
   ├── workflow-summary-failure Job（失敗時）
   │   └── .github/actions/workflow-summary         # 失敗サマリー出力
@@ -90,6 +90,6 @@ flowchart TD
 
 ## 📜 関連スクリプト
 
-- [setup-project-status.sh](../scripts/setup-project-status) — ステータスカラム設定スクリプト
-- [setup-project-fields.sh](../scripts/setup-project-fields) — カスタムフィールド作成スクリプト
+- [setup-project-status.sh](../scripts/setup-project-status) — Statusカラム設定スクリプト
+- [setup-project-fields.sh](../scripts/setup-project-fields) — カスタムField作成スクリプト
 - [setup-project-views.sh](../scripts/setup-project-views) — View 作成スクリプト

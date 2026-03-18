@@ -115,5 +115,5 @@ Fork 先 Repository の `Actions` タブから Workflow を選択し、`Run work
 
 - [① GitHub Project 新規作成](workflows/01-create-project)
 - [② GitHub Project 拡張](workflows/02-extend-project)
-- [③ Issue ラベル一括追加](workflows/03-setup-repository-labels)
+- [③ Issue Label一括追加](workflows/03-setup-repository-labels)
 - [④ Issue/PR 一括紐付け](workflows/04-add-items-to-project)

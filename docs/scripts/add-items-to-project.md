@@ -1,7 +1,7 @@
 # 📜 add-items-to-project.sh
 
 Repositoryの `Issue`/`PR` を `Project` に一括追加するスクリプトです。
-既に `Project` に追加済みのアイテムは自動的にスキップされます。
+既に `Project` に追加済みのItemは自動的にスキップされます。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -28,9 +28,9 @@ Repositoryの `Issue`/`PR` を `Project` に一括追加するスクリプトで
 | `PROJECT_OWNER` | `Project` の所有者 | ✅ |
 | `PROJECT_NUMBER` | 対象 `Project` の Number（数値） | ✅ |
 | `TARGET_REPO` | 対象Repository（owner/repo 形式） | ✅ |
-| `ITEM_TYPE` | 対象アイテムの種別（`all`/`issues`/`prs`） | ❌（デフォルト: `all`） |
-| `ITEM_STATE` | 取得するアイテムの状態（`open`/`closed`/`all`） | ❌（デフォルト: `open`） |
-| `ITEM_LABEL` | 絞り込みラベル | ❌ |
+| `ITEM_TYPE` | 対象Itemの種別（`all`/`issues`/`prs`） | ❌（デフォルト: `all`） |
+| `ITEM_STATE` | 取得するItemの状態（`open`/`closed`/`all`） | ❌（デフォルト: `open`） |
+| `ITEM_LABEL` | 絞り込みLabel | ❌ |
 
 ## 📊 処理フロー
 
@@ -38,8 +38,8 @@ Repositoryの `Issue`/`PR` を `Project` に一括追加するスクリプトで
 flowchart TD
     A["開始"] --> B["環境変数バリデーション"]
     B --> C["オーナータイプ判定"]
-    C --> D["GraphQL で Project ID・\nStatus フィールド ID・\nOption ID を一括取得"]
-    D --> E["GraphQL で Project の\n既存アイテム URL 一覧を取得\n（ページネーション対応）"]
+    C --> D["GraphQL で Project ID・\nStatus Field ID・\nOption ID を一括取得"]
+    D --> E["GraphQL で Project の\n既存Item URL 一覧を取得\n（ページネーション対応）"]
 
     E --> F{"ITEM_TYPE に\nIssue を含む?"}
     F -- "Yes" --> G["fetch_and_add_items\n（Issue）"]
@@ -54,14 +54,14 @@ flowchart TD
     J --> K["完了"]
 
     subgraph L["fetch_and_add_items 関数"]
-        M["gh issue/pr list で\nアイテム一覧を取得"] --> N["各アイテムをループ"]
-        N --> O{"既存アイテムに\n含まれる?"}
+        M["gh issue/pr list で\nItem一覧を取得"] --> N["各Itemをループ"]
+        N --> O{"既存Itemに\n含まれる?"}
         O -- "Yes" --> P["スキップ"]
         O -- "No" --> Q["gh project item-add\nで追加"]
         Q --> R{"Done 対象の\nstate?"}
-        R -- "Yes" --> S["ステータス: Done"]
-        R -- "No" --> T["ステータス: Backlog"]
-        P & S & T --> U{"次のアイテム\nあり?"}
+        R -- "Yes" --> S["Status: Done"]
+        R -- "No" --> T["Status: Backlog"]
+        P & S & T --> U{"次のItem\nあり?"}
         U -- "Yes" --> N
         U -- "No" --> V["件数サマリー出力"]
     end
@@ -72,22 +72,22 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別 | `gh api users/{owner}` |
-| `Status` フィールド取得 | GraphQL で `Project` ID・`Status` フィールド ID・各ステータスの Option ID を一括抽出 | `gh api graphql` — `projectV2.fields` |
-| 既存アイテム取得 | GraphQL クエリで `Project` に紐づく全アイテムの URL をページネーション付きで取得。重複防止に使用 | `gh api graphql` — `projectV2.items(first: 100)` |
-| アイテム取得・追加 | `fetch_and_add_items` 関数で `Issue` / `PR` を共通処理。`ITEM_STATE`・`ITEM_LABEL` で絞り込んで一覧を取得し、重複チェック・追加・ステータス設定を実行（`Issue` / `PR` 各種別ごとに最大 100 件、1件ごとに 1秒の sleep） | `gh issue list` / `gh pr list`・`gh project item-add`・`updateProjectV2ItemFieldValue` |
-| ステータス設定 | 追加したアイテムにステータスを自動付与。open → Backlog、closed/merged → Done | `gh api graphql` — `updateProjectV2ItemFieldValue` |
+| `Status` Field取得 | GraphQL で `Project` ID・`Status` Field ID・各Statusの Option ID を一括抽出 | `gh api graphql` — `projectV2.fields` |
+| 既存Item取得 | GraphQL クエリで `Project` に紐づく全Itemの URL をページネーション付きで取得。重複防止に使用 | `gh api graphql` — `projectV2.items(first: 100)` |
+| Item取得・追加 | `fetch_and_add_items` 関数で `Issue` / `PR` を共通処理。`ITEM_STATE`・`ITEM_LABEL` で絞り込んで一覧を取得し、重複チェック・追加・Status設定を実行（`Issue` / `PR` 各種別ごとに最大 100 件、1件ごとに 1秒の sleep） | `gh issue list` / `gh pr list`・`gh project item-add`・`updateProjectV2ItemFieldValue` |
+| Status設定 | 追加したItemにStatusを自動付与。open → Backlog、closed/merged → Done | `gh api graphql` — `updateProjectV2ItemFieldValue` |
 | サマリー出力 | `Issue`・`PR` それぞれの追加・スキップ・失敗件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
 
 ## 📚 API リファレンス
 
 | API / コマンド | 用途 | リファレンス |
 |---------------|------|-------------|
-| `projectV2.items` (GraphQL) | 既存アイテム URL の取得（重複防止） | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
+| `projectV2.items` (GraphQL) | 既存Item URL の取得（重複防止） | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
 | `gh issue list` | `Issue` 一覧の取得 | [gh issue list](https://cli.github.com/manual/gh_issue_list) |
 | `gh pr list` | `PR` 一覧の取得 | [gh pr list](https://cli.github.com/manual/gh_pr_list) |
-| `gh project item-add` | アイテムの `Project` への追加 | [gh project item-add](https://cli.github.com/manual/gh_project_item-add) |
-| `projectV2.fields` (GraphQL) | `Status` フィールド ID・Option ID の取得 | [ProjectV2SingleSelectField](https://docs.github.com/en/graphql/reference/objects#projectv2singleselectfield) |
-| `updateProjectV2ItemFieldValue` (GraphQL) | アイテムのステータス設定 | [updateProjectV2ItemFieldValue](https://docs.github.com/en/graphql/reference/mutations#updateprojectv2itemfieldvalue) |
+| `gh project item-add` | Itemの `Project` への追加 | [gh project item-add](https://cli.github.com/manual/gh_project_item-add) |
+| `projectV2.fields` (GraphQL) | `Status` Field ID・Option ID の取得 | [ProjectV2SingleSelectField](https://docs.github.com/en/graphql/reference/objects#projectv2singleselectfield) |
+| `updateProjectV2ItemFieldValue` (GraphQL) | ItemのStatus設定 | [updateProjectV2ItemFieldValue](https://docs.github.com/en/graphql/reference/mutations#updateprojectv2itemfieldvalue) |
 
 ### API バージョン要件
 
@@ -97,9 +97,9 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 
 | パラメータ | 現在の値 | 備考 |
 |-----------|---------|------|
-| `items(first: N)` | 100 | 既存アイテム取得のページサイズ |
+| `items(first: N)` | 100 | 既存Item取得のページサイズ |
 | `--limit` | 100 | `gh issue list` / `gh pr list` の最大取得件数 |
-| `sleep` | 1秒 | アイテム追加間のレート制限回避待機時間 |
+| `sleep` | 1秒 | Item追加間のレート制限回避待機時間 |
 
 ## 🔄 使用Workflow
 
