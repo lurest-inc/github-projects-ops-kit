@@ -13,7 +13,7 @@ on:
         required: true
         type: number
       target_repo:
-        description: "対象リポジトリ（owner/repo 形式、1 回の実行で 1 リポジトリ）"
+        description: "対象 Repository（owner/repo 形式、1 回の実行で 1 Repository）"
         required: true
         type: string
       item_type:
