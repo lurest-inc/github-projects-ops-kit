@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# GitHub Project アイテム一括追加スクリプト
+# GitHub Project Item 一括追加スクリプト
 # https://mabubu0203.github.io/github-projects-starter-kit/scripts/add-items-to-project
 #
 # 環境変数:
@@ -9,8 +9,8 @@ set -euo pipefail
 #   PROJECT_OWNER  - Project の所有者
 #   PROJECT_NUMBER - 対象 Project の Number
 #   TARGET_REPO    - 対象 Repository（owner/repo 形式）
-#   ITEM_TYPE      - 対象アイテムの種別（all/issues/prs、デフォルト: all）
-#   ITEM_STATE     - 取得するアイテムの状態（open/closed/all、デフォルト: open）
+#   ITEM_TYPE      - 対象 Item の種別（all/issues/prs、デフォルト: all）
+#   ITEM_STATE     - 取得する Item の状態（open/closed/all、デフォルト: open）
 #   ITEM_LABEL     - 絞り込みラベル（指定ラベルの Issue/PR のみ追加、省略可）
 
 # --- 共通ライブラリ読み込み ---
@@ -186,7 +186,7 @@ LINK_RESULT=$(printf '%s' "${LINK_REQUEST_BODY}" | gh api graphql --input - 2>&1
 
 # --- ヘルパー関数 ---
 
-# アイテムにステータスを設定する
+# Item にステータスを設定する
 set_item_status() {
   local item_id="$1"
   local option_id="$2"
@@ -219,7 +219,7 @@ GRAPHQL
   run_graphql_json "${mutation}" "ステータスの設定" "${variables_json}" > /dev/null
 }
 
-# Project に既に追加済みのアイテム URL を取得する
+# Project に既に追加済みの Item URL を取得する
 get_existing_project_items() {
   local items=""
 
@@ -272,9 +272,9 @@ GRAPHQL
     --argjson number "${PROJECT_NUMBER}" \
     '{login: $login, number: $number}')
 
-  if ! run_graphql_paginated "${query}" "Project の既存アイテム取得" "${variables_json}" \
+  if ! run_graphql_paginated "${query}" "Project の既存 Item 取得" "${variables_json}" \
     '.data.[($owner)].projectV2.items.pageInfo' _on_existing_items_page; then
-    echo "::warning::Project の既存アイテム取得に失敗しました。重複チェックをスキップします。" >&2
+    echo "::warning::Project の既存 Item 取得に失敗しました。重複チェックをスキップします。" >&2
     echo ""
     return
   fi
@@ -282,22 +282,22 @@ GRAPHQL
   echo "${items}"
 }
 
-# --- 既存アイテム取得（重複防止用） ---
+# --- 既存 Item 取得（重複防止用） ---
 
 echo ""
-echo "Project #${PROJECT_NUMBER} の既存アイテムを取得しています..."
+echo "Project #${PROJECT_NUMBER} の既存 Item を取得しています..."
 EXISTING_ITEMS=$(get_existing_project_items)
 if [[ -n "${EXISTING_ITEMS}" ]]; then
   EXISTING_COUNT=$(echo "${EXISTING_ITEMS}" | wc -l | tr -d ' ')
-  echo "  既存アイテム数: ${EXISTING_COUNT}"
+  echo "  既存 Item 数: ${EXISTING_COUNT}"
 else
   EXISTING_COUNT=0
-  echo "  既存アイテム数: 0"
+  echo "  既存 Item 数: 0"
 fi
 
-# --- アイテム取得・追加（共通関数） ---
+# --- Item 取得・追加（共通関数） ---
 
-# アイテム（Issue / PR）を取得して Project に追加する
+# Item（Issue / PR）を取得して Project に追加する
 # 引数: $1=種別ラベル（Issue / PR）, $2=gh サブコマンド（issue / pr）, $3=Done 判定用 state パターン
 # 出力: ログは stderr、カウント（ADDED SKIPPED FAILED）は stdout に TSV で返す
 fetch_and_add_items() {
@@ -316,7 +316,7 @@ fetch_and_add_items() {
     fi
   fi
 
-  # 1 回の取得で処理するアイテム数の上限
+  # 1 回の取得で処理する Item 数の上限
   local list_args=(--repo "${TARGET_REPO}" --state "${ITEM_STATE}" --limit 100 --json url,state --jq '.[] | [.url, .state] | @tsv')
   if [[ -n "${ITEM_LABEL}" ]]; then
     list_args+=(--label "${ITEM_LABEL}")
@@ -408,7 +408,7 @@ print_summary \
 
 if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
   {
-    echo "## Project アイテム一括追加 完了"
+    echo "## Project Item 一括追加 完了"
     echo ""
     echo "| 項目 | 値 |"
     echo "|------|-----|"
@@ -432,8 +432,8 @@ fi
 
 echo ""
 if [[ "${TOTAL_FAILED}" -gt 0 ]]; then
-  echo "::error::アイテムの追加に ${TOTAL_FAILED} 件失敗しました（追加: ${TOTAL_ADDED} 件、スキップ: ${TOTAL_SKIPPED} 件）。"
+  echo "::error::Item の追加に ${TOTAL_FAILED} 件失敗しました（追加: ${TOTAL_ADDED} 件、スキップ: ${TOTAL_SKIPPED} 件）。"
   exit 1
 fi
 
-echo "::notice::アイテムの一括追加が完了しました（追加: ${TOTAL_ADDED} 件、スキップ: ${TOTAL_SKIPPED} 件）。"
+echo "::notice::Item の一括追加が完了しました（追加: ${TOTAL_ADDED} 件、スキップ: ${TOTAL_SKIPPED} 件）。"

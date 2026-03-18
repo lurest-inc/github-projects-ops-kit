@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 滞留アイテム検知スクリプト
+# 滞留 Item 検知スクリプト
 # https://mabubu0203.github.io/github-projects-starter-kit/scripts/detect-stale-items
 #
 # 環境変数:
 #   GH_TOKEN       - GitHub PAT（Projects 読み取り権限が必要）
 #   PROJECT_OWNER  - Project の所有者
 #   PROJECT_NUMBER - 対象 Project の Number
-#   ITEM_TYPE      - 対象アイテムの種別（all / issues / prs、デフォルト: all）
-#   ITEM_STATE     - 対象アイテムの状態（open / closed / all、デフォルト: all）
+#   ITEM_TYPE      - 対象 Item の種別（all / issues / prs、デフォルト: all）
+#   ITEM_STATE     - 対象 Item の状態（open / closed / all、デフォルト: all）
 #   OUTPUT_FORMAT  - 出力形式（json / markdown / csv / tsv、デフォルト: json）
 
 # --- 共通ライブラリ読み込み ---
@@ -39,10 +39,10 @@ get_now_epoch() {
   fi
 }
 
-# --- アイテム取得 ---
+# --- Item 取得 ---
 
 echo ""
-echo "Project #${PROJECT_NUMBER} のアイテムを取得しています..."
+echo "Project #${PROJECT_NUMBER} の Item を取得しています..."
 PROJECT_TITLE=""
 
 STALE_QUERY_TEMPLATE=$(cat <<'GRAPHQL'
@@ -185,7 +185,7 @@ read -r STALE_COUNT IN_REVIEW_COUNT IN_PROGRESS_COUNT TODO_COUNT < <(echo "${STA
     ([.[] | select(.status == "Todo")] | length)
   ] | @tsv
 ')
-echo "  滞留アイテム: ${STALE_COUNT} 件"
+echo "  滞留 Item: ${STALE_COUNT} 件"
 
 # --- フォーマッター関数 ---
 
@@ -196,7 +196,7 @@ format_stale_markdown() {
     "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(.repository) | \(if .assignees == "" then "-" else (.assignees | md_escape) end) | \(.updated_at | split("T")[0]) | \(.days_stale) |"'
 
   {
-    echo "# 滞留アイテムレポート"
+    echo "# 滞留 Item レポート"
     echo ""
     echo "- **Project:** ${PROJECT_TITLE} (#${PROJECT_NUMBER})"
     echo "- **実行日時:** ${EXECUTED_AT}"
@@ -204,7 +204,7 @@ format_stale_markdown() {
     echo ""
 
     if [[ "${STALE_COUNT}" -eq 0 ]]; then
-      echo "> 滞留アイテムはありません。"
+      echo "> 滞留 Item はありません。"
     else
       if [[ "${IN_REVIEW_COUNT}" -gt 0 ]]; then
         echo "## In Review（${STALE_DAYS_IN_REVIEW} 日以上）: ${IN_REVIEW_COUNT} 件"
@@ -340,7 +340,7 @@ print_summary "Project" "${PROJECT_TITLE} (#${PROJECT_NUMBER})" \
 
 echo ""
 if [[ "${STALE_COUNT}" -gt 0 ]]; then
-  echo "::warning::${STALE_COUNT} 件の滞留アイテムが検知されました。"
+  echo "::warning::${STALE_COUNT} 件の滞留 Item が検知されました。"
 else
-  echo "::notice::滞留アイテムは検知されませんでした。"
+  echo "::notice::滞留 Item は検知されませんでした。"
 fi

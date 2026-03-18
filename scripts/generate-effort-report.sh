@@ -8,8 +8,8 @@ set -euo pipefail
 #   GH_TOKEN       - GitHub PAT（Projects 読み取り権限が必要）
 #   PROJECT_OWNER  - Project の所有者
 #   PROJECT_NUMBER - 対象 Project の Number
-#   ITEM_TYPE      - 対象アイテムの種別（all / issues / prs、デフォルト: all）
-#   ITEM_STATE     - 対象アイテムの状態（open / closed / all、デフォルト: all）
+#   ITEM_TYPE      - 対象 Item の種別（all / issues / prs、デフォルト: all）
+#   ITEM_STATE     - 対象 Item の状態（open / closed / all、デフォルト: all）
 #   OUTPUT_FORMAT  - 出力形式（json / markdown / csv / tsv、デフォルト: json）
 
 # --- 共通ライブラリ読み込み ---
@@ -26,10 +26,10 @@ VARIANCE_TOP_N=10
 
 validate_analysis_env
 
-# --- アイテム取得 ---
+# --- Item 取得 ---
 
 echo ""
-echo "Project #${PROJECT_NUMBER} のアイテムを取得しています..."
+echo "Project #${PROJECT_NUMBER} の Item を取得しています..."
 PROJECT_TITLE=""
 
 EFFORT_QUERY_TEMPLATE=$(cat <<'GRAPHQL'
@@ -210,7 +210,7 @@ STATUS_EFFORT=$(echo "${ITEMS}" | jq --argjson total_estimated "${TOTAL_ESTIMATE
   | sort_by(status_order(.status))
 ')
 
-# 乖離アイテム抽出（乖離率の絶対値が閾値以上）
+# 乖離 Item 抽出（乖離率の絶対値が閾値以上）
 VARIANCE_ITEMS=$(echo "${ITEMS}" | jq --argjson threshold "${VARIANCE_THRESHOLD}" --argjson top_n "${VARIANCE_TOP_N}" '
   [.[] | select(.estimated_hours != null and .estimated_hours > 0 and .actual_hours != null) |
     . + {
@@ -225,7 +225,7 @@ VARIANCE_ITEMS_COUNT=$(echo "${VARIANCE_ITEMS}" | jq 'length')
 
 echo "  担当者別: $(echo "${ASSIGNEE_EFFORT}" | jq 'length') 件"
 echo "  ステータス別: $(echo "${STATUS_EFFORT}" | jq 'length') 件"
-echo "  乖離アイテム: ${VARIANCE_ITEMS_COUNT} 件"
+echo "  乖離 Item: ${VARIANCE_ITEMS_COUNT} 件"
 
 # --- リードタイム分析（条件付き） ---
 
@@ -278,7 +278,7 @@ if [[ "${HAS_LEAD_TIME}" == "true" ]]; then
   echo "  リードタイム分析対象: $(echo "${LEAD_TIME_ITEMS}" | jq 'length') 件"
 fi
 
-# --- 工数未入力アイテム抽出 ---
+# --- 工数未入力 Item 抽出 ---
 
 MISSING_EFFORT_ITEMS=$(echo "${ITEMS}" | jq '
   [.[] | select(.estimated_hours == null and .actual_hours == null) |
@@ -308,7 +308,7 @@ format_effort_markdown() {
     echo ""
     echo "- **Project:** ${PROJECT_TITLE} (#${PROJECT_NUMBER})"
     echo "- **実行日時:** ${EXECUTED_AT}"
-    echo "- **対象アイテム数:** ${TOTAL_COUNT} 件（工数入力済み: ${ITEMS_WITH_EFFORT_COUNT} 件、未入力: ${ITEMS_WITHOUT_EFFORT_COUNT} 件）"
+    echo "- **対象 Item 数:** ${TOTAL_COUNT} 件（工数入力済み: ${ITEMS_WITH_EFFORT_COUNT} 件、未入力: ${ITEMS_WITHOUT_EFFORT_COUNT} 件）"
     echo ""
     echo "---"
     echo ""
@@ -338,12 +338,12 @@ format_effort_markdown() {
     if [[ "${assignee_count}" -gt 0 ]]; then
       echo "## 担当者別工数"
       echo ""
-      echo "| 担当者 | アイテム数 | 見積もり(h) | 実績(h) | 乖離率 |"
+      echo "| 担当者 | Item 数 | 見積もり(h) | 実績(h) | 乖離率 |"
       echo "|---|---|---|---|---|"
       echo "${ASSIGNEE_EFFORT}" | jq -r '.[] | "| \(.assignee) | \(.count) | \(.estimated_hours) | \(.actual_hours) | \(if .variance_rate != null then (if .variance_rate >= 0 then "+\(.variance_rate)%" else "\(.variance_rate)%" end) else "-" end) |"'
       echo ""
 
-      echo "> **Note:** 複数担当者がアサインされたアイテムは、各担当者に同一工数が計上されます。担当者別の合計は全体合計と一致しない場合があります。"
+      echo "> **Note:** 複数担当者がアサインされた Item は、各担当者に同一工数が計上されます。担当者別の合計は全体合計と一致しない場合があります。"
       echo ""
 
       # Mermaid 円グラフ
@@ -364,18 +364,18 @@ format_effort_markdown() {
     if [[ "${status_count}" -gt 0 ]]; then
       echo "## ステータス別工数"
       echo ""
-      echo "| ステータス | アイテム数 | 見積もり(h) | 実績(h) | 消化率 |"
+      echo "| ステータス | Item 数 | 見積もり(h) | 実績(h) | 消化率 |"
       echo "|---|---|---|---|---|"
       echo "${STATUS_EFFORT}" | jq -r "${JQ_MD_ESCAPE}"'.[] | "| \(.status | md_escape) | \(.count) | \(.estimated_hours) | \(.actual_hours) | \(if .consumption_rate != null then "\(.consumption_rate)%" else "-" end) |"'
       echo ""
     fi
 
-    # 乖離アイテム
+    # 乖離 Item
     if [[ "${VARIANCE_ITEMS_COUNT}" -gt 0 ]]; then
       local md_row_filter="${JQ_MD_ESCAPE}"'
         "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(if (.assignees | length) > 0 then (.assignees | join(", ")) else "-" end) | \(.estimated_hours) | \(.actual_hours) | \(if .variance_rate >= 0 then "+\(.variance_rate)%" else "\(.variance_rate)%" end) |"'
 
-      echo "## 乖離アイテム（上位）"
+      echo "## 乖離 Item（上位）"
       echo ""
       echo "| # | タイトル | 担当者 | 見積もり(h) | 実績(h) | 乖離率 |"
       echo "|---|---|---|---|---|---|"
@@ -400,15 +400,15 @@ format_effort_markdown() {
       fi
     fi
 
-    # 工数未入力アイテム
+    # 工数未入力 Item
     if [[ "${MISSING_EFFORT_COUNT}" -gt 0 ]]; then
       local md_row_filter="${JQ_MD_ESCAPE}"'
         "| \(if .is_done then "**" else "" end)[#\(.number)](\(.url))\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\(.title | md_escape)\(if .is_done then "**" else "" end) | \(if .is_done then "**" else "" end)\((.status // "-") | md_escape)\(if .is_done then "**" else "" end) | \(if (.assignees | length) > 0 then (.assignees | join(", ") | md_escape) else "-" end) |"'
 
-      echo "## 工数未入力アイテム: ${MISSING_EFFORT_COUNT} 件"
+      echo "## 工数未入力 Item: ${MISSING_EFFORT_COUNT} 件"
       echo ""
       if [[ "${MISSING_EFFORT_DONE_COUNT}" -gt 0 ]]; then
-        echo "> **Warning:** Done ステータスで工数未入力のアイテムが ${MISSING_EFFORT_DONE_COUNT} 件あります（太字で表示）。"
+        echo "> **Warning:** Done ステータスで工数未入力の Item が ${MISSING_EFFORT_DONE_COUNT} 件あります（太字で表示）。"
         echo ""
       fi
       echo "| # | タイトル | ステータス | 担当者 |"
@@ -510,7 +510,7 @@ print_summary "Project" "${PROJECT_TITLE} (#${PROJECT_NUMBER})" \
   "形式" "${OUTPUT_FORMAT}" \
   "フィルタ(type)" "${ITEM_TYPE}" \
   "フィルタ(state)" "${ITEM_STATE}" \
-  "総アイテム数" "${TOTAL_COUNT} 件" \
+  "総 Item 数" "${TOTAL_COUNT} 件" \
   "工数入力済み" "${ITEMS_WITH_EFFORT_COUNT} 件" \
   "工数未入力" "${ITEMS_WITHOUT_EFFORT_COUNT} 件" \
   "見積もり工数" "${TOTAL_ESTIMATED} h" \

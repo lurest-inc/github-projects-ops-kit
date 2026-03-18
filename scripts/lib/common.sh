@@ -188,7 +188,7 @@ run_graphql_json() {
 #   $6 - 最大ページ数（省略または 0 で無制限）
 # 使用例:
 #   _on_page() { ALL_ITEMS+=$(echo "$1" | jq -r '...'); }
-#   run_graphql_paginated "${QUERY}" "アイテム取得" "${VARS}" \
+#   run_graphql_paginated "${QUERY}" "Item 取得" "${VARS}" \
 #     '.data.[($owner)].projectV2.items.pageInfo' _on_page 50
 run_graphql_paginated() {
   local query="$1"
@@ -280,7 +280,7 @@ JQ_STATUS_ORDER='def status_order(s): if s == "Backlog" then 0 elif s == "Todo" 
 should_include_issues() { [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "issues" ]]; }
 should_include_prs() { [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "prs" ]]; }
 
-# ITEM_TYPE と ITEM_STATE に基づいてアイテム JSON 配列を一括フィルタリングする
+# ITEM_TYPE と ITEM_STATE に基づいて Item JSON 配列を一括フィルタリングする
 # type フィルタと state フィルタを 1 回の jq 呼び出しで実行する
 # 標準入力から JSON 配列を受け取り、フィルタ後の JSON 配列を標準出力に返す
 # 使用例: ITEMS=$(echo "${ITEMS}" | filter_items)
@@ -314,12 +314,12 @@ get_file_extension() {
   esac
 }
 
-# Project の全アイテムをページネーション付きで取得する汎用関数
-# 成功時: PROJECT_TITLE をグローバルに設定し、正規化済みアイテム JSON 配列を標準出力に出力
+# Project の全 Item をページネーション付きで取得する汎用関数
+# 成功時: PROJECT_TITLE をグローバルに設定し、正規化済み Item JSON 配列を標準出力に出力
 # 失敗時: エラーメッセージを出力して return 1
 # 引数:
 #   $1 - GraphQL クエリテンプレート（__OWNER_FIELD__ プレースホルダーを含む）
-#   $2 - アイテム正規化用 jq フィルタ（$owner 変数で OWNER_QUERY_FIELD を参照可能）
+#   $2 - Item 正規化用 jq フィルタ（$owner 変数で OWNER_QUERY_FIELD を参照可能）
 #   $3 - ページネーション上限（省略時: 50）
 # 使用例:
 #   ITEMS=$(fetch_all_project_items "${QUERY_TEMPLATE}" "${NORMALIZE_FILTER}" 50)
@@ -365,7 +365,7 @@ fetch_all_project_items() {
     --argjson number "${PROJECT_NUMBER}" \
     '{login: $login, number: $number}')
 
-  if ! run_graphql_paginated "${query}" "Project アイテムの取得" "${variables_json}" \
+  if ! run_graphql_paginated "${query}" "Project Item の取得" "${variables_json}" \
     '.data.[($owner)].projectV2.items.pageInfo' _fapi_on_page "${max_pages}"; then
     return 1
   fi

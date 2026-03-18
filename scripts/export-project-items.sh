@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# GitHub Project アイテム エクスポートスクリプト
+# GitHub Project Item エクスポートスクリプト
 # https://mabubu0203.github.io/github-projects-starter-kit/scripts/export-project-items
 #
 # 環境変数:
@@ -9,8 +9,8 @@ set -euo pipefail
 #   PROJECT_OWNER  - Project の所有者
 #   PROJECT_NUMBER - 対象 Project の Number
 #   OUTPUT_FORMAT  - 出力形式（markdown / csv / tsv / json、デフォルト: markdown）
-#   ITEM_TYPE      - 対象アイテムの種別（all / issues / prs、デフォルト: all）
-#   ITEM_STATE     - 取得するアイテムの状態（open / closed / all、デフォルト: all）
+#   ITEM_TYPE      - 対象 Item の種別（all / issues / prs、デフォルト: all）
+#   ITEM_STATE     - 取得する Item の状態（open / closed / all、デフォルト: all）
 
 # --- 共通ライブラリ読み込み ---
 
@@ -33,7 +33,7 @@ format_markdown() {
     "| [#\(.number)](\(.url)) | \(.title | md_escape) | \(.state) | \(.repository) | \(.author) | \(.assignees | md_escape) | \(.labels | md_escape) | \(.created_at | split("T")[0]) | \(.updated_at | split("T")[0]) |"'
 
   {
-    echo "# Project アイテム一覧"
+    echo "# Project Item 一覧"
     echo ""
     echo "- **Project:** ${PROJECT_TITLE}"
     echo "- **Project Number:** ${PROJECT_NUMBER}"
@@ -74,10 +74,10 @@ format_tsv() {
   echo "${items}" | jq -r '.[] | [.type, (.number | tostring), .title, .url, .state, .repository, .author, .assignees, .labels, .created_at, .updated_at] | @tsv'
 }
 
-# --- アイテム取得 ---
+# --- Item 取得 ---
 
 echo ""
-echo "Project #${PROJECT_NUMBER} のアイテムを取得しています..."
+echo "Project #${PROJECT_NUMBER} の Item を取得しています..."
 PROJECT_TITLE=""
 
 EXPORT_QUERY_TEMPLATE=$(cat <<'GRAPHQL'
@@ -190,4 +190,4 @@ print_summary "Project" "${PROJECT_TITLE} (#${PROJECT_NUMBER})" \
   "PR" "${PR_COUNT} 件" "合計" "${TOTAL_COUNT} 件" "出力先" "${OUTPUT_FILE}"
 
 echo ""
-echo "::notice::Project アイテムのエクスポートが完了しました（${TOTAL_COUNT} 件、形式: ${OUTPUT_FORMAT}）。"
+echo "::notice::Project Item のエクスポートが完了しました（${TOTAL_COUNT} 件、形式: ${OUTPUT_FORMAT}）。"

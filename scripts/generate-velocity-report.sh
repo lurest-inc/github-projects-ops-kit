@@ -8,8 +8,8 @@ set -euo pipefail
 #   GH_TOKEN        - GitHub PAT（Projects 読み取り権限が必要）
 #   PROJECT_OWNER   - Project の所有者
 #   PROJECT_NUMBER  - 対象 Project の Number
-#   ITEM_TYPE       - 対象アイテムの種別（all / issues / prs、デフォルト: all）
-#   ITEM_STATE      - 対象アイテムの状態（open / closed / all、デフォルト: all）
+#   ITEM_TYPE       - 対象 Item の種別（all / issues / prs、デフォルト: all）
+#   ITEM_STATE      - 対象 Item の状態（open / closed / all、デフォルト: all）
 #   OUTPUT_FORMAT   - 出力形式（json / markdown / csv / tsv、デフォルト: json）
 
 # --- 共通ライブラリ読み込み ---
@@ -32,10 +32,10 @@ if ! [[ "${VELOCITY_WEEKS}" =~ ^[0-9]+$ ]] || [[ "${VELOCITY_WEEKS}" -lt 1 || "$
   exit 1
 fi
 
-# --- アイテム取得 ---
+# --- Item 取得 ---
 
 echo ""
-echo "Project #${PROJECT_NUMBER} のアイテムを取得しています..."
+echo "Project #${PROJECT_NUMBER} の Item を取得しています..."
 PROJECT_TITLE=""
 
 VELOCITY_QUERY_TEMPLATE=$(cat <<'GRAPHQL'
@@ -118,7 +118,7 @@ ITEMS=$(echo "${ITEMS}" | filter_items)
 TOTAL_COUNT=$(echo "${ITEMS}" | jq 'length')
 echo "  合計: ${TOTAL_COUNT} 件（フィルタ後）"
 
-# --- Done アイテムの抽出と集計期間の計算 ---
+# --- Done Item の抽出と集計期間の計算 ---
 
 echo ""
 echo "ベロシティ集計を実行しています..."
@@ -143,7 +143,7 @@ read -r PERIOD_START PERIOD_END < <(jq -rn \
 
 echo "  集計期間: ${PERIOD_START} 〜 ${PERIOD_END}（${VELOCITY_WEEKS} 週間）"
 
-# Done ステータスのアイテムを抽出し、集計期間内のものに絞り込み
+# Done ステータスの Item を抽出し、集計期間内のものに絞り込み
 DONE_ITEMS=$(echo "${ITEMS}" | jq --arg start "${PERIOD_START}" --arg end "${PERIOD_END}" '
   [.[] |
     select(.status == "Done") |
@@ -153,7 +153,7 @@ DONE_ITEMS=$(echo "${ITEMS}" | jq --arg start "${PERIOD_START}" --arg end "${PER
 ')
 
 DONE_COUNT=$(echo "${DONE_ITEMS}" | jq 'length')
-echo "  Done アイテム数（期間内）: ${DONE_COUNT} 件"
+echo "  Done Item 数（期間内）: ${DONE_COUNT} 件"
 
 # --- 週別ベロシティ集計 ---
 
@@ -180,7 +180,7 @@ WEEKLY_VELOCITY=$(jq -n \
       period_display: ($ws_short + "\u301c" + $we_short)
     }
   ) |
-  # 各週にマッチするアイテムを集計
+  # 各週にマッチする Item を集計
   map(
     . as $week |
     ($items | [.[] |
@@ -267,7 +267,7 @@ format_velocity_markdown() {
     echo "- **Project:** ${PROJECT_TITLE} (#${PROJECT_NUMBER})"
     echo "- **実行日時:** ${EXECUTED_AT}"
     echo "- **集計期間:** ${PERIOD_START} 〜 ${PERIOD_END}（${VELOCITY_WEEKS} 週間）"
-    echo "- **Done アイテム数:** ${DONE_COUNT} 件"
+    echo "- **Done Item 数:** ${DONE_COUNT} 件"
     echo "- **平均ベロシティ:** ${AVG_COUNT} 件/週"
     if [[ "${HAS_HOURS}" == "true" ]]; then
       echo "- **平均完了工数:** ${AVG_HOURS} h/週"
@@ -291,7 +291,7 @@ format_velocity_markdown() {
     echo ""
 
     # Mermaid チャート（完了数）
-    emit_mermaid_xychart "週別完了アイテム数" "完了数" "count" 2
+    emit_mermaid_xychart "週別完了 Item 数" "完了数" "count" 2
 
     # Mermaid チャート（完了工数）
     if [[ "${HAS_HOURS}" == "true" ]]; then

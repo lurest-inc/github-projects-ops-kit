@@ -8,8 +8,8 @@ set -euo pipefail
 #   GH_TOKEN       - GitHub PAT（Projects 読み取り権限が必要）
 #   PROJECT_OWNER  - Project の所有者
 #   PROJECT_NUMBER - 対象 Project の Number
-#   ITEM_TYPE      - 対象アイテムの種別（all / issues / prs、デフォルト: all）
-#   ITEM_STATE     - 対象アイテムの状態（open / closed / all、デフォルト: all）
+#   ITEM_TYPE      - 対象 Item の種別（all / issues / prs、デフォルト: all）
+#   ITEM_STATE     - 対象 Item の状態（open / closed / all、デフォルト: all）
 #   OUTPUT_FORMAT  - 出力形式（json / markdown / csv / tsv、デフォルト: json）
 
 # --- 共通ライブラリ読み込み ---
@@ -21,10 +21,10 @@ source "${SCRIPT_DIR}/lib/common.sh"
 
 validate_analysis_env
 
-# --- アイテム取得 ---
+# --- Item 取得 ---
 
 echo ""
-echo "Project #${PROJECT_NUMBER} のアイテムを取得しています..."
+echo "Project #${PROJECT_NUMBER} の Item を取得しています..."
 PROJECT_TITLE=""
 
 SUMMARY_QUERY_TEMPLATE=$(cat <<'GRAPHQL'
@@ -175,7 +175,7 @@ LABEL_SUMMARY=$(echo "${ITEMS}" | jq '
   | sort_by(-.count)
 ')
 
-# Field 集計（工数）・期日超過アイテムのフラグを 1 回の jq で判定
+# Field 集計（工数）・期日超過 Item のフラグを 1 回の jq で判定
 read -r HAS_EFFORT HAS_DUE_DATE < <(echo "${ITEMS}" | jq -r '[
   ([.[] | select(.estimated_hours != null or .actual_hours != null)] | length > 0),
   ([.[] | select(.due_date != null)] | length > 0)
@@ -232,7 +232,7 @@ format_summary_markdown() {
     echo ""
     echo "- **Project:** ${PROJECT_TITLE} (#${PROJECT_NUMBER})"
     echo "- **実行日時:** ${EXECUTED_AT}"
-    echo "- **総アイテム数:** ${TOTAL_COUNT} 件（Issue: ${ISSUE_COUNT}, PR: ${PR_COUNT}）"
+    echo "- **総 Item 数:** ${TOTAL_COUNT} 件（Issue: ${ISSUE_COUNT}, PR: ${PR_COUNT}）"
     echo ""
     echo "---"
     echo ""
@@ -250,7 +250,7 @@ format_summary_markdown() {
     has_nonzero=$(echo "${STATUS_SUMMARY}" | jq '[.[] | select(.count > 0)] | length')
     if [[ "${has_nonzero}" -gt 0 ]]; then
       echo '```mermaid'
-      echo 'pie title ステータス別アイテム分布'
+      echo 'pie title ステータス別 Item 分布'
       echo "${STATUS_SUMMARY}" | jq -r '.[] | select(.count > 0) | "    \"\(.status | gsub("\""; "\\\"") | gsub("\\\\"; "\\\\"))\" : \(.count)"'
       echo '```'
       echo ""
@@ -283,12 +283,12 @@ format_summary_markdown() {
       echo ""
     fi
 
-    # 期日超過アイテム
+    # 期日超過 Item
     if [[ "${HAS_DUE_DATE}" == "true" && "${OVERDUE_COUNT}" -gt 0 ]]; then
       local md_row_filter="${JQ_MD_ESCAPE}"'
         "| [#\(.number)](\(.url)) | \(.title | md_escape) | \((.status // \"-\") | md_escape) | \(if (.assignees | length) > 0 then (.assignees | join(\", \") | md_escape) else \"-\" end) | \(.due_date) | \(.days_overdue) |"'
 
-      echo "## 期日超過アイテム: ${OVERDUE_COUNT} 件"
+      echo "## 期日超過 Item: ${OVERDUE_COUNT} 件"
       echo ""
       echo "| # | タイトル | ステータス | 担当者 | 終了期日 | 超過日数 |"
       echo "|---|---------|-----------|--------|---------|---------|"
@@ -406,7 +406,7 @@ print_summary "Project" "${PROJECT_TITLE} (#${PROJECT_NUMBER})" \
   "形式" "${OUTPUT_FORMAT}" \
   "フィルタ(type)" "${ITEM_TYPE}" \
   "フィルタ(state)" "${ITEM_STATE}" \
-  "総アイテム数" "${TOTAL_COUNT} 件" \
+  "総 Item 数" "${TOTAL_COUNT} 件" \
   "Issue" "${ISSUE_COUNT} 件" \
   "PR" "${PR_COUNT} 件" \
   "期日超過" "${OVERDUE_COUNT} 件" \
