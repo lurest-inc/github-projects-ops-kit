@@ -35,7 +35,7 @@ jobs:
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         run: bash scripts/setup-project-status.sh
 
-      - name: カスタムフィールドを作成
+      - name: Field を作成
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         run: bash scripts/setup-project-fields.sh
 

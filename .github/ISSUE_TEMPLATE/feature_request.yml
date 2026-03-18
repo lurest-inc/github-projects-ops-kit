@@ -14,7 +14,7 @@ body:
     attributes:
       label: 概要
       description: リクエストする機能の概要を簡潔に記述してください
-      placeholder: 例）GitHub Project 作成時にカスタムフィールドを自動設定できるようにしたい
+      placeholder: 例）GitHub Project 作成時に Field を自動設定できるようにしたい
     validations:
       required: true
 
@@ -23,7 +23,7 @@ body:
     attributes:
       label: 背景・動機
       description: この機能が必要な理由や、現在困っていることを記述してください
-      placeholder: 例）毎回手動でカスタムフィールドを設定しており、手間がかかっている
+      placeholder: 例）毎回手動で Field を設定しており、手間がかかっている
     validations:
       required: true
 
@@ -32,7 +32,7 @@ body:
     attributes:
       label: 期待する動作
       description: 機能が実装された場合、どのように動作することを期待しますか
-      placeholder: 例）スクリプト実行時にカスタムフィールドの定義を渡すと、自動的に設定される
+      placeholder: 例）スクリプト実行時に Field の定義を渡すと、自動的に設定される
     validations:
       required: true
 

@@ -175,7 +175,7 @@ LABEL_SUMMARY=$(echo "${ITEMS}" | jq '
   | sort_by(-.count)
 ')
 
-# カスタムフィールド集計（工数）・期日超過アイテムのフラグを1回の jq で判定
+# Field 集計（工数）・期日超過アイテムのフラグを1回の jq で判定
 read -r HAS_EFFORT HAS_DUE_DATE < <(echo "${ITEMS}" | jq -r '[
   ([.[] | select(.estimated_hours != null or .actual_hours != null)] | length > 0),
   ([.[] | select(.due_date != null)] | length > 0)
