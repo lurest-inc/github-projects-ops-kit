@@ -48,7 +48,7 @@ Project に View を自動作成するスクリプトです。
 | `name` | string | ✅ | `View` の名前 |
 | `layout` | string | ✅ | `table` / `board` / `roadmap` |
 | `filter` | string | - | フィルタクエリ（例: `is:issue`, `is:open`） |
-| `visible_fields` | array of integers | - | 表示するFieldの ID 配列（`roadmap` レイアウトには非対応） |
+| `visible_fields` | array of integers | - | 表示する Field の ID 配列（`roadmap` レイアウトには非対応） |
 
 ```json
 [
@@ -135,7 +135,7 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 |-----------|---------|------|
 | `views(first: N)` | 100 | GraphQL API の 1 ページあたりの取得件数（`pageInfo` でページネーション対応） |
 
-## 🔄 使用Workflow
+## 🔄 使用 Workflow
 
 - [① GitHub Project 新規作成](../workflows/01-create-project)
 - [② GitHub Project 拡張](../workflows/02-extend-project)

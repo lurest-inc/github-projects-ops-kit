@@ -95,6 +95,6 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 |-----------|---------|------|
 | `projectsV2(first: N)` | 100 | 既存 `Project` 重複チェック用のページサイズ |
 
-## 🔄 使用Workflow
+## 🔄 使用 Workflow
 
 - [① GitHub Project 新規作成](../workflows/01-create-project)

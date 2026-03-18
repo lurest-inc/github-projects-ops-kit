@@ -1,6 +1,6 @@
 # ① 📝 GitHub Project 新規作成
 
-新しい `Project` を作成し、Field・Status・View を一括でセットアップします。
+新しい `Project` を作成し、 Field ・ Status ・ View を一括でセットアップします。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -65,7 +65,7 @@ flowchart TD
     E -- "失敗" --> G["workflow-summary-failure Job\n失敗サマリーを出力"]
 ```
 
-## 🔧 Workflow仕様
+## 🔧 Workflow 仕様
 
 ### ファイル
 
@@ -85,9 +85,9 @@ flowchart TD
 | `PROJECT_TITLE` | `inputs.project_title` | Project タイトル |
 | `PROJECT_VISIBILITY` | `inputs.visibility` | Project 公開範囲 |
 
-> **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。また、`project_number` が空の場合は後続の `extend-project` Jobもスキップされます。
+> **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、 PAT を使用するステップはスキップされます。また、`project_number` が空の場合は後続の `extend-project` Job もスキップされます。
 
-### Job構成
+### Job 構成
 
 ```
 .github/workflows/01-create-project.yml

@@ -1,4 +1,4 @@
-# ③ 🏷️ Issue Label一括追加
+# ③ 🏷️ Issue Label 一括追加
 
 指定 Repository に対して、設定ファイルで定義した Issue Label を一括作成します。
 既存 Label と同名の Label が存在する場合はスキップします。
@@ -40,7 +40,7 @@
 
 | パラメータ | 説明 | 必須 | タイプ | 例 |
 |------------|------|:----:|--------|-----|
-| `target_repo` | 対象Repository（owner/repo 形式） | ✅ | `string` | `myorg/myrepo` |
+| `target_repo` | 対象 Repository（owner/repo 形式） | ✅ | `string` | `myorg/myrepo` |
 
 > **Note:** 既存 Label と同名の Label が存在する場合はスキップされます。定義ファイルに含まれない既存 Label は削除されません。追加のみの安全設計です。
 
@@ -54,7 +54,7 @@ flowchart TD
     C -- "失敗" --> E["workflow-summary-failure Job\n失敗サマリーを出力"]
 ```
 
-## 🔧 Workflow仕様
+## 🔧 Workflow 仕様
 
 ### ファイル
 
@@ -72,9 +72,9 @@ flowchart TD
 | `TARGET_REPO` | `inputs.target_repo` | 対象 Repository  |
 | `PROJECT_PAT` | `secrets.PROJECT_PAT` | PAT 形式検証用（`ghp_` または `github_pat_` で始まるか検証） |
 
-> **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
+> **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、 PAT を使用するステップはスキップされます。
 
-### Job構成
+### Job 構成
 
 ```
 .github/workflows/03-setup-repository-labels.yml
@@ -88,4 +88,4 @@ flowchart TD
 
 ## 📜 関連スクリプト
 
-- [setup-repository-labels.sh](../scripts/setup-repository-labels) — Issue Label一括作成スクリプト
+- [setup-repository-labels.sh](../scripts/setup-repository-labels) — Issue Label 一括作成スクリプト

@@ -125,7 +125,7 @@ scripts/
       └── .github/actions/workflow-summary   # 成功サマリー出力
 ```
 
-### ③ Issue Label一括追加
+### ③ Issue Label 一括追加
 
 ```
 03-setup-repository-labels.yml
@@ -185,7 +185,7 @@ scripts/
 | [add-items-to-project.sh](scripts/add-items-to-project) | 指定 Repository の Issue/PR を Project に一括追加する。追加済み Item は自動スキップ |
 | [export-project-items.sh](scripts/export-project-items) | 指定 Project の Issue/PR 一覧を取得し、指定形式でエクスポートする |
 | [setup-repository-labels.sh](scripts/setup-repository-labels) | 指定 Repository に対して、設定ファイルで定義した Issue Label を一括作成する |
-| [detect-stale-items.sh](scripts/detect-stale-items) | 指定 Project の Item を走査し、Status 別の閾値に基づいて滞留 Item を検知する |
-| [generate-summary-report.sh](scripts/generate-summary-report) | 指定 Project の Item を Status 別・担当者別・Label 別に集計しサマリーレポートを生成する |
+| [detect-stale-items.sh](scripts/detect-stale-items) | 指定 Project の Item を走査し、 Status 別の閾値に基づいて滞留 Item を検知する |
+| [generate-summary-report.sh](scripts/generate-summary-report) | 指定 Project の Item を Status 別・担当者別・ Label 別に集計しサマリーレポートを生成する |
 | [generate-effort-report.sh](scripts/generate-effort-report) | 指定 Project の見積もり工数・実績工数を多角的に集計・分析しレポートを生成する |
 | [generate-velocity-report.sh](scripts/generate-velocity-report) | 指定 Project の Done Item を週別に集計し、ベロシティレポートを生成する |

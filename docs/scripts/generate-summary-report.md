@@ -1,7 +1,7 @@
 # 📜 generate-summary-report.sh
 
-指定した GitHub Project のItemを走査し、Status 別・担当者別・Label 別の集計レポートを生成するスクリプトです。
-カスタム Field （工数・期日）が設定されている場合は、工数サマリーと期日超過Itemの集計も行います。
+指定した GitHub Project の Item を走査し、 Status 別・担当者別・ Label 別の集計レポートを生成するスクリプトです。
+カスタム Field （工数・期日）が設定されている場合は、工数サマリーと期日超過 Item の集計も行います。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -29,8 +29,8 @@
 | `GH_TOKEN` | GitHub PAT（Projects 読み取り権限が必要） | ✅ |
 | `PROJECT_OWNER` | Project の所有者 | ✅ |
 | `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
-| `ITEM_TYPE` | 対象Itemの種別（`all` / `issues` / `prs`、デフォルト: `all`） | — |
-| `ITEM_STATE` | 対象Itemの状態（`open` / `closed` / `all`、デフォルト: `all`） | — |
+| `ITEM_TYPE` | 対象 Item の種別（`all` / `issues` / `prs`、デフォルト: `all`） | — |
+| `ITEM_STATE` | 対象 Item の状態（`open` / `closed` / `all`、デフォルト: `all`） | — |
 | `OUTPUT_FORMAT` | 出力形式（`json` / `markdown` / `csv` / `tsv`、デフォルト: `json`） | — |
 
 ## 📊 集計項目
@@ -39,19 +39,19 @@
 
 | # | 集計項目 | 説明 |
 |---|---------|------|
-| 1 | **概要サマリー** | 総Item数、Issue/PR 別件数、OPEN/CLOSED 別件数 |
-| 2 | **Status別件数** | 各Status（Backlog〜Done）の件数と割合 |
-| 3 | **担当者別件数** | 各担当者のItem数（未アサイン含む） |
-| 4 | **Label別件数** | 各LabelのItem数（Labelなし含む） |
+| 1 | **概要サマリー** | 総 Item 数、 Issue/PR 別件数、 OPEN/CLOSED 別件数 |
+| 2 | **Status 別件数** | 各 Status（Backlog 〜 Done）の件数と割合 |
+| 3 | **担当者別件数** | 各担当者の Item 数（未アサイン含む） |
+| 4 | **Label 別件数** | 各 Label の Item 数（Label なし含む） |
 
-### オプション項目（カスタムField使用時）
+### オプション項目（カスタム Field 使用時）
 
 | # | 集計項目 | 説明 |
 |---|---------|------|
-| 5 | **工数サマリー** | Status別の見積もり工数合計・実績工数合計 |
-| 6 | **期日超過Item** | 終了期日を過ぎた未完了Itemの一覧 |
+| 5 | **工数サマリー** | Status 別の見積もり工数合計・実績工数合計 |
+| 6 | **期日超過 Item** | 終了期日を過ぎた未完了 Item の一覧 |
 
-> **Note:** カスタムFieldが設定されていないプロジェクトでは、オプション項目のセクションは自動的に非表示となります。
+> **Note:** カスタム Field が設定されていないプロジェクトでは、オプション項目のセクションは自動的に非表示となります。
 
 ## 📊 処理フロー
 
@@ -82,24 +82,24 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
-| Item取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全Itemをページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、Issue・PR の基本情報に加え、Status・見積もり工数(h)・実績工数(h)・終了期日のField値を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
+| Item 取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全 Item をページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、 Issue ・ PR の基本情報に加え、 Status ・見積もり工数(h)・実績工数(h)・終了期日の Field 値を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
 | type / state フィルタリング | `ITEM_TYPE` による種別フィルタ、`ITEM_STATE` による状態フィルタを1回の jq 呼び出しで一括適用 | `filter_items` |
-| Status別集計 | 各Statusの件数と割合を計算 | `jq` |
-| 担当者別集計 | 各担当者のItem数と In Progress / In Review の内訳を集計。未アサインItemも含む | `jq` |
-| Label別集計 | 各LabelのItem数を集計。LabelなしItemも含む | `jq` |
-| 工数集計 | Status別の見積もり工数合計・実績工数合計を算出（カスタムFieldが設定されている場合のみ） | `jq` |
-| 期日超過判定 | 終了期日を過ぎた未完了（Done 以外の）Itemを検出し超過日数を計算（カスタムFieldが設定されている場合のみ） | `jq` |
-| レポート出力 | `OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。Markdown 形式では Mermaid 円グラフを含む | `jq` + bash |
+| Status 別集計 | 各 Status の件数と割合を計算 | `jq` |
+| 担当者別集計 | 各担当者の Item 数と In Progress / In Review の内訳を集計。未アサイン Item も含む | `jq` |
+| Label 別集計 | 各 Label の Item 数を集計。 Label なし Item も含む | `jq` |
+| 工数集計 | Status 別の見積もり工数合計・実績工数合計を算出（カスタム Field が設定されている場合のみ） | `jq` |
+| 期日超過判定 | 終了期日を過ぎた未完了（Done 以外の）Item を検出し超過日数を計算（カスタム Field が設定されている場合のみ） | `jq` |
+| レポート出力 | `OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。 Markdown 形式では Mermaid 円グラフを含む | `jq` + bash |
 | Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記。`OUTPUT_FORMAT=markdown` の場合は出力ファイルを再利用 | — |
 
 ## 📚 API リファレンス
 
 | API / コマンド | 用途 | リファレンス |
 |---------------|------|-------------|
-| `projectV2.items` (GraphQL) | Project Itemの取得 | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
-| `ProjectV2ItemFieldSingleSelectValue` (GraphQL) | Status Field値の取得 | [ProjectV2ItemFieldSingleSelectValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfieldsingleselect) |
-| `ProjectV2ItemFieldNumberValue` (GraphQL) | 数値Field値の取得 | [ProjectV2ItemFieldNumberValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfieldnumbervalue) |
-| `ProjectV2ItemFieldDateValue` (GraphQL) | 日付Field値の取得 | [ProjectV2ItemFieldDateValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfielddatevalue) |
+| `projectV2.items` (GraphQL) | Project Item の取得 | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
+| `ProjectV2ItemFieldSingleSelectValue` (GraphQL) | Status Field 値の取得 | [ProjectV2ItemFieldSingleSelectValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfieldsingleselect) |
+| `ProjectV2ItemFieldNumberValue` (GraphQL) | 数値 Field 値の取得 | [ProjectV2ItemFieldNumberValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfieldnumbervalue) |
+| `ProjectV2ItemFieldDateValue` (GraphQL) | 日付 Field 値の取得 | [ProjectV2ItemFieldDateValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfielddatevalue) |
 | GraphQL ページネーション | カーソルベースのページ送り | [Using pagination in the GraphQL API](https://docs.github.com/en/graphql/guides/using-pagination-in-the-graphql-api) |
 
 ### API バージョン要件
@@ -112,10 +112,10 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 |-----------|---------|------|
 | `items(first: N)` | 100 | 1ページあたりの取得件数 |
 | `max_pages` | 50 | ページネーション上限（最大 5,000 件まで取得可能） |
-| `fieldValues(first: N)` | 20 | 1ItemあたりのField値取得数 |
-| `assignees(first: N)` | 100 | 1Itemあたりのアサイン取得数 |
-| `labels(first: N)` | 100 | 1ItemあたりのLabel取得数 |
+| `fieldValues(first: N)` | 20 | 1Item あたりの Field 値取得数 |
+| `assignees(first: N)` | 100 | 1Item あたりのアサイン取得数 |
+| `labels(first: N)` | 100 | 1Item あたりの Label 取得数 |
 
-## 🔄 使用Workflow
+## 🔄 使用 Workflow
 
 - [⑤ 統合プロジェクト分析](../workflows/05-analyze-project)

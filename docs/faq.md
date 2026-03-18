@@ -2,7 +2,7 @@
 
 Workflow 利用時につまづきやすいポイントをまとめています。
 
-> **ヒント:** トークンの権限設定については [認証・トークンガイド](guide/auth-tokens)、入力値の確認方法については [入力値ガイド](guide/input-values)、カンバン運用については [運用ルール](guide/kanban-rules)、Label運用については [Label運用ルール](guide/label-rules) をご覧ください。
+> **ヒント:** トークンの権限設定については [認証・トークンガイド](guide/auth-tokens)、入力値の確認方法については [入力値ガイド](guide/input-values)、カンバン運用については [運用ルール](guide/kanban-rules)、 Label 運用については [Label 運用ルール](guide/label-rules) をご覧ください。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -43,7 +43,7 @@ A. PAT の権限設定が不足している可能性があります。
 
 ## 💡 Q3. 既存の Project に対して Workflow ① を実行してしまいました
 
-A. Workflow ① は新規 Project を作成するものです。既存 Project に Field や Status を追加したい場合は、Workflow ②（[GitHub Project 拡張](workflows/02-extend-project)）を使用してください。
+A. Workflow ① は新規 Project を作成するものです。既存 Project に Field や Status を追加したい場合は、 Workflow ②（[GitHub Project 拡張](workflows/02-extend-project)）を使用してください。
 
 > **Note:** Workflow ① を実行した場合、新しい Project が別途作成されます。不要な場合は GitHub 上で手動削除してください。
 

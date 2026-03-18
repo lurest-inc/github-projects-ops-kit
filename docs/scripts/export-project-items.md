@@ -30,8 +30,8 @@ DraftIssue は出力対象外となります。
 | `PROJECT_OWNER` | Project の所有者 | ✅ |
 | `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
 | `OUTPUT_FORMAT` | 出力形式（`markdown`/`csv`/`tsv`/`json`） | ❌（デフォルト: `markdown`） |
-| `ITEM_TYPE` | 対象Itemの種別（`all`/`issues`/`prs`） | ❌（デフォルト: `all`） |
-| `ITEM_STATE` | 取得するItemの状態（`open`/`closed`/`all`） | ❌（デフォルト: `all`） |
+| `ITEM_TYPE` | 対象 Item の種別（`all`/`issues`/`prs`） | ❌（デフォルト: `all`） |
+| `ITEM_STATE` | 取得する Item の状態（`open`/`closed`/`all`） | ❌（デフォルト: `all`） |
 
 ## 📊 処理フロー
 
@@ -60,9 +60,9 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
-| Item取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全Itemをページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、Issue・PR の `number`・`title`・`url`・`state`・`author`・`assignees`・`labels` 等を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
+| Item 取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全 Item をページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、 Issue ・ PR の `number`・`title`・`url`・`state`・`author`・`assignees`・`labels` 等を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
 | type / state フィルタリング | `ITEM_TYPE` による種別フィルタ、`ITEM_STATE` による状態フィルタ（`closed` は `CLOSED` + `MERGED` を含む）を1回の jq 呼び出しで一括適用 | `filter_items` |
-| Markdown 出力 | Issue と PR を別セクションに分け、テーブル形式で出力。タイトル・Label・アサイン内の Markdown 特殊文字をエスケープ。エスケープには共通ライブラリの `JQ_MD_ESCAPE` を使用 | `format_markdown` 関数 |
+| Markdown 出力 | Issue と PR を別セクションに分け、テーブル形式で出力。タイトル・ Label ・アサイン内の Markdown 特殊文字をエスケープ。エスケープには共通ライブラリの `JQ_MD_ESCAPE` を使用 | `format_markdown` 関数 |
 | CSV / TSV 出力 | jq の `@csv` / `@tsv` フィルタで変換 | `format_csv` / `format_tsv` 関数 |
 | JSON 出力 | jq で整形して出力 | `jq '.'` |
 
@@ -70,7 +70,7 @@ flowchart TD
 
 | API / コマンド | 用途 | リファレンス |
 |---------------|------|-------------|
-| `projectV2.items` (GraphQL) | Project Itemの取得 | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
+| `projectV2.items` (GraphQL) | Project Item の取得 | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
 | GraphQL ページネーション | カーソルベースのページ送り | [Using pagination in the GraphQL API](https://docs.github.com/en/graphql/guides/using-pagination-in-the-graphql-api) |
 
 ### API バージョン要件
@@ -93,6 +93,6 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 | `tsv` | なし | タブ → `\t`, 改行 → `\n`, `\` → `\\` | jq `@tsv` により自動処理 |
 | `json` | `"` で囲む | JSON 標準のエスケープ | jq により自動処理 |
 
-## 🔄 使用Workflow
+## 🔄 使用 Workflow
 
 - [⑤ 統合プロジェクト分析](../workflows/05-analyze-project)（`report_types: export`）

@@ -1,6 +1,6 @@
 # ② 🔧 GitHub Project 拡張
 
-既存の Project に Field・Status・View を追加します。
+既存の Project に Field ・ Status ・ View を追加します。
 [① GitHub Project 新規作成](01-create-project) を実行していない既存 Project 向けです。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -52,7 +52,7 @@ flowchart TD
     C -- "失敗" --> E["workflow-summary-failure Job\n失敗サマリーを出力"]
 ```
 
-## 🔧 Workflow仕様
+## 🔧 Workflow 仕様
 
 ### ファイル
 
@@ -71,9 +71,9 @@ flowchart TD
 | `PROJECT_NUMBER` | `inputs.project_number` | 対象 Project Number |
 | `PROJECT_PAT` | `secrets.PROJECT_PAT` | PAT 形式検証用（`ghp_` または `github_pat_` で始まるか検証） |
 
-> **Note:** 環境変数は Reusable Workflow `_reusable-extend-project.yml` 内で設定されます。`PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
+> **Note:** 環境変数は Reusable Workflow `_reusable-extend-project.yml` 内で設定されます。`PROJECT_PAT` が未設定または無効な形式の場合、 PAT を使用するステップはスキップされます。
 
-### Job構成
+### Job 構成
 
 ```
 .github/workflows/02-extend-project.yml

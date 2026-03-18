@@ -46,7 +46,7 @@ Project に Repository の `Issue`/`PR` を一括追加します。
 | `item_state` | 取得する Item の状態 | ✅ | `choice` | `open`（デフォルト） |
 | `item_label` | 絞り込み Label（指定 Label のみ追加） | - | `string` | `bug` |
 
-### Item種別
+### Item 種別
 
 | 選択肢 | 説明 |
 |--------|------|
@@ -54,7 +54,7 @@ Project に Repository の `Issue`/`PR` を一括追加します。
 | `issues` | `Issue` のみ |
 | `prs` | `Pull Request` のみ |
 
-### Item状態
+### Item 状態
 
 | 選択肢 | 説明 |
 |--------|------|
@@ -62,7 +62,7 @@ Project に Repository の `Issue`/`PR` を一括追加します。
 | `closed` | クローズ状態のもの（`CLOSED` + `MERGED` を含む） |
 | `all` | すべての状態 |
 
-> **Note:** 既に Project に追加済みのItemは自動的にスキップされます。
+> **Note:** 既に Project に追加済みの Item は自動的にスキップされます。
 > **Note:** Repository と Project のリンクは自動的に行われます。既にリンク済みの場合はスキップされます。
 
 ## 📊 処理フロー
@@ -76,7 +76,7 @@ flowchart TD
     C -- "失敗" --> E["workflow-summary-failure Job\n失敗サマリーを出力"]
 ```
 
-## 🔧 Workflow仕様
+## 🔧 Workflow 仕様
 
 ### ファイル
 
@@ -99,9 +99,9 @@ flowchart TD
 | `ITEM_STATE` | `inputs.item_state` | Item 状態フィルタ |
 | `ITEM_LABEL` | `inputs.item_label` | Label フィルタ |
 
-> **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、PAT を使用するステップはスキップされます。
+> **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、 PAT を使用するステップはスキップされます。
 
-### Job構成
+### Job 構成
 
 ```
 .github/workflows/04-add-items-to-project.yml

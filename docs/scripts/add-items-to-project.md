@@ -1,6 +1,6 @@
 # 📜 add-items-to-project.sh
 
-Repositoryの `Issue`/`PR` を `Project` に一括追加するスクリプトです。
+Repository の `Issue`/`PR` を `Project` に一括追加するスクリプトです。
 既に `Project` に追加済みの Item は自動的にスキップされます。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -27,10 +27,10 @@ Repositoryの `Issue`/`PR` を `Project` に一括追加するスクリプトで
 | `GH_TOKEN` | GitHub PAT（Projects 操作権限が必要） | ✅ |
 | `PROJECT_OWNER` | Project の所有者 | ✅ |
 | `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
-| `TARGET_REPO` | 対象Repository（owner/repo 形式） | ✅ |
-| `ITEM_TYPE` | 対象Itemの種別（`all`/`issues`/`prs`） | ❌（デフォルト: `all`） |
-| `ITEM_STATE` | 取得するItemの状態（`open`/`closed`/`all`） | ❌（デフォルト: `open`） |
-| `ITEM_LABEL` | 絞り込みLabel | ❌ |
+| `TARGET_REPO` | 対象 Repository（owner/repo 形式） | ✅ |
+| `ITEM_TYPE` | 対象 Item の種別（`all`/`issues`/`prs`） | ❌（デフォルト: `all`） |
+| `ITEM_STATE` | 取得する Item の状態（`open`/`closed`/`all`） | ❌（デフォルト: `open`） |
+| `ITEM_LABEL` | 絞り込み Label | ❌ |
 
 ## 📊 処理フロー
 
@@ -72,10 +72,10 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別 | `gh api users/{owner}` |
-| `Status` Field取得 | GraphQL で `Project ID`・`Status Field ID`・各 Status の `Option ID` を一括抽出 | `gh api graphql` — `projectV2.fields` |
+| `Status` Field 取得 | GraphQL で `Project ID`・`Status Field ID`・各 Status の `Option ID` を一括抽出 | `gh api graphql` — `projectV2.fields` |
 | 既存 Item 取得 | GraphQL クエリで Project に紐づく全 Item の URL をページネーション付きで取得。重複防止に使用 | `gh api graphql` — `projectV2.items(first: 100)` |
-| Item 取得・追加 | `fetch_and_add_items` 関数で `Issue` / `PR` を共通処理。`ITEM_STATE`・`ITEM_LABEL` で絞り込んで一覧を取得し、重複チェック・追加・Status設定を実行（`Issue` / `PR` 各種別ごとに最大 100 件、1件ごとに 1秒の sleep） | `gh issue list` / `gh pr list`・`gh project item-add`・`updateProjectV2ItemFieldValue` |
-| Status設定 | 追加した Item に Status を自動付与。`open → Backlog、closed/merged → Done` | `gh api graphql` — `updateProjectV2ItemFieldValue` |
+| Item 取得・追加 | `fetch_and_add_items` 関数で `Issue` / `PR` を共通処理。`ITEM_STATE`・`ITEM_LABEL` で絞り込んで一覧を取得し、重複チェック・追加・ Status 設定を実行（`Issue` / `PR` 各種別ごとに最大 100 件、1件ごとに 1秒の sleep） | `gh issue list` / `gh pr list`・`gh project item-add`・`updateProjectV2ItemFieldValue` |
+| Status 設定 | 追加した Item に Status を自動付与。`open → Backlog、closed/merged → Done` | `gh api graphql` — `updateProjectV2ItemFieldValue` |
 | サマリー出力 | `Issue`・`PR` それぞれの追加・スキップ・失敗件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
 
 ## 📚 API リファレンス
@@ -87,7 +87,7 @@ flowchart TD
 | `gh pr list` | `PR` 一覧の取得 | [gh pr list](https://cli.github.com/manual/gh_pr_list) |
 | `gh project item-add` | Project へ Item の追加 | [gh project item-add](https://cli.github.com/manual/gh_project_item-add) |
 | `projectV2.fields` (GraphQL) | `Status Field ID`・`Option ID` の取得 | [ProjectV2SingleSelectField](https://docs.github.com/en/graphql/reference/objects#projectv2singleselectfield) |
-| `updateProjectV2ItemFieldValue` (GraphQL) | ItemのStatus設定 | [updateProjectV2ItemFieldValue](https://docs.github.com/en/graphql/reference/mutations#updateprojectv2itemfieldvalue) |
+| `updateProjectV2ItemFieldValue` (GraphQL) | Item の Status 設定 | [updateProjectV2ItemFieldValue](https://docs.github.com/en/graphql/reference/mutations#updateprojectv2itemfieldvalue) |
 
 ### API バージョン要件
 
@@ -97,10 +97,10 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 
 | パラメータ | 現在の値 | 備考 |
 |-----------|---------|------|
-| `items(first: N)` | 100 | 既存Item取得のページサイズ |
+| `items(first: N)` | 100 | 既存 Item 取得のページサイズ |
 | `--limit` | 100 | `gh issue list` / `gh pr list` の最大取得件数 |
-| `sleep` | 1秒 | Item追加間のレート制限回避待機時間 |
+| `sleep` | 1秒 | Item 追加間のレート制限回避待機時間 |
 
-## 🔄 使用Workflow
+## 🔄 使用 Workflow
 
 - [④ Issue/PR 一括紐付け](../workflows/04-add-items-to-project)

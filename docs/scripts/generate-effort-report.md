@@ -1,7 +1,7 @@
 # 📜 generate-effort-report.sh
 
-指定した GitHub Project のItemを走査し、見積もり工数・実績工数の多角的な集計・分析レポートを生成するスクリプトです。
-担当者別・Status 別の工数集計、乖離分析、リードタイム分析、工数未入力 Item の抽出を行います。
+指定した GitHub Project の Item を走査し、見積もり工数・実績工数の多角的な集計・分析レポートを生成するスクリプトです。
+担当者別・ Status 別の工数集計、乖離分析、リードタイム分析、工数未入力 Item の抽出を行います。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -31,16 +31,16 @@
 | `GH_TOKEN` | GitHub PAT（Projects 読み取り権限が必要） | ✅ |
 | `PROJECT_OWNER` | Project の所有者 | ✅ |
 | `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
-| `ITEM_TYPE` | 対象Itemの種別（`all` / `issues` / `prs`、デフォルト: `all`） | — |
-| `ITEM_STATE` | 対象Itemの状態（`open` / `closed` / `all`、デフォルト: `all`） | — |
+| `ITEM_TYPE` | 対象 Item の種別（`all` / `issues` / `prs`、デフォルト: `all`） | — |
+| `ITEM_STATE` | 対象 Item の状態（`open` / `closed` / `all`、デフォルト: `all`） | — |
 | `OUTPUT_FORMAT` | 出力形式（`json` / `markdown` / `csv` / `tsv`、デフォルト: `json`） | — |
 
 ## 📊 スクリプト内定数
 
 | 定数 | 値 | 説明 |
 |------|---|------|
-| `VARIANCE_THRESHOLD` | `10` | 乖離Item一覧の表示閾値（乖離率の絶対値が N% 以上） |
-| `VARIANCE_TOP_N` | `10` | 乖離Item一覧の最大表示件数 |
+| `VARIANCE_THRESHOLD` | `10` | 乖離 Item 一覧の表示閾値（乖離率の絶対値が N% 以上） |
+| `VARIANCE_TOP_N` | `10` | 乖離 Item 一覧の最大表示件数 |
 
 ## 📊 集計項目
 
@@ -49,18 +49,18 @@
 | # | 集計項目 | 説明 |
 |---|---------|------|
 | 1 | **全体サマリー** | 総見積もり工数、総実績工数、全体乖離率、工数入力率 |
-| 2 | **担当者別工数** | 担当者ごとの見積もり・実績工数合計、乖離率、Item数 |
-| 3 | **Status別工数** | Statusごとの見積もり・実績工数合計、消化率 |
-| 4 | **乖離Item** | 見積もりと実績の乖離が大きいItem（閾値 10% 以上、上位 10 件） |
-| 5 | **工数未入力Item** | 見積もり・実績ともに未入力のItem一覧（Done Statusは太字で強調） |
+| 2 | **担当者別工数** | 担当者ごとの見積もり・実績工数合計、乖離率、 Item 数 |
+| 3 | **Status 別工数** | Status ごとの見積もり・実績工数合計、消化率 |
+| 4 | **乖離 Item** | 見積もりと実績の乖離が大きい Item（閾値 10% 以上、上位 10 件） |
+| 5 | **工数未入力 Item** | 見積もり・実績ともに未入力の Item 一覧（Done Status は太字で強調） |
 
-### オプション項目（日付Field使用時）
+### オプション項目（日付 Field 使用時）
 
 | # | 集計項目 | 説明 |
 |---|---------|------|
 | 6 | **リードタイム分析** | 計画・実績リードタイム、乖離日数、日あたり工数（開始実績・終了実績がある場合のみ） |
 
-> **Note:** 日付Fieldが設定されていないプロジェクトでは、リードタイム分析は自動的に非表示となります。
+> **Note:** 日付 Field が設定されていないプロジェクトでは、リードタイム分析は自動的に非表示となります。
 
 ## 📊 処理フロー
 
@@ -92,25 +92,25 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
-| Item取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全Itemをページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、Issue・PR の基本情報に加え、Status・見積もり工数(h)・実績工数(h)・終了期日・開始予定・終了予定・開始実績・終了実績のField値を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
+| Item 取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全 Item をページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、 Issue ・ PR の基本情報に加え、 Status ・見積もり工数(h)・実績工数(h)・終了期日・開始予定・終了予定・開始実績・終了実績の Field 値を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
 | type / state フィルタリング | `ITEM_TYPE` による種別フィルタ、`ITEM_STATE` による状態フィルタを1回の jq 呼び出しで一括適用 | `filter_items` |
 | 全体サマリー | 総見積もり工数・総実績工数・全体乖離率・工数入力率を算出 | `jq` + `awk` |
-| 担当者別集計 | 担当者ごとの見積もり・実績工数合計・乖離率を算出。複数担当者のItemは各担当者に同一工数を計上 | `jq` |
-| Status別集計 | Statusごとの見積もり・実績工数合計を算出。Done Statusの消化率を計算 | `jq` |
-| 乖離Item抽出 | 乖離率の絶対値が閾値以上のItemを抽出し、乖離率の絶対値で降順ソート | `jq` |
+| 担当者別集計 | 担当者ごとの見積もり・実績工数合計・乖離率を算出。複数担当者の Item は各担当者に同一工数を計上 | `jq` |
+| Status 別集計 | Status ごとの見積もり・実績工数合計を算出。 Done Status の消化率を計算 | `jq` |
+| 乖離 Item 抽出 | 乖離率の絶対値が閾値以上の Item を抽出し、乖離率の絶対値で降順ソート | `jq` |
 | リードタイム分析 | 開始実績・終了実績がある場合にリードタイム・日あたり工数を算出（条件付き） | `jq` |
-| 工数未入力Item抽出 | 見積もり・実績ともに未入力のItemを抽出。Done StatusのItemを優先表示 | `jq` |
-| レポート出力 | `OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。Markdown 形式では Mermaid 円グラフを含む | `jq` + bash |
+| 工数未入力 Item 抽出 | 見積もり・実績ともに未入力の Item を抽出。 Done Status の Item を優先表示 | `jq` |
+| レポート出力 | `OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。 Markdown 形式では Mermaid 円グラフを含む | `jq` + bash |
 | Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記。`OUTPUT_FORMAT=markdown` の場合は出力ファイルを再利用 | — |
 
 ## 📚 API リファレンス
 
 | API / コマンド | 用途 | リファレンス |
 |---------------|------|-------------|
-| `projectV2.items` (GraphQL) | Project Itemの取得 | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
-| `ProjectV2ItemFieldSingleSelectValue` (GraphQL) | Status Field値の取得 | [ProjectV2ItemFieldSingleSelectValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfieldsingleselect) |
-| `ProjectV2ItemFieldNumberValue` (GraphQL) | 数値Field値の取得 | [ProjectV2ItemFieldNumberValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfieldnumbervalue) |
-| `ProjectV2ItemFieldDateValue` (GraphQL) | 日付Field値の取得 | [ProjectV2ItemFieldDateValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfielddatevalue) |
+| `projectV2.items` (GraphQL) | Project Item の取得 | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
+| `ProjectV2ItemFieldSingleSelectValue` (GraphQL) | Status Field 値の取得 | [ProjectV2ItemFieldSingleSelectValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfieldsingleselect) |
+| `ProjectV2ItemFieldNumberValue` (GraphQL) | 数値 Field 値の取得 | [ProjectV2ItemFieldNumberValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfieldnumbervalue) |
+| `ProjectV2ItemFieldDateValue` (GraphQL) | 日付 Field 値の取得 | [ProjectV2ItemFieldDateValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfielddatevalue) |
 | GraphQL ページネーション | カーソルベースのページ送り | [Using pagination in the GraphQL API](https://docs.github.com/en/graphql/guides/using-pagination-in-the-graphql-api) |
 
 ### API バージョン要件
@@ -123,10 +123,10 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 |-----------|---------|------|
 | `items(first: N)` | 100 | 1ページあたりの取得件数 |
 | `max_pages` | 50 | ページネーション上限（最大 5,000 件まで取得可能） |
-| `fieldValues(first: N)` | 20 | 1ItemあたりのField値取得数 |
-| `assignees(first: N)` | 100 | 1Itemあたりのアサイン取得数 |
-| `labels(first: N)` | 100 | 1ItemあたりのLabel取得数 |
+| `fieldValues(first: N)` | 20 | 1Item あたりの Field 値取得数 |
+| `assignees(first: N)` | 100 | 1Item あたりのアサイン取得数 |
+| `labels(first: N)` | 100 | 1Item あたりの Label 取得数 |
 
-## 🔄 使用Workflow
+## 🔄 使用 Workflow
 
 - [⑤ 統合プロジェクト分析](../workflows/05-analyze-project)

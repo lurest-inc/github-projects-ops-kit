@@ -1,7 +1,7 @@
 # 📜 detect-stale-items.sh
 
-指定した GitHub Project の Item を走査し、Status 別の閾値に基づいて滞留 Item を検知するスクリプトです。
-DraftIssue、Done / Backlog Status、除外 Label 付き Item は検知対象外となります。
+指定した GitHub Project の Item を走査し、 Status 別の閾値に基づいて滞留 Item を検知するスクリプトです。
+DraftIssue 、 Done / Backlog Status 、除外 Label 付き Item は検知対象外となります。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -29,8 +29,8 @@ DraftIssue、Done / Backlog Status、除外 Label 付き Item は検知対象外
 | `GH_TOKEN` | GitHub PAT（Projects 読み取り権限が必要） | ✅ |
 | `PROJECT_OWNER` | Project の所有者 | ✅ |
 | `PROJECT_NUMBER` | 対象 Project の Number（数値） | ✅ |
-| `ITEM_TYPE` | 対象Itemの種別（`all` / `issues` / `prs`、デフォルト: `all`） | — |
-| `ITEM_STATE` | 対象Itemの状態（`open` / `closed` / `all`、デフォルト: `all`） | — |
+| `ITEM_TYPE` | 対象 Item の種別（`all` / `issues` / `prs`、デフォルト: `all`） | — |
+| `ITEM_STATE` | 対象 Item の状態（`open` / `closed` / `all`、デフォルト: `all`） | — |
 | `OUTPUT_FORMAT` | 出力形式（`json` / `markdown` / `csv` / `tsv`、デフォルト: `json`） | — |
 
 ## 📊 スクリプト内定数
@@ -42,7 +42,7 @@ DraftIssue、Done / Backlog Status、除外 Label 付き Item は検知対象外
 | `STALE_DAYS_TODO` | `14` | Todo の滞留閾値（日） |
 | `STALE_DAYS_IN_PROGRESS` | `7` | In Progress の滞留閾値（日） |
 | `STALE_DAYS_IN_REVIEW` | `3` | In Review の滞留閾値（日） |
-| `EXCLUDE_LABELS` | `on-hold,blocked` | 除外Label（カンマ区切り） |
+| `EXCLUDE_LABELS` | `on-hold,blocked` | 除外 Label（カンマ区切り） |
 
 ## 📊 処理フロー
 
@@ -69,19 +69,19 @@ flowchart TD
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で Organization / User を判別 | `gh api users/{owner}` |
-| Item取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全Itemをページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、Issue・PR の `number`・`title`・`url`・`state`・`updatedAt`・`assignees`・`labels` および Status Field値を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
+| Item 取得・正規化 | 共通ライブラリの `fetch_all_project_items` で Project の全 Item をページネーション付きで取得（100件/ページ、最大 50 ページ）。`DraftIssue` を除外し、 Issue ・ PR の `number`・`title`・`url`・`state`・`updatedAt`・`assignees`・`labels` および Status Field 値を含む統一フォーマットに正規化 | `fetch_all_project_items` — `projectV2.items(first: 100)` |
 | type / state フィルタリング | `ITEM_TYPE` による種別フィルタ、`ITEM_STATE` による状態フィルタを1回の jq 呼び出しで一括適用 | `filter_items` |
-| 除外フィルタリング | 除外Status（`Done`・`Backlog`）および除外Label（`on-hold`・`blocked`）に該当するItemを除外 | `jq` |
-| 滞留判定 | 各Itemの `updatedAt` と現在日時の差分を計算し、Status別閾値を超過したItemを「滞留」と判定 | `jq`（`strptime`・`mktime` で日付計算） |
-| レポート出力 | `OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。Markdown 形式ではStatus別テーブル・`JQ_MD_ESCAPE` によるエスケープを適用 | `jq` + bash |
+| 除外フィルタリング | 除外 Status（`Done`・`Backlog`）および除外 Label（`on-hold`・`blocked`）に該当する Item を除外 | `jq` |
+| 滞留判定 | 各 Item の `updatedAt` と現在日時の差分を計算し、 Status 別閾値を超過した Item を「滞留」と判定 | `jq`（`strptime`・`mktime` で日付計算） |
+| レポート出力 | `OUTPUT_FORMAT` に応じて Markdown / CSV / TSV / JSON 形式のレポートファイルを生成。 Markdown 形式では Status 別テーブル・`JQ_MD_ESCAPE` によるエスケープを適用 | `jq` + bash |
 | Workflow Summary 出力 | Markdown 形式のレポートを `$GITHUB_STEP_SUMMARY` に追記。`OUTPUT_FORMAT=markdown` の場合は出力ファイルを再利用 | — |
 
 ## 📚 API リファレンス
 
 | API / コマンド | 用途 | リファレンス |
 |---------------|------|-------------|
-| `projectV2.items` (GraphQL) | Project Itemの取得 | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
-| `ProjectV2ItemFieldSingleSelectValue` (GraphQL) | Status Field値の取得 | [ProjectV2ItemFieldSingleSelectValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfieldsingleselect) |
+| `projectV2.items` (GraphQL) | Project Item の取得 | [ProjectV2](https://docs.github.com/en/graphql/reference/objects#projectv2) |
+| `ProjectV2ItemFieldSingleSelectValue` (GraphQL) | Status Field 値の取得 | [ProjectV2ItemFieldSingleSelectValue](https://docs.github.com/en/graphql/reference/objects#projectv2itemfieldsingleselect) |
 | GraphQL ページネーション | カーソルベースのページ送り | [Using pagination in the GraphQL API](https://docs.github.com/en/graphql/guides/using-pagination-in-the-graphql-api) |
 
 ### API バージョン要件
@@ -94,8 +94,8 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 |-----------|---------|------|
 | `items(first: N)` | 100 | 1ページあたりの取得件数 |
 | `max_pages` | 50 | ページネーション上限（最大 5,000 件まで取得可能） |
-| `fieldValues(first: N)` | 20 | 1ItemあたりのField値取得数 |
+| `fieldValues(first: N)` | 20 | 1Item あたりの Field 値取得数 |
 
-## 🔄 使用Workflow
+## 🔄 使用 Workflow
 
 - [⑤ 統合プロジェクト分析](../workflows/05-analyze-project)
