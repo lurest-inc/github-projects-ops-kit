@@ -38,6 +38,7 @@
 | **`Classic token`** | 従来型の PAT。Scope 単位で権限を設定する。`Fine-grained token` より権限の粒度が粗い |
 | **Secrets**<br>（シークレット） | Repository に安全に保存できる暗号化された環境変数。PAT などの機密情報を Workflow から参照する際に使用する |
 | **Scope**<br>（スコープ） | `Classic token` で設定する権限の範囲（例: `project`、`read:org`、`repo`） |
+| **`GH_TOKEN`** | `GitHub CLI` が認証に使用する環境変数。Workflow 内で Secrets に保存した PAT を `GH_TOKEN` として渡すことで、`gh` コマンドが認証済みの状態で実行される |
 
 ---
 
@@ -49,12 +50,13 @@
 | **Project**<br>（プロジェクト） | `GitHub Projects` で作成する管理ボード。複数の Repository の Issue/PR をまとめて管理できる |
 | **`project_number`** | 各 Project に割り当てられる一意の番号。Project の URL 末尾に表示される |
 | **View**<br>（ビュー） | Project 内のアイテム一覧の表示方法。`Table`（テーブル）、`Board`（ボード）、`Roadmap`（ロードマップ）の 3 種類がある |
-| **Board View**<br>（ボードビュー） | カンバン形式でアイテムをステータスごとに列で表示する View |
-| **Table View**<br>（テーブルビュー） | スプレッドシートのように行と列でアイテムを表示する View |
-| **Roadmap View**<br>（ロードマップビュー） | 時間軸に沿ってアイテムをガントチャート風に表示する View |
-| **Field**<br>（フィールド） | Project のアイテムに追加できる属性（カスタムフィールド）。日付・数値・選択肢などの型がある |
+| **Board View**<br>（ボードビュー） | カンバン形式でアイテムをステータスごとに列で表示する View 。 |
+| **Table View**<br>（テーブルビュー） | スプレッドシートのように行と列でアイテムを表示する View 。 |
+| **Roadmap View**<br>（ロードマップビュー） | 時間軸に沿ってアイテムをガントチャート風に表示する View 。 |
+| **Field**<br>（フィールド） | Project のアイテムに追加できる属性（カスタムフィールド）。日付・数値・選択肢などの型がある。 |
 | **Status**<br>（ステータス） | アイテムの進捗状態を示す Field 。本キットでは `Backlog` → `Todo` → `In Progress` → `In Review` → `Done` の 5 段階 |
 | **Item**<br>（アイテム） | Project に追加された Issue や Pull Request のこと |
+| **DraftIssue**<br>（ドラフトイシュー） | Project 内で作成できる下書き状態の Issue 。Repository には紐付かず、Project 内でのみ管理される。分析 Workflow では集計対象から除外される。 |
 
 ---
 
@@ -69,7 +71,9 @@
 | **Fork**<br>（フォーク） | 他の Repository を自分のアカウントにコピーすること。コピー先で自由に変更を加えられる |
 | **Label**<br>（ラベル） | Issue や Pull Request に付与する分類タグ。優先度・種別・ステータスなどの分類に使用する |
 | **Milestone**<br>（マイルストーン） | Issue や Pull Request をグループ化して進捗を追跡する仕組み。リリース計画などの管理に使用する |
-| **`GitHub Pages`** | Repository から直接静的な Web サイトを公開できる GitHub のホスティングサービス。ドキュメントやプロジェクトサイトの公開に使用する |
+| **GitHub Release**<br>（リリース） | Repository の特定時点のスナップショットを公開する仕組み。Tag と紐付けてリリースノートやバイナリを配布できる。 |
+| **Upstream Repository**<br>（アップストリーム） | Fork 元のオリジナル Repository。Fork 先から変更を取り込む際の参照元となる。 |
+| **`GitHub Pages`** | Repository から直接静的な Web サイトを公開できる GitHub のホスティングサービス。ドキュメントやプロジェクトサイトの公開に使用する。 |
 
 ---
 
@@ -83,7 +87,8 @@
 | **Job**<br>（ジョブ） | Workflow 内の実行単位。1 つの Workflow に複数の Job を定義できる |
 | **Step**<br>（ステップ） | Job 内で順番に実行される個々の処理単位。シェルコマンドの実行や Action の呼び出しを行う |
 | **Artifact**<br>（アーティファクト） | Workflow の実行結果として出力されるファイル。エクスポートしたデータのダウンロードなどに使用する |
-| **`Actions` タブ** | Repository ページ上部にあるタブ。ワークフローの実行・監視・管理を行う画面 |
+| **Reusable Workflow**<br>（再利用可能ワークフロー） | `workflow_call` トリガーを使用して他の Workflow から呼び出せる Workflow。本キットでは `_reusable-*.yml` ファイルとして定義されている。 |
+| **`Actions` タブ** | Repository ページ上部にあるタブ。Workflow の実行・監視・管理を行う画面 |
 
 ---
 
