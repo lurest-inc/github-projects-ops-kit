@@ -32,7 +32,7 @@
 ## 📖 使い方
 
 1. `Actions` タブを開く
-2. `④ Issue Label一括追加` を選択
+2. `④ Issue Label 一括追加` を選択
 3. `Run workflow` をクリック
 4. パラメータを入力して実行
 

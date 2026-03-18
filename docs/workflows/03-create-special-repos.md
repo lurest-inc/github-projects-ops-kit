@@ -1,4 +1,4 @@
-# ③ 🏗️ 特殊Repository一括作成
+# ③ 🏗️ 特殊 Repository 一括作成
 
 GitHub の特殊命名規則 Repository（プロフィール README、`GitHub Pages`、dotfiles 等）を一括作成します。
 オーナータイプ（個人アカウント / Organization）を自動判定し、対応するスクリプトを実行します。

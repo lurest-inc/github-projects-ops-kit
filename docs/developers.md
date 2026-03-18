@@ -25,7 +25,7 @@ flowchart TD
     B --> C["④ Issue Label 一括追加"]
     C --> D["⑤ Issue/PR 一括紐付け"]
     D --> F["⑥ 統合 Project 分析"]
-    A ~~~ G["③ 特殊Repository一括作成"]
+    A ~~~ G["③ 特殊 Repository 一括作成"]
 
     A -- "Reusable Workflow" --> R["_reusable-extend-project"]
     B -- "Reusable Workflow" --> R
@@ -74,7 +74,7 @@ flowchart TD
       ├── 01-create-project.yml             # ① Project 新規作成 Workflow
       ├── 02-extend-project.yml             # ② Project 拡張 Workflow
       ├── _reusable-extend-project.yml      # Project 拡張（Reusable Workflow）
-      ├── 03-create-special-repos.yml       # ③ 特殊Repository一括作成 Workflow
+      ├── 03-create-special-repos.yml       # ③ 特殊 Repository 一括作成 Workflow
       ├── 04-setup-repository-labels.yml    # ④ Issue Label 一括追加 Workflow
       ├── 05-add-items-to-project.yml       # ⑤ Issue/PR 一括紐付け Workflow
       └── 06-analyze-project.yml            # ⑥ 統合 Project 分析 Workflow
@@ -84,8 +84,8 @@ scripts/
   │   ├── project-field-definitions.json       # カスタム Field 定義
   │   ├── project-view-definitions.json        # View 定義
   │   ├── repository-label-definitions.json    # Issue Label 定義
-  │   ├── special-repo-definitions-user.json   # 個人アカウント用特殊Repository定義
-  │   └── special-repo-definitions-org.json    # Organization 用特殊Repository定義
+  │   ├── special-repo-definitions-user.json   # 個人アカウント用特殊 Repository定義
+  │   └── special-repo-definitions-org.json    # Organization 用特殊 Repository定義
   ├── lib/
   │   └── common.sh                    # 共通関数ライブラリ
   ├── setup-github-project.sh          # Project 作成スクリプト
@@ -99,8 +99,8 @@ scripts/
   ├── generate-summary-report.sh       # Project サマリーレポート生成スクリプト
   ├── generate-effort-report.sh        # 工数集計レポート生成スクリプト
   ├── generate-velocity-report.sh      # ベロシティレポート生成スクリプト
-  ├── create-special-repos-user.sh     # 個人アカウント用特殊Repository作成スクリプト
-  └── create-special-repos-org.sh      # Organization 用特殊Repository作成スクリプト
+  ├── create-special-repos-user.sh     # 個人アカウント用特殊 Repository作成スクリプト
+  └── create-special-repos-org.sh      # Organization 用特殊 Repository作成スクリプト
 ```
 
 ## ⚙️ 各 Workflow の構成

@@ -2,7 +2,7 @@
 
 Workflow で生成された Artifact を手動で削除する方法を説明します。
 
-> **Note:** Artifact の公開範囲に関する注意事項は [⑥ 統合プロジェクト分析](../workflows/06-analyze-project.md#️-Artifact の公開範囲に関する注意事項) を参照してください。
+> **Note:** Artifact の公開範囲に関する注意事項は [⑥ 統合プロジェクト分析](../workflows/06-analyze-project.md#%EF%B8%8F-artifact-%E3%81%AE%E5%85%AC%E9%96%8B%E7%AF%84%E5%9B%B2%E3%81%AB%E9%96%A2%E3%81%99%E3%82%8B%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A0%85) を参照してください。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
