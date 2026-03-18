@@ -1,23 +1,20 @@
 # ---------------------------------------------------------
-# PAT（Personal Access Token）の種類について
+# TOC Generator による目次の自動生成
 # ---------------------------------------------------------
+# このワークフローは technote-space/toc-generator を使用して、
+# マークダウンファイルの目次（Table of Contents）を自動生成します。
+#
+# mainブランチへのpush時にトリガーされ、目次を更新するPRを
+# 自動作成します。目次の変更を反映するには、作成されたPRを
+# マージする必要があります。
+#
+# 設定:
+#   - 対象ファイル: README.md, docs/**/*.md, .github/**/*.md
+#   - 見出しレベル: H2（##）のみ
+#   - 折りたたみ: 有効（<details>タグで表示）
+#
 # secrets.PROJECT_PAT には GitHub の Personal Access Token を設定します。
-# GitHub には以下の2種類の PAT があります:
-#
-# 1. Fine-grained personal access tokens（きめ細かい個人用アクセストークン）
-#    - リポジトリ単位でスコープを制限可能
-#    - 有効期限の設定が必須
-#    - 推奨される方式
-#    - 必要な権限: Contents（Read and write）, Pull requests（Read and write）
-#
-# 2. Personal access tokens (classic)（クラシック個人用アクセストークン）
-#    - リポジトリ横断でスコープを設定
-#    - 有効期限の設定は任意
-#    - 必要なスコープ: repo
-#
-# 現在、secrets.PROJECT_PAT に有効な値が設定されていないため、
-# このワークフローは disabled 状態としています。
-# 有効な PAT を設定後、ワークフローを有効化してください。
+# 他のワークフローと同じトークンを使用しています。
 # ---------------------------------------------------------
 on:
   push:
