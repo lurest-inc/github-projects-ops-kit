@@ -67,11 +67,6 @@
 
 📄 **ドキュメント（HTML版）**: [https://lurest-inc.github.io/github-starter-kit/](https://lurest-inc.github.io/github-starter-kit/)
 
-| 対象 | ページ |
-|------|--------|
-| 個人開発者・OSS メンテナー | [個人アカウント向け活用ガイド](https://lurest-inc.github.io/github-starter-kit/use-case-personal) |
-| チームリーダー・マネージャー | [Organization 向け活用ガイド](https://lurest-inc.github.io/github-starter-kit/use-case-organization) |
-
 ## 📋 更新履歴
 
 詳細な更新履歴は [CHANGELOG.md](CHANGELOG.md) をご覧ください。
