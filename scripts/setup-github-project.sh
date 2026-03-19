@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # GitHub Project セットアップスクリプト
-# https://mabubu0203.github.io/github-projects-starter-kit/scripts/setup-github-project
+# https://lurest-inc.github.io/github-starter-kit/scripts/setup-github-project
 #
 # 環境変数:
 #   GH_TOKEN           - GitHub PAT（Projects 操作権限が必要）
