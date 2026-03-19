@@ -108,15 +108,15 @@ scripts/
 ```
 01-create-project.yml
   ├── create-project Job
-  │   └── scripts/setup-github-project.sh    # Project 作成
+  │   └── scripts/setup-github-project.sh        # Project 作成
   ├── extend-project Job（_reusable-extend-project.yml）
-  │   ├── scripts/setup-project-status.sh    # カスタム Status 作成
-  │   ├── scripts/setup-project-fields.sh    # カスタム Field 作成
-  │   └── scripts/setup-project-views.sh     # View 作成
+  │   ├── scripts/setup-project-status.sh        # カスタム Status 作成
+  │   ├── scripts/setup-project-fields.sh        # カスタム Field 作成
+  │   └── scripts/setup-project-views.sh         # View 作成
   ├── workflow-summary-failure Job（失敗時）
-  │   └── .github/actions/workflow-summary   # 失敗サマリー出力
+  │   └── .github/actions/workflow-summary       # 失敗サマリー出力
   └── workflow-summary-success Job（成功時）
-      └── .github/actions/workflow-summary   # 成功サマリー出力
+      └── .github/actions/workflow-summary       # 成功サマリー出力
 ```
 
 ### ② GitHub `Project` 拡張
@@ -124,13 +124,13 @@ scripts/
 ```
 02-extend-project.yml
   ├── extend-project Job（_reusable-extend-project.yml）
-  │   ├── scripts/setup-project-status.sh    # カスタム Status 作成
-  │   ├── scripts/setup-project-fields.sh    # カスタム Field 作成
-  │   └── scripts/setup-project-views.sh     # View 作成
+  │   ├── scripts/setup-project-status.sh        # カスタム Status 作成
+  │   ├── scripts/setup-project-fields.sh        # カスタム Field 作成
+  │   └── scripts/setup-project-views.sh         # View 作成
   ├── workflow-summary-failure Job（失敗時）
-  │   └── .github/actions/workflow-summary   # 失敗サマリー出力
+  │   └── .github/actions/workflow-summary       # 失敗サマリー出力
   └── workflow-summary-success Job（成功時）
-      └── .github/actions/workflow-summary   # 成功サマリー出力
+      └── .github/actions/workflow-summary       # 成功サマリー出力
 ```
 
 ### ③ 特殊 Repository 一括作成
@@ -138,11 +138,11 @@ scripts/
 ```
 03-create-special-repos.yml
   ├── create-special-repos Job
-  │   └── scripts/create-special-repos.sh         # オーナータイプ自動判定 → 一括作成
+  │   └── scripts/create-special-repos.sh        # オーナータイプ自動判定 → 一括作成
   ├── workflow-summary-failure Job（失敗時）
-  │   └── .github/actions/workflow-summary        # 失敗サマリー出力
+  │   └── .github/actions/workflow-summary       # 失敗サマリー出力
   └── workflow-summary-success Job（成功時）
-      └── .github/actions/workflow-summary        # 成功サマリー出力
+      └── .github/actions/workflow-summary       # 成功サマリー出力
 ```
 
 ### ④ Issue Label 一括追加
@@ -150,11 +150,11 @@ scripts/
 ```
 04-setup-repository-labels.yml
   ├── setup-repository-labels Job
-  │   └── scripts/setup-repository-labels.sh    # Issue Label 一括作成
+  │   └── scripts/setup-repository-labels.sh     # Issue Label 一括作成
   ├── workflow-summary-failure Job（失敗時）
-  │   └── .github/actions/workflow-summary      # 失敗サマリー出力
+  │   └── .github/actions/workflow-summary       # 失敗サマリー出力
   └── workflow-summary-success Job（成功時）
-      └── .github/actions/workflow-summary      # 成功サマリー出力
+      └── .github/actions/workflow-summary       # 成功サマリー出力
 ```
 
 ### ⑤ Issue/PR 一括紐付け
@@ -162,11 +162,11 @@ scripts/
 ```
 05-add-items-to-project.yml
   ├── add-items Job
-  │   └── scripts/add-items-to-project.sh    # Item 一括追加
+  │   └── scripts/add-items-to-project.sh        # Item 一括追加
   ├── workflow-summary-failure Job（失敗時）
-  │   └── .github/actions/workflow-summary   # 失敗サマリー出力
+  │   └── .github/actions/workflow-summary       # 失敗サマリー出力
   └── workflow-summary-success Job（成功時）
-      └── .github/actions/workflow-summary   # 成功サマリー出力
+      └── .github/actions/workflow-summary       # 成功サマリー出力
 ```
 
 ### ⑥ 統合 Project 分析
@@ -175,19 +175,19 @@ scripts/
 06-analyze-project.yml
   ├── generate-summary-report Job（report_types: all or summary）
   │   ├── scripts/generate-summary-report.sh     # サマリーレポート生成
-  │   └── artifact アップロード                    # サマリーレポートを保存
+  │   └── artifact アップロード                  # サマリーレポートを保存
   ├── generate-effort-report Job（report_types: all or effort）
   │   ├── scripts/generate-effort-report.sh      # 工数集計レポート生成
-  │   └── artifact アップロード                    # 工数レポートを保存
+  │   └── artifact アップロード                  # 工数レポートを保存
   ├── detect-stale-items Job（report_types: all or stale）
   │   ├── scripts/detect-stale-items.sh          # 滞留 Item 検知
-  │   └── artifact アップロード                    # 滞留レポートを保存
+  │   └── artifact アップロード                  # 滞留レポートを保存
   ├── generate-velocity-report Job（report_types: all or velocity）
   │   ├── scripts/generate-velocity-report.sh    # ベロシティレポート生成
-  │   └── artifact アップロード                    # ベロシティレポートを保存
+  │   └── artifact アップロード                  # ベロシティレポートを保存
   ├── export-items Job（report_types: all or export）
   │   ├── scripts/export-project-items.sh        # Item エクスポート
-  │   └── artifact アップロード                    # エクスポートファイルを保存
+  │   └── artifact アップロード                  # エクスポートファイルを保存
   ├── workflow-summary-failure Job（失敗時）
   │   └── .github/actions/workflow-summary       # 失敗サマリー出力
   └── workflow-summary-success Job（成功時）
