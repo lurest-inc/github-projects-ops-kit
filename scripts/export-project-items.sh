@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # GitHub Project Item エクスポートスクリプト
-# https://mabubu0203.github.io/github-projects-starter-kit/scripts/export-project-items
+# https://lurest-inc.github.io/github-starter-kit/scripts/export-project-items
 #
 # 環境変数:
 #   GH_TOKEN       - GitHub PAT（Projects 読み取り権限が必要）

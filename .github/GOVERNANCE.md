@@ -28,7 +28,7 @@
 
 ## 意思決定プロセス
 
-- 機能追加や設計変更は Issue または [Discussions](https://github.com/mabubu0203/github-projects-starter-kit/discussions) で提案し、メンテナーの承認を経て実施する
+- 機能追加や設計変更は Issue または [Discussions](https://github.com/lurest-inc/github-starter-kit/discussions) で提案し、メンテナーの承認を経て実施する
 - 軽微な修正（タイポ、ドキュメント更新など）は直接 Pull Request を作成できる
 
 ## レビューとマージ

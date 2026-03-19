@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ベロシティレポート生成スクリプト
-# https://mabubu0203.github.io/github-projects-starter-kit/scripts/generate-velocity-report
+# https://lurest-inc.github.io/github-starter-kit/scripts/generate-velocity-report
 #
 # 環境変数:
 #   GH_TOKEN        - GitHub PAT（Projects 読み取り権限が必要）

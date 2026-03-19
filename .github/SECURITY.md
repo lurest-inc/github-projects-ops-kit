@@ -17,7 +17,7 @@
 
 ### 報告方法
 
-GitHub の [Private vulnerability reporting](https://github.com/mabubu0203/github-projects-starter-kit/security/advisories/new) 機能をご利用ください。
+GitHub の [Private vulnerability reporting](https://github.com/lurest-inc/github-starter-kit/security/advisories/new) 機能をご利用ください。
 
 ### 報告に含めていただきたい情報
 

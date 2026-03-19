@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # 指定 Repository への Issue ラベル一括作成スクリプト
-# https://mabubu0203.github.io/github-projects-starter-kit/scripts/setup-repository-labels
+# https://lurest-inc.github.io/github-starter-kit/scripts/setup-repository-labels
 #
 # 環境変数:
 #   GH_TOKEN    - GitHub PAT（repo または public_repo スコープが必要）

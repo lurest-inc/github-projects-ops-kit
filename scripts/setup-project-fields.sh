@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # GitHub Project Field 作成スクリプト
-# https://mabubu0203.github.io/github-projects-starter-kit/scripts/setup-project-fields
+# https://lurest-inc.github.io/github-starter-kit/scripts/setup-project-fields
 #
 # 環境変数:
 #   GH_TOKEN          - GitHub PAT（Projects 操作権限が必要）
