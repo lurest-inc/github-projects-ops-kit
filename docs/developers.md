@@ -156,19 +156,19 @@ scripts/
 06-analyze-project.yml
   ├── generate-summary-report Job（report_types: all or summary）
   │   ├── scripts/generate-summary-report.sh     # サマリーレポート生成
-  │   └── artifact アップロード                  # サマリーレポートを保存
+  │   └── actions/upload-artifact                # サマリーレポートを保存
   ├── generate-effort-report Job（report_types: all or effort）
   │   ├── scripts/generate-effort-report.sh      # 工数集計レポート生成
-  │   └── artifact アップロード                  # 工数レポートを保存
+  │   └── actions/upload-artifact                # 工数レポートを保存
   ├── detect-stale-items Job（report_types: all or stale）
   │   ├── scripts/detect-stale-items.sh          # 滞留 Item 検知
-  │   └── artifact アップロード                  # 滞留レポートを保存
+  │   └── actions/upload-artifact                # 滞留レポートを保存
   ├── generate-velocity-report Job（report_types: all or velocity）
   │   ├── scripts/generate-velocity-report.sh    # ベロシティレポート生成
-  │   └── artifact アップロード                  # ベロシティレポートを保存
+  │   └── actions/upload-artifact                # ベロシティレポートを保存
   ├── export-items Job（report_types: all or export）
   │   ├── scripts/export-project-items.sh        # Item エクスポート
-  │   └── artifact アップロード                  # エクスポートファイルを保存
+  │   └── actions/upload-artifact                # エクスポートファイルを保存
   ├── workflow-summary-failure Job（失敗時）
   │   └── .github/actions/workflow-summary       # 失敗サマリー出力
   └── workflow-summary-success Job（成功時）
