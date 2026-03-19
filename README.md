@@ -1,4 +1,4 @@
-# GitHub Projects Starter Kit
+# GitHub Starter Kit
 
 ![Platform: macOS/Windows](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-blue.svg)
 ![GitHub Top Language](https://img.shields.io/github/languages/top/mabubu0203/github-projects-starter-kit)
@@ -17,7 +17,7 @@
 [![release-please](https://github.com/mabubu0203/github-projects-starter-kit/actions/workflows/release-please.yml/badge.svg)](https://github.com/mabubu0203/github-projects-starter-kit/actions/workflows/release-please.yml)
 
 `GitHub Projects` の初期セットアップを `GitHub Actions` で半自動実行するためのスターターキットです。
-本リポジトリを Fork し、Workflow を手動実行することで、Project の作成から分析までを一気通貫して行えます。
+本 Repository を Fork し、Workflow を手動実行することで、Project の作成から分析までを一気通貫して行えます。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -65,7 +65,7 @@
 
 導入手順や使い方の詳細は `GitHub Pages` をご参照ください。
 
-📄 **ドキュメント（HTML版）**: [https://mabubu0203.github.io/github-projects-starter-kit/](https://mabubu0203.github.io/github-projects-starter-kit/)
+📄 **ドキュメント（HTML版）**: [https://lurest-inc.github.io/github-starter-kit/](https://lurest-inc.github.io/github-starter-kit/)
 
 ## 📋 更新履歴
 
