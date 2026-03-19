@@ -1,5 +1,44 @@
 # Changelog
 
+## [1.1.1](https://github.com/mabubu0203/github-projects-starter-kit/compare/v1.1.0...v1.1.1) (2026-03-19)
+
+
+### バグ修正
+
+* CONTRIBUTING.md から GOVERNANCE.md へのリンクパスを修正する ([4feb095](https://github.com/mabubu0203/github-projects-starter-kit/commit/4feb0958253d6a494a37a1eae49621c04888267c))
+
+
+### ドキュメント
+
+* Community Health Files の整備・用語集の拡充 ([c5ad2db](https://github.com/mabubu0203/github-projects-starter-kit/commit/c5ad2db41f8eb83d44c9d59553c37c243246e11f))
+* developers.md の scripts 配下・統合 Project 分析・スクリプト詳細をワークフロー順に構成し直す ([8346828](https://github.com/mabubu0203/github-projects-starter-kit/commit/8346828e49a1fbc8401d393baed027a75c416971))
+* developers.md の scripts 配下・統合 Project 分析・スクリプト詳細をワークフロー順に構成し直す ([e5d1d58](https://github.com/mabubu0203/github-projects-starter-kit/commit/e5d1d584b32645a9c54b39a98beefcdc8ca48f81)), closes [#364](https://github.com/mabubu0203/github-projects-starter-kit/issues/364)
+* GOVERNANCE.md を追加し CONTRIBUTING.md にレビュー方針への参照を追加 ([95839d4](https://github.com/mabubu0203/github-projects-starter-kit/commit/95839d421a8053c31b0e64d46042ec2b1bbad4f7))
+* Workflow 全体像セクションをカテゴリ別 mermaid 図に置き換える ([8a98fa0](https://github.com/mabubu0203/github-projects-starter-kit/commit/8a98fa0ec81da24d19fd12e8255ee3ccee9d44e3))
+* Workflow 全体像セクションをカテゴリ別 mermaid 図に置き換える ([e136298](https://github.com/mabubu0203/github-projects-starter-kit/commit/e136298917c1009c1a6793e331e50646c498ff5c)), closes [#366](https://github.com/mabubu0203/github-projects-starter-kit/issues/366)
+* 用語集に Codespaces・Community Health Files を追加、絵文字・表記揺れを修正 ([c8e0fd7](https://github.com/mabubu0203/github-projects-starter-kit/commit/c8e0fd7cf9462a948941a1a8bae51c34b9532acc))
+
+
+### スタイル
+
+* ⚙️ 各 Workflow の構成セクションの # コメント桁位置を col=49 に統一する ([30bc219](https://github.com/mabubu0203/github-projects-starter-kit/commit/30bc219dba9de82185d45170354b40ec7fcd1c96))
+* developers.md の目次を details/summary 形式に戻す ([e9cd5a4](https://github.com/mabubu0203/github-projects-starter-kit/commit/e9cd5a41feb31e592fe992a10c7c2d0eb1322131))
+* Workflow 全体像の mermaid 図に GitHub Actions ルートノードを追加する ([75132dc](https://github.com/mabubu0203/github-projects-starter-kit/commit/75132dc01cb0108630f4a0d749ae3703a42cc6f0))
+* 統合 Project 分析セクションの # コメント位置を揃える ([7e68974](https://github.com/mabubu0203/github-projects-starter-kit/commit/7e689743ec5b7f17cc54f5532b2a7fda26db1a16))
+* 統合 Project 分析セクションの # コメント位置を揃える ([223dd43](https://github.com/mabubu0203/github-projects-starter-kit/commit/223dd43e7a6f6def5f5e99cefb3f11b01e10b8e8))
+
+
+### その他の変更
+
+* **docs:** update TOC ([2dc769a](https://github.com/mabubu0203/github-projects-starter-kit/commit/2dc769aec73b8d9c83c98249a646693190715b54))
+
+
+### リファクタリング
+
+* 個別スクリプトを統合スクリプトに統合し削除 ([d9dbda2](https://github.com/mabubu0203/github-projects-starter-kit/commit/d9dbda277b32475611dc60bc59ae93c703178d84))
+* 特殊 Repository 一括作成 Workflow のオーナータイプ判定を共通関数に統一する ([d4fa546](https://github.com/mabubu0203/github-projects-starter-kit/commit/d4fa54676edd742acf90fa25b7e9124b13fb7682))
+* 特殊 Repository 一括作成 Workflow のオーナータイプ判定を共通関数に統一する ([0b4bea4](https://github.com/mabubu0203/github-projects-starter-kit/commit/0b4bea49491d46b561acff49c2c564bd97a7a496)), closes [#362](https://github.com/mabubu0203/github-projects-starter-kit/issues/362)
+
 ## [1.1.0](https://github.com/mabubu0203/github-projects-starter-kit/compare/v1.0.0...v1.1.0) (2026-03-18)
 
 
