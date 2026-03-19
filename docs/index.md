@@ -1,4 +1,4 @@
-# 📖 GitHub Projects Starter Kit ドキュメント
+# 📖 GitHub Starter Kit ドキュメント
 
 ![Platform: macOS/Windows](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-blue.svg)
 ![GitHub Top Language](https://img.shields.io/github/languages/top/mabubu0203/github-projects-starter-kit)
@@ -104,4 +104,4 @@ Workflow の内部構成やスクリプトの詳細については [開発者向
 
 ## 🏠 Repository
 
-- GitHub: [mabubu0203/github-projects-starter-kit](https://github.com/mabubu0203/github-projects-starter-kit)
+- GitHub: [lurest-inc/github-starter-kit](https://github.com/lurest-inc/github-starter-kit)
