@@ -1,5 +1,47 @@
 # Changelog
 
+## [1.1.3](https://github.com/lurest-inc/github-starter-kit/compare/v1.1.2...v1.1.3) (2026-03-21)
+
+
+### ドキュメント
+
+* 「困ったときは」セクションに Issues・Discussions への誘導を追加する ([fce99f3](https://github.com/lurest-inc/github-starter-kit/commit/fce99f371e9a4359915142772c2eaa72579f0441))
+* 「困ったときは」セクションに Issues・Discussions への誘導を追加する ([65bde8d](https://github.com/lurest-inc/github-starter-kit/commit/65bde8d30f4ef245b6cb7b5bb11c939f80c0d150))
+* Bug Report テンプレートを追加し、config.yml の誘導先を Discussions カテゴリ別に分割する ([23a60c6](https://github.com/lurest-inc/github-starter-kit/commit/23a60c6a14e26c58ad98cb002fa02adf33dfa7e0))
+* Discussions カテゴリの案内文と導線の整合性を修正する ([b217ec8](https://github.com/lurest-inc/github-starter-kit/commit/b217ec8cbd78a79c9dab6caeb6bd23efab8a6c5d))
+* docs 直下の Markdown ファイルをサブディレクトリに整理する ([65a05c8](https://github.com/lurest-inc/github-starter-kit/commit/65a05c85c7edd8779181c117427d36ee2609a15d))
+* docs 直下の Markdown ファイルをサブディレクトリに整理する ([d748d1a](https://github.com/lurest-inc/github-starter-kit/commit/d748d1a7d35849105dd66feb76b0c8456fe58f12)), closes [#391](https://github.com/lurest-inc/github-starter-kit/issues/391)
+* FAQ の Q5 と Q6 の掲載順を入れ替える ([999ede4](https://github.com/lurest-inc/github-starter-kit/commit/999ede4bce91e5bacbace0a2ec6b8a7a604af6ee))
+* FAQ の Q5 と Q6 の掲載順を入れ替える ([8562efd](https://github.com/lurest-inc/github-starter-kit/commit/8562efd192db1c232d092bc018f2e8914bc2d1dd)), closes [#384](https://github.com/lurest-inc/github-starter-kit/issues/384)
+* Organization 向けプロモーションページを作成する ([ba46e7b](https://github.com/lurest-inc/github-starter-kit/commit/ba46e7b151c04c4f4d176a4bbda8765ed8517f3c))
+* Organization 向けユースケースドキュメントをブラッシュアップする ([3a629ff](https://github.com/lurest-inc/github-starter-kit/commit/3a629ff723524b7b4632651920838c820e9b31f6))
+* README.md からユースケースページへのリンクテーブルを削除する ([6895452](https://github.com/lurest-inc/github-starter-kit/commit/68954529edb638b7b75d9f6c639765d5df347228))
+* Sync fork の用語を用語集に追加する ([2b38dbe](https://github.com/lurest-inc/github-starter-kit/commit/2b38dbec90b98126adeadbb284a757e12c58d3ad))
+* use-cases ドキュメントをブラッシュアップして導入意欲を高める ([2f3ad38](https://github.com/lurest-inc/github-starter-kit/commit/2f3ad38c12b971087e34b09941e0856d148fbd89))
+* use-cases 配下の Markdown 見出しに絵文字を追加する ([a8f9441](https://github.com/lurest-inc/github-starter-kit/commit/a8f9441aa60caf08a73c00d44154425538a8b052))
+* use-cases 配下の Markdown 見出しに絵文字を追加する ([b96d881](https://github.com/lurest-inc/github-starter-kit/commit/b96d88123fefd8fd522ac1648209a0d16bcb93ff)), closes [#395](https://github.com/lurest-inc/github-starter-kit/issues/395)
+* use-cases 配下のアルファベット・カタカナ表記を他の Markdown と統一する ([c3c0668](https://github.com/lurest-inc/github-starter-kit/commit/c3c06681c2e72a8ad8f553436cc3e3aaa2b6fb61))
+* use-cases 配下のアルファベット・カタカナ表記を他の Markdown と統一する ([53e63ce](https://github.com/lurest-inc/github-starter-kit/commit/53e63cece14d05fd9590b7ec2324a09f2fb544d4)), closes [#399](https://github.com/lurest-inc/github-starter-kit/issues/399)
+* use-cases 配下のバッククォート囲み漏れを追加修正する ([3f18f69](https://github.com/lurest-inc/github-starter-kit/commit/3f18f6982d7cea90f348c744f068861e50e7c973))
+* use-cases 配下の技術用語にバッククォート囲みを追加する ([f693466](https://github.com/lurest-inc/github-starter-kit/commit/f6934664459ef02d0010cf054ec3964accf84d67))
+* use-cases 配下の技術用語にバッククォート囲みを追加する ([b9026f9](https://github.com/lurest-inc/github-starter-kit/commit/b9026f9b66a97f2ac644d0477c12191a8ed8e46e)), closes [#397](https://github.com/lurest-inc/github-starter-kit/issues/397)
+* コミュニティドキュメントの誘導を整理し、Bug Report テンプレートを追加する ([3d93622](https://github.com/lurest-inc/github-starter-kit/commit/3d93622674d32d0dd7b54d007486da95ca96678a))
+* コミュニティドキュメントの誘導先を整理し、セクション構成を見直す ([69a05ba](https://github.com/lurest-inc/github-starter-kit/commit/69a05ba50b861ce0e474ec594161721378c8df29))
+* フォーク元リポジトリの更新同期手順を FAQ に追加する ([e220520](https://github.com/lurest-inc/github-starter-kit/commit/e220520e72ecc498b52ab3984841855f62dbab6b))
+* フォーク元リポジトリの更新同期手順を FAQ に追加する ([4867428](https://github.com/lurest-inc/github-starter-kit/commit/48674288c7bad2a043624ece03041436e923cad5)), closes [#381](https://github.com/lurest-inc/github-starter-kit/issues/381)
+* ユースケースページへの導線を追加する ([5c666e0](https://github.com/lurest-inc/github-starter-kit/commit/5c666e03a86ee8a4d6f38463bdbebd25de315dcd)), closes [#382](https://github.com/lurest-inc/github-starter-kit/issues/382)
+* 個人アカウント向け・Organization 向けのプロモーションページを作成する ([b1d8161](https://github.com/lurest-inc/github-starter-kit/commit/b1d8161cda75c94e062bb853d0ac0b860a77c928))
+* 個人アカウント向けプロモーションページを作成する ([2776802](https://github.com/lurest-inc/github-starter-kit/commit/2776802b2c3318428620ea69d97d8bebda4b1fc5))
+* 個人開発者向けユースケースドキュメントをブラッシュアップする ([bb91b61](https://github.com/lurest-inc/github-starter-kit/commit/bb91b6102e3effe5a446924a1632378a7ca99007))
+
+
+### その他の変更
+
+* **docs:** update TOC ([169a99e](https://github.com/lurest-inc/github-starter-kit/commit/169a99e25db83ccb5b6703d4aa2328d3c8335b68))
+* **docs:** update TOC ([b09ca05](https://github.com/lurest-inc/github-starter-kit/commit/b09ca05c0a338a047dc149ce537102dcbd1e5346))
+* **docs:** update TOC ([4ea5bdd](https://github.com/lurest-inc/github-starter-kit/commit/4ea5bdd1154ecf99d3978313873afb2408e79342))
+* **docs:** update TOC ([f529d6f](https://github.com/lurest-inc/github-starter-kit/commit/f529d6f3744f25b0c2172fac230c57196bbe6b56))
+
 ## [1.1.2](https://github.com/lurest-inc/github-starter-kit/compare/v1.1.1...v1.1.2) (2026-03-19)
 
 
