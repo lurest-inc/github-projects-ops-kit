@@ -31,6 +31,8 @@ JSON 定義ファイルで構成を管理するため、何度でも同じ環境
 
 <li><a href="#-%E8%A9%B3%E3%81%97%E3%81%8F%E7%9F%A5%E3%82%8A%E3%81%9F%E3%81%84%E6%96%B9%E3%81%B8">📚 詳しく知りたい方へ</a></li>
 
+<li><a href="#-%E9%96%A2%E9%80%A3%E8%A8%98%E4%BA%8B">📰 関連記事</a></li>
+
 <li><a href="#-%E5%9B%B0%E3%81%A3%E3%81%9F%E3%81%A8%E3%81%8D%E3%81%AF">🔧 困ったときは</a></li>
 
 <li><a href="#-%E3%82%B3%E3%83%9F%E3%83%A5%E3%83%8B%E3%83%86%E3%82%A3%E3%81%AB%E5%8F%82%E5%8A%A0%E3%81%99%E3%82%8B">🤝 コミュニティに参加する</a></li>
@@ -164,6 +166,14 @@ Docs サイトは以下のカテゴリで構成されています。目的に応
 | [Label 運用ルール](guide/label-rules) | Issue Label のカテゴリ分類、用途、付与タイミング |
 | [Artifact の手動削除](guide/delete-artifacts) | Workflow で生成された Artifact の削除手順（GUI / CLI） |
 | [用語集](reference/glossary) | GitHub 関連の専門用語の解説 |
+
+---
+
+## 📰 関連記事
+
+| 記事 | 掲載先 |
+|------|--------|
+| [GitHub Projects の初期構築・運用分析を自動化する GitHub Actions ツールキット](https://qiita.com/mabubu0203/items/41d590b3c127eebbb613) | Qiita |
 
 ---
 
