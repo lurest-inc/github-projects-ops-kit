@@ -1,6 +1,6 @@
 # 📏 運用ルール
 
-本スターターキットで構築する `GitHub Projects` の運用ルールについて説明します。
+本 Ops Kit で構築する `GitHub Projects` の運用ルールについて説明します。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

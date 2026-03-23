@@ -19,7 +19,7 @@
 
 導入手順や使い方については GitHub Pages をご参照ください。
 
-- [GitHub Starter Kit ドキュメント](https://lurest-inc.github.io/github-starter-kit/)
+- [GitHub Projects Ops Kit ドキュメント](https://lurest-inc.github.io/github-starter-kit/)
 
 ## 質問・相談
 

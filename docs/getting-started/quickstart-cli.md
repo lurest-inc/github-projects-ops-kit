@@ -2,7 +2,7 @@
 
 `gh` CLI を使ったセットアップ手順です。`PAT` 作成を除き、すべての操作をターミナルから実行できます。
 
-> **Tip:** Claude Code などの **生成 AI へのプロンプト** として、「[github-starter-kit](https://lurest-inc.github.io/github-starter-kit/)の[クイックスタート（コマンド版）](https://lurest-inc.github.io/github-starter-kit/quickstart-cli)を参照しながら自分のアカウント上でセットアップして」と命じることで、セットアップ作業の自動化を支援できます。
+> **Tip:** Claude Code などの **生成 AI へのプロンプト** として、「[GitHub Projects Ops Kit](https://lurest-inc.github.io/github-starter-kit/)の[クイックスタート（コマンド版）](https://lurest-inc.github.io/github-starter-kit/quickstart-cli)を参照しながら自分のアカウント上でセットアップして」と命じることで、セットアップ作業の自動化を支援できます。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

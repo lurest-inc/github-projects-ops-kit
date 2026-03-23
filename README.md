@@ -1,4 +1,4 @@
-# GitHub Starter Kit
+# GitHub Projects Ops Kit
 
 ![Platform: macOS/Windows](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-blue.svg)
 ![GitHub Top Language](https://img.shields.io/github/languages/top/lurest-inc/github-starter-kit)
@@ -16,7 +16,7 @@
 [![Pages Deploy](https://github.com/lurest-inc/github-starter-kit/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/lurest-inc/github-starter-kit/actions/workflows/pages/pages-build-deployment)
 [![release-please](https://github.com/lurest-inc/github-starter-kit/actions/workflows/release-please.yml/badge.svg)](https://github.com/lurest-inc/github-starter-kit/actions/workflows/release-please.yml)
 
-`GitHub Projects` の初期セットアップを `GitHub Actions` で半自動実行するためのスターターキットです。
+`GitHub Projects` の初期構築から運用分析までを `GitHub Actions` で半自動実行するための運用キットです。
 本 Repository を Fork し、Workflow を手動実行することで、Project の作成から分析までを一気通貫して行えます。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -65,7 +65,7 @@
 
 導入手順や使い方の詳細は `GitHub Pages` をご参照ください。
 
-📄 **ドキュメント（HTML版）**: [https://lurest-inc.github.io/github-starter-kit/](https://lurest-inc.github.io/github-starter-kit/)
+📄 **ドキュメント（HTML版）**: [GitHub Projects Ops Kit ドキュメント](https://lurest-inc.github.io/github-starter-kit/)
 
 ## 📋 更新履歴
 
