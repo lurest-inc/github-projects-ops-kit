@@ -1,20 +1,20 @@
 # GitHub Projects Ops Kit
 
 ![Platform: macOS/Windows](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-blue.svg)
-![GitHub Top Language](https://img.shields.io/github/languages/top/lurest-inc/github-starter-kit)
-[![GitHub Release](https://img.shields.io/github/v/release/lurest-inc/github-starter-kit)](https://github.com/lurest-inc/github-starter-kit/releases)
-[![GitHub Release Date](https://img.shields.io/github/release-date/lurest-inc/github-starter-kit)](https://github.com/lurest-inc/github-starter-kit/releases)
+![GitHub Top Language](https://img.shields.io/github/languages/top/lurest-inc/github-projects-ops-kit)
+[![GitHub Release](https://img.shields.io/github/v/release/lurest-inc/github-projects-ops-kit)](https://github.com/lurest-inc/github-projects-ops-kit/releases)
+[![GitHub Release Date](https://img.shields.io/github/release-date/lurest-inc/github-projects-ops-kit)](https://github.com/lurest-inc/github-projects-ops-kit/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
   
-[![GitHub Stars](https://img.shields.io/github/stars/lurest-inc/github-starter-kit)](https://github.com/lurest-inc/github-starter-kit/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/lurest-inc/github-starter-kit)](https://github.com/lurest-inc/github-starter-kit/forks)
-[![GitHub Last Commit](https://img.shields.io/github/last-commit/lurest-inc/github-starter-kit)](https://github.com/lurest-inc/github-starter-kit/commits)
-[![Issues Welcome](https://img.shields.io/badge/Issues-welcome-brightgreen)](https://github.com/lurest-inc/github-starter-kit/issues)
-[![Discussions Welcome](https://img.shields.io/badge/Discussions-welcome-brightgreen)](https://github.com/lurest-inc/github-starter-kit/discussions)
+[![GitHub Stars](https://img.shields.io/github/stars/lurest-inc/github-projects-ops-kit)](https://github.com/lurest-inc/github-projects-ops-kit/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/lurest-inc/github-projects-ops-kit)](https://github.com/lurest-inc/github-projects-ops-kit/forks)
+[![GitHub Last Commit](https://img.shields.io/github/last-commit/lurest-inc/github-projects-ops-kit)](https://github.com/lurest-inc/github-projects-ops-kit/commits)
+[![Issues Welcome](https://img.shields.io/badge/Issues-welcome-brightgreen)](https://github.com/lurest-inc/github-projects-ops-kit/issues)
+[![Discussions Welcome](https://img.shields.io/badge/Discussions-welcome-brightgreen)](https://github.com/lurest-inc/github-projects-ops-kit/discussions)
   
-[![TOC Generator](https://github.com/lurest-inc/github-starter-kit/actions/workflows/toc.yml/badge.svg)](https://github.com/lurest-inc/github-starter-kit/actions/workflows/toc.yml)
-[![Pages Deploy](https://github.com/lurest-inc/github-starter-kit/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/lurest-inc/github-starter-kit/actions/workflows/pages/pages-build-deployment)
-[![release-please](https://github.com/lurest-inc/github-starter-kit/actions/workflows/release-please.yml/badge.svg)](https://github.com/lurest-inc/github-starter-kit/actions/workflows/release-please.yml)
+[![TOC Generator](https://github.com/lurest-inc/github-projects-ops-kit/actions/workflows/toc.yml/badge.svg)](https://github.com/lurest-inc/github-projects-ops-kit/actions/workflows/toc.yml)
+[![Pages Deploy](https://github.com/lurest-inc/github-projects-ops-kit/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/lurest-inc/github-projects-ops-kit/actions/workflows/pages/pages-build-deployment)
+[![release-please](https://github.com/lurest-inc/github-projects-ops-kit/actions/workflows/release-please.yml/badge.svg)](https://github.com/lurest-inc/github-projects-ops-kit/actions/workflows/release-please.yml)
 
 `GitHub Projects` の初期構築から運用分析までを `GitHub Actions` で半自動実行するための運用キットです。
 本 Repository を Fork し、Workflow を手動実行することで、Project の作成から分析までを一気通貫して行えます。
@@ -65,7 +65,7 @@
 
 導入手順や使い方の詳細は `GitHub Pages` をご参照ください。
 
-📄 **ドキュメント（HTML版）**: [GitHub Projects Ops Kit ドキュメント](https://lurest-inc.github.io/github-starter-kit/)
+📄 **ドキュメント（HTML版）**: [GitHub Projects Ops Kit ドキュメント](https://lurest-inc.github.io/github-projects-ops-kit/)
 
 ## 📋 更新履歴
 

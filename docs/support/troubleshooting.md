@@ -29,7 +29,7 @@ Fork した Repository では、セキュリティ上の理由により **`GitHu
 ### 有効化手順（CLI）
 
 ```bash
-gh api repos/<owner>/github-starter-kit/actions/permissions \
+gh api repos/<owner>/github-projects-ops-kit/actions/permissions \
   --method PUT \
   --field enabled=true \
   --field allowed_actions="all"

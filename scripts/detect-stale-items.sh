@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # 滞留 Item 検知スクリプト
-# https://lurest-inc.github.io/github-starter-kit/scripts/detect-stale-items
+# https://lurest-inc.github.io/github-projects-ops-kit/scripts/detect-stale-items
 #
 # 環境変数:
 #   GH_TOKEN       - GitHub PAT（Projects 読み取り権限が必要）

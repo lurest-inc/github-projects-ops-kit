@@ -2,7 +2,7 @@
 
 `gh` CLI を使ったセットアップ手順です。`PAT` 作成を除き、すべての操作をターミナルから実行できます。
 
-> **Tip:** Claude Code などの **生成 AI へのプロンプト** として、「[GitHub Projects Ops Kit](https://lurest-inc.github.io/github-starter-kit/)の[クイックスタート（コマンド版）](https://lurest-inc.github.io/github-starter-kit/getting-started/quickstart-cli/)を参照しながら自分のアカウント上でセットアップして」と命じることで、セットアップ作業の自動化を支援できます。
+> **Tip:** Claude Code などの **生成 AI へのプロンプト** として、「[GitHub Projects Ops Kit](https://lurest-inc.github.io/github-projects-ops-kit/)の[クイックスタート（コマンド版）](https://lurest-inc.github.io/github-projects-ops-kit/getting-started/quickstart-cli/)を参照しながら自分のアカウント上でセットアップして」と命じることで、セットアップ作業の自動化を支援できます。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -41,8 +41,8 @@ flowchart LR
 ## 1. 🍴 Repository を Fork する
 
 ```bash
-gh repo fork lurest-inc/github-starter-kit --clone
-cd github-starter-kit
+gh repo fork lurest-inc/github-projects-ops-kit --clone
+cd github-projects-ops-kit
 ```
 
 ## 2. 🔑 PAT を作成する
@@ -56,7 +56,7 @@ GitHub の [Settings > Developer settings > Personal access tokens](https://gith
 ## 3. 🔒 Secrets を設定する
 
 ```bash
-gh secret set PROJECT_PAT --repo <owner>/github-starter-kit
+gh secret set PROJECT_PAT --repo <owner>/github-projects-ops-kit
 ```
 
 実行するとプロンプトが表示されるので、作成した PAT を入力してください。
@@ -66,7 +66,7 @@ gh secret set PROJECT_PAT --repo <owner>/github-starter-kit
 Fork した Repository では `GitHub Actions` がデフォルトで無効になっています。
 
 ```bash
-gh api repos/<owner>/github-starter-kit/actions/permissions \
+gh api repos/<owner>/github-projects-ops-kit/actions/permissions \
   --method PUT \
   --field enabled=true \
   --field allowed_actions="all"

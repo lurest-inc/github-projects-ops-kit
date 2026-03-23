@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # GitHub Project ステータスカラム設定スクリプト
-# https://lurest-inc.github.io/github-starter-kit/scripts/setup-project-status
+# https://lurest-inc.github.io/github-projects-ops-kit/scripts/setup-project-status
 #
 # 環境変数:
 #   GH_TOKEN       - GitHub PAT（Projects 操作権限が必要）

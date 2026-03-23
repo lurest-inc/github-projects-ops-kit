@@ -57,7 +57,7 @@
 
 ハラスメントや不適切な行動を発見した場合は、プロジェクトメンテナーに報告してください。報告は、公開IssueやDiscussionsではなく、以下のプライベートな連絡手段をご利用ください。
 
-- [GitHubのPrivate Security Advisory](https://github.com/lurest-inc/github-starter-kit/security/advisories/new)を通じた報告
+- [GitHubのPrivate Security Advisory](https://github.com/lurest-inc/github-projects-ops-kit/security/advisories/new)を通じた報告
 
 報告の際には、可能な範囲で次の情報を含めてください：
 

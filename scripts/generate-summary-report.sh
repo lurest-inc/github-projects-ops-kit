@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Project サマリーレポート生成スクリプト
-# https://lurest-inc.github.io/github-starter-kit/scripts/generate-summary-report
+# https://lurest-inc.github.io/github-projects-ops-kit/scripts/generate-summary-report
 #
 # 環境変数:
 #   GH_TOKEN       - GitHub PAT（Projects 読み取り権限が必要）

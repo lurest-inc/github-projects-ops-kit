@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # GitHub Project View 作成スクリプト
-# https://lurest-inc.github.io/github-starter-kit/scripts/setup-project-views
+# https://lurest-inc.github.io/github-projects-ops-kit/scripts/setup-project-views
 #
 # 環境変数:
 #   GH_TOKEN          - GitHub PAT（Projects 操作権限が必要）
