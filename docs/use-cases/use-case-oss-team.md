@@ -14,7 +14,7 @@ JSON 定義ファイルで Field・Status・View を定義するため、誰が 
 
 ### 🏷️ Label・Status を一括で標準化できる
 
-複数リポジトリにまたがる OSS や、チーム内の複数プロジェクトでも、Label と Status を統一できます。
+複数 Repository にまたがる OSS や、チーム内の複数プロジェクトでも、Label と Status を統一できます。
 Issue の分類基準が揃うことで、優先度の判断やトリアージがスムーズになります。
 
 ### 👥 チーム全員が同じ画面で作業できる
@@ -44,7 +44,7 @@ GitHub 上で Issue 管理・コードレビュー・プロジェクト進捗の
 
 人数が増えるにつれ、Issue の書き方・Label の付け方・Status の使い分けに個人差が出てきます。
 
-**GitHub Projects Ops Kit なら:** JSON 定義ファイルで Field・Status・Label を標準化できます。定義ファイルをリポジトリに含めておけば、運用ルールがコードとして共有され、ルールの曖昧さを排除できます。
+**GitHub Projects Ops Kit なら:** JSON 定義ファイルで Field・Status・Label を標準化できます。定義ファイルを Repository に含めておけば、運用ルールがコードとして共有され、ルールの曖昧さを排除できます。
 
 → [Workflow ① GitHub Project 新規作成](../workflows/01-create-project)
 
@@ -58,9 +58,9 @@ Issue が増えてくると、全体像の把握が難しくなります。Board
 
 ### 🏷️ Issue/PR 管理を標準化したい
 
-リポジトリごとに Label がバラバラだと、横断的な検索や集計ができません。
+Repository ごとに Label がバラバラだと、横断的な検索や集計ができません。
 
-**GitHub Projects Ops Kit なら:** 設定ファイルで定義した Label を複数リポジトリに一括適用できます。Issue/PR を Project に一括紐付けすることで、チーム全体の作業を 1 つの Board で俯瞰できます。
+**GitHub Projects Ops Kit なら:** 設定ファイルで定義した Label を複数 Repository に一括適用できます。Issue/PR を Project に一括紐付けすることで、チーム全体の作業を 1 つの Board で俯瞰できます。
 
 → [Workflow ④ Issue Label 一括追加](../workflows/04-setup-repository-labels)
 → [Workflow ⑤ Issue/PR 一括紐付け](../workflows/05-add-items-to-project)
@@ -75,7 +75,7 @@ Issue が増えてくると、全体像の把握が難しくなります。Board
 
 **Ops Kit を使った改善手順:**
 
-1. **Workflow ④** で全リポジトリに共通 Label を一括設定（bug / feature / docs / good first issue 等）
+1. **Workflow ④** で全 Repository に共通 Label を一括設定（bug / feature / docs / good first issue 等）
 2. **Workflow ①** で Project を作成し、Status・Field・View を標準化
 3. **Workflow ⑤** で既存 Issue/PR を Project に一括紐付け
 4. Board View で未トリアージの Issue を一覧化し、週次でチェック
@@ -84,16 +84,16 @@ Issue が増えてくると、全体像の把握が難しくなります。Board
 
 ### シナリオ 2: 小規模チームのスプリント管理
 
-> **状況:** 3 名のチームで Web アプリを開発中。2 つのリポジトリ（Frontend / Backend）にまたがる Issue を Sprint 単位で管理したい。
+> **状況:** 3 名のチームで Web アプリを開発中。2 つの Repository（Frontend / Backend）にまたがる Issue を Sprint 単位で管理したい。
 
 **Ops Kit を活用した運用:**
 
 1. **Workflow ①** で Sprint 管理用の Project を作成（Sprint・Priority・Estimate の Field 付き）
-2. **Workflow ⑤** で 2 リポジトリの Issue を Project に一括追加
+2. **Workflow ⑤** で 2 Repositories の Issue を Project に一括追加
 3. Sprint Board View でタスクの進捗を管理し、Daily で確認
 4. Sprint 終了時に **Workflow ⑥** でサマリーレポート・ベロシティレポートを生成し、振り返りに活用
 
-**結果:** 2 リポジトリのタスクを 1 つの Board で横断管理。Sprint ごとの生産性を定量的に把握できる。
+**結果:** 2 Repositories のタスクを 1 つの Board で横断管理。Sprint ごとの生産性を定量的に把握できる。
 
 ---
 
@@ -111,9 +111,9 @@ Issue が増えてくると、全体像の把握が難しくなります。Board
 
 > **所要時間:** 約 10 分 | **前提条件:** GitHub アカウント、`GitHub Personal Access Token`（PAT）
 
-### Step 1: リポジトリを Fork する
+### Step 1: Repository を Fork する
 
-[このリポジトリを Fork](https://github.com/lurest-inc/github-projects-ops-kit/fork) して、自分のアカウントまたは Organization にコピーします。
+[この Repository を Fork](https://github.com/lurest-inc/github-projects-ops-kit/fork) して、自分のアカウントまたは Organization にコピーします。
 
 ### Step 2: PAT を設定する
 
