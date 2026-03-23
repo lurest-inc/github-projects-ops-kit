@@ -1,5 +1,53 @@
 # Changelog
 
+## [1.2.0](https://github.com/lurest-inc/github-projects-ops-kit/compare/v1.1.3...v1.2.0) (2026-03-23)
+
+
+### 新機能
+
+* リポジトリ物理名 github-starter-kit を github-projects-ops-kit に一括置換 ([a5b7084](https://github.com/lurest-inc/github-projects-ops-kit/commit/a5b70843afe51ccd00b93486820d54f8c0c4528a)), closes [#411](https://github.com/lurest-inc/github-projects-ops-kit/issues/411)
+* リポジトリ物理名を github-projects-ops-kit に変更 ([2e63501](https://github.com/lurest-inc/github-projects-ops-kit/commit/2e63501d539afccf32fbbc48f44f8e5fd1c48b29))
+* リポジトリ論理名を GitHub Projects Ops Kit に統一し命名規則ドキュメントを追加 ([80f3586](https://github.com/lurest-inc/github-projects-ops-kit/commit/80f3586935cf88252fc0b755ba3f5ef4ecfede92)), closes [#404](https://github.com/lurest-inc/github-projects-ops-kit/issues/404)
+
+
+### バグ修正
+
+* PRレビュー指摘対応（TOCアンカー・名称表記・リンクパス修正） ([427d1f9](https://github.com/lurest-inc/github-projects-ops-kit/commit/427d1f928f9236d0a6475eb7096c8fe888de6913))
+
+
+### ドキュメント
+
+* about.md を docs/reference 配下に移動 ([44f8432](https://github.com/lurest-inc/github-projects-ops-kit/commit/44f8432cb3505942a335568ba69fc6949bcbaa4d))
+* altテキストの半角スペースを修正 ([986c3e0](https://github.com/lurest-inc/github-projects-ops-kit/commit/986c3e0afbcb0b208ee7a3baab656937163dc7e3))
+* GitHub流入ユーザー向けに README のブランド訴求と導線を再設計 ([276690f](https://github.com/lurest-inc/github-projects-ops-kit/commit/276690fb911a7c9fac3bbe6dbfe5e4f467adc2f4))
+* GitHub流入ユーザー向けに README のブランド訴求と導線を再設計 ([db1689f](https://github.com/lurest-inc/github-projects-ops-kit/commit/db1689fab264cb22b691eb607daa8f97e53c5501)), closes [#406](https://github.com/lurest-inc/github-projects-ops-kit/issues/406)
+* OSSチームユースケースページに画像を追加 ([7665538](https://github.com/lurest-inc/github-projects-ops-kit/commit/76655381b4de2e8d6cb809078a5ae5ba4cb0cf98))
+* OSSチームユースケースページに画像を追加 ([bce4d01](https://github.com/lurest-inc/github-projects-ops-kit/commit/bce4d0119e714f4f2529e43f3d632ed330e6fa33))
+* Qiita記事と命名規則ドキュメントを.claude/docsに移動しGitHub Pages公開範囲から除外 ([545f28b](https://github.com/lurest-inc/github-projects-ops-kit/commit/545f28b10c34e8e2773becf2a147e47ee101c7ac))
+* ドキュメントサイトトップページを用途別・段階別導線に再設計 ([c900c12](https://github.com/lurest-inc/github-projects-ops-kit/commit/c900c12e859748b91992daffc57234d62a7556e7))
+* ドキュメントサイト流入ユーザー向けにトップページと案内文を再設計 ([90bba74](https://github.com/lurest-inc/github-projects-ops-kit/commit/90bba748061627d137412b796353b570780b31c4))
+* ブランドメッセージと想定顧客セグメントのガイドを追加 ([957189c](https://github.com/lurest-inc/github-projects-ops-kit/commit/957189c8ff30e06d704eb679659085cffc0c9f0f))
+* ブランドメッセージと想定顧客セグメントのガイドを追加 ([8b5a584](https://github.com/lurest-inc/github-projects-ops-kit/commit/8b5a58431e64f4e40bb18f1639d09ff126c51863)), closes [#405](https://github.com/lurest-inc/github-projects-ops-kit/issues/405)
+* ユースケースドキュメントに導入前後のイメージ画像を追加 ([5bd0e92](https://github.com/lurest-inc/github-projects-ops-kit/commit/5bd0e923905dc7ed0cadddedab0f2277e67ad365))
+* ユースケースドキュメントに導入前後のイメージ画像を追加 ([60409d0](https://github.com/lurest-inc/github-projects-ops-kit/commit/60409d05a3939a9aae4a12ce42aa3518781b4e94))
+* ユースケースページの文言を修正 ([500099d](https://github.com/lurest-inc/github-projects-ops-kit/commit/500099d327db75b096c76e067823ab20c3ccd3e5))
+* ユースケースページをブランドガイドの3セグメントに最適化 ([ca0d089](https://github.com/lurest-inc/github-projects-ops-kit/commit/ca0d089a1346b84722c35688f50b3442a9781b21))
+* 個人開発者・Organizationユースケースの画像を差し替え ([efa7cfb](https://github.com/lurest-inc/github-projects-ops-kit/commit/efa7cfb9df15fec127a53c78b246765e5e02071c))
+* 目次位置の修正とブランド名の太字統一 ([ae65205](https://github.com/lurest-inc/github-projects-ops-kit/commit/ae65205fb881073ab7f574c6803c520d42313503))
+* 紹介ページから公開リポジトリ一覧を削除 ([f787dfc](https://github.com/lurest-inc/github-projects-ops-kit/commit/f787dfc11ec47e42da0392868e115a8095270273))
+* 紹介ページのレビュー指摘を反映 ([3567a1a](https://github.com/lurest-inc/github-projects-ops-kit/commit/3567a1a02a152b1abf7d301a11c54ddee19c7bb2))
+* 見出しに絵文字を追加して README と統一 ([db2da4d](https://github.com/lurest-inc/github-projects-ops-kit/commit/db2da4d82d8cdbb9f9cb804b929192968fc14dfc))
+* 運営元 Lurest と開発者 mabubu0203 の紹介ページを作成 ([1e8324f](https://github.com/lurest-inc/github-projects-ops-kit/commit/1e8324f23d049e6d0f1a4796ccf89f816e87a248))
+* 運営元 Lurest と開発者 mabubu0203 の紹介ページを作成 ([5409189](https://github.com/lurest-inc/github-projects-ops-kit/commit/54091893ba7f650ee9b28a15d2942a179937e7b0))
+
+
+### その他の変更
+
+* **docs:** update TOC ([60142d4](https://github.com/lurest-inc/github-projects-ops-kit/commit/60142d4e48bc9dc6daad5b60c08ae88d4598b277))
+* **docs:** update TOC ([6ed4e01](https://github.com/lurest-inc/github-projects-ops-kit/commit/6ed4e01e3a890cfdcffa68b6f9e344b4ce94b0b9))
+* **docs:** update TOC ([3b34ca9](https://github.com/lurest-inc/github-projects-ops-kit/commit/3b34ca9392ba83a51e920078085c95af62172832))
+* **docs:** update TOC ([dc65755](https://github.com/lurest-inc/github-projects-ops-kit/commit/dc6575548a9b4a557c63a9be5873fefaec8f1f3d))
+
 ## [1.1.3](https://github.com/lurest-inc/github-starter-kit/compare/v1.1.2...v1.1.3) (2026-03-21)
 
 
