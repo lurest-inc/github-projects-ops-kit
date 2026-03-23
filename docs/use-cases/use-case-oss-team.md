@@ -33,6 +33,8 @@ GitHub 上で Issue 管理・コードレビュー・プロジェクト進捗の
 
 ---
 
+![OSSメンテナー・小規模チームの導入前後イメージ](../assets/images/use-case-oss-team.png)
+
 ## ⚡ Before/After — 手作業 vs Ops Kit
 
 | 作業内容 | 手作業の場合 | Ops Kit の場合 |
