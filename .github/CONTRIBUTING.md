@@ -19,21 +19,21 @@
 
 ## Issue の起票
 
-[Issues](https://github.com/lurest-inc/github-starter-kit/issues/new/choose) からテンプレートを選択して起票してください。
+[Issues](https://github.com/lurest-inc/github-projects-ops-kit/issues/new/choose) からテンプレートを選択して起票してください。
 
 | テンプレート | 用途 |
 |-------------|------|
-| [バグ報告](https://github.com/lurest-inc/github-starter-kit/issues/new?template=bug_report.yml) | バグや不具合の報告 |
-| [機能リクエスト](https://github.com/lurest-inc/github-starter-kit/issues/new?template=feature_request.yml) | 新しい機能や改善の提案 |
+| [バグ報告](https://github.com/lurest-inc/github-projects-ops-kit/issues/new?template=bug_report.yml) | バグや不具合の報告 |
+| [機能リクエスト](https://github.com/lurest-inc/github-projects-ops-kit/issues/new?template=feature_request.yml) | 新しい機能や改善の提案 |
 
-質問・アイデア・雑談・成果共有などは [Discussions](https://github.com/lurest-inc/github-starter-kit/discussions) をご利用ください。
+質問・アイデア・雑談・成果共有などは [Discussions](https://github.com/lurest-inc/github-projects-ops-kit/discussions) をご利用ください。
 
 | カテゴリ | 用途 |
 |---------|------|
-| [Q&A](https://github.com/lurest-inc/github-starter-kit/discussions/categories/q-a) | 使い方やトラブルに関する質問 |
-| [Ideas](https://github.com/lurest-inc/github-starter-kit/discussions/categories/ideas) | 新しいアイデアや改善提案の共有 |
-| [General](https://github.com/lurest-inc/github-starter-kit/discussions/categories/general) | 一般的な話題 |
-| [Show and tell](https://github.com/lurest-inc/github-starter-kit/discussions/categories/show-and-tell) | 活用事例やカスタマイズの共有 |
+| [Q&A](https://github.com/lurest-inc/github-projects-ops-kit/discussions/categories/q-a) | 使い方やトラブルに関する質問 |
+| [Ideas](https://github.com/lurest-inc/github-projects-ops-kit/discussions/categories/ideas) | 新しいアイデアや改善提案の共有 |
+| [General](https://github.com/lurest-inc/github-projects-ops-kit/discussions/categories/general) | 一般的な話題 |
+| [Show and tell](https://github.com/lurest-inc/github-projects-ops-kit/discussions/categories/show-and-tell) | 活用事例やカスタマイズの共有 |
 
 ## Pull Request の作成
 

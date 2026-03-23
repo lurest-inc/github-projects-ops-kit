@@ -56,11 +56,11 @@
 
 ### リポジトリ名変更後に対応が必要
 
-- [ ] GitHub URL 内の `github-starter-kit` を `github-projects-ops-kit` に一括置換
-- [ ] GitHub Pages URL の変更（`lurest-inc.github.io/github-projects-ops-kit/`）
-- [ ] バッジ URL の更新（README.md / docs/index.md）
-- [ ] `gh repo fork` / `gh secret set` コマンド例の更新（quickstart-cli.md）
-- [ ] `.github/ISSUE_TEMPLATE/config.yml` の URL 更新
-- [ ] GitHub Discussions / Issues のリンク更新
-- [ ] Qiita 記事内のリンク更新（公開済みコンテンツ）
-- [ ] CLAUDE.md のプロジェクト説明更新
+- [x] GitHub URL 内の `github-starter-kit` を `github-projects-ops-kit` に一括置換
+- [x] GitHub Pages URL の変更（`lurest-inc.github.io/github-projects-ops-kit/`）
+- [x] バッジ URL の更新（README.md / docs/index.md）
+- [x] `gh repo fork` / `gh secret set` コマンド例の更新（quickstart-cli.md）
+- [x] `.github/ISSUE_TEMPLATE/config.yml` の URL 更新
+- [x] GitHub Discussions / Issues のリンク更新
+- [x] Qiita 記事内のリンク更新（公開済みコンテンツ）
+- [x] CLAUDE.md のプロジェクト説明更新（旧名称の参照なし、対応不要）

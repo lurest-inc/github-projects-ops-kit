@@ -17,8 +17,8 @@ GitHub Projects、使っていますか？
 
 | | |
 |---|---|
-| リポジトリ | https://github.com/lurest-inc/github-starter-kit |
-| ドキュメント | https://lurest-inc.github.io/github-starter-kit/ |
+| リポジトリ | https://github.com/lurest-inc/github-projects-ops-kit |
+| ドキュメント | https://lurest-inc.github.io/github-projects-ops-kit/ |
 | バージョン | v1.1.2 |
 | ライセンス | MIT |
 | 主要言語 | Bash |
@@ -207,7 +207,7 @@ JSON 定義ファイルを編集するだけで、Field・Status・View・Label 
 4. Workflow を手動実行
 ```
 
-GUI 操作のみでセットアップできる **[クイックスタート（GUI）](https://lurest-inc.github.io/github-starter-kit/getting-started/quickstart-gui/)** と、ターミナル操作で進める **[クイックスタート（CLI）](https://lurest-inc.github.io/github-starter-kit/getting-started/quickstart-cli/)** の 2 種類のガイドを用意しています。
+GUI 操作のみでセットアップできる **[クイックスタート（GUI）](https://lurest-inc.github.io/github-projects-ops-kit/getting-started/quickstart-gui/)** と、ターミナル操作で進める **[クイックスタート（CLI）](https://lurest-inc.github.io/github-projects-ops-kit/getting-started/quickstart-cli/)** の 2 種類のガイドを用意しています。
 
 # おわりに
 
@@ -228,6 +228,6 @@ Issue や Discussions でのフィードバックも大歓迎です。
 
 # 関連リンク📎
 
-- **リポジトリ**: https://github.com/lurest-inc/github-starter-kit
-- **ドキュメント**: https://lurest-inc.github.io/github-starter-kit/
-- **CHANGELOG**: https://github.com/lurest-inc/github-starter-kit/blob/main/CHANGELOG.md
+- **リポジトリ**: https://github.com/lurest-inc/github-projects-ops-kit
+- **ドキュメント**: https://lurest-inc.github.io/github-projects-ops-kit/
+- **CHANGELOG**: https://github.com/lurest-inc/github-projects-ops-kit/blob/main/CHANGELOG.md

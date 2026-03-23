@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # GitHub Project Item 一括追加スクリプト
-# https://lurest-inc.github.io/github-starter-kit/scripts/add-items-to-project
+# https://lurest-inc.github.io/github-projects-ops-kit/scripts/add-items-to-project
 #
 # 環境変数:
 #   GH_TOKEN       - GitHub PAT（Projects 操作権限が必要）

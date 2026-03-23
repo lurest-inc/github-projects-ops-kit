@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # 工数集計レポート生成スクリプト
-# https://lurest-inc.github.io/github-starter-kit/scripts/generate-effort-report
+# https://lurest-inc.github.io/github-projects-ops-kit/scripts/generate-effort-report
 #
 # 環境変数:
 #   GH_TOKEN       - GitHub PAT（Projects 読み取り権限が必要）

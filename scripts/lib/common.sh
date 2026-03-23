@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # GitHub Project スクリプト共通ライブラリ
-# https://lurest-inc.github.io/github-starter-kit/
+# https://lurest-inc.github.io/github-projects-ops-kit/
 #
 # 各スクリプトから source して使用する
 
