@@ -2,3 +2,5 @@ title: GitHub Projects Ops Kit
 description: GitHub Projects の初期構築から運用分析までを自動実行する運用キット
 theme: jekyll-theme-cayman
 google_analytics:
+plugins:
+  - jekyll-sitemap
