@@ -8,9 +8,8 @@ set -euo pipefail
 # 既に存在するファイルはスキップする（上書き禁止）。
 #
 # 環境変数:
-#   GH_TOKEN        - GitHub PAT（repo スコープが必要）
-#   PROJECT_OWNER   - リポジトリオーナー（個人アカウントまたは Organization）
-#   REPOSITORY_NAME - 対象リポジトリ名
+#   GH_TOKEN    - GitHub PAT（repo スコープが必要）
+#   TARGET_REPO - 対象 Repository（owner/repo 形式）
 
 # --- 共通ライブラリ読み込み ---
 
@@ -20,12 +19,13 @@ source "${SCRIPT_DIR}/lib/common.sh"
 # --- バリデーション ---
 
 require_env "GH_TOKEN" "Secrets に PROJECT_PAT を設定してください。"
-require_env "PROJECT_OWNER"
-require_env "REPOSITORY_NAME"
+require_env "TARGET_REPO"
+if [[ ! "${TARGET_REPO}" =~ ^[^/]+/[^/]+$ ]]; then
+  echo "::error::TARGET_REPO は owner/repo 形式で指定してください（例: myorg/myrepo）。"
+  exit 1
+fi
 require_command "gh" "GitHub CLI (gh) が必要です。PATH を確認してください。"
 require_command "jq" "JSON の解析に必要です。"
-
-TARGET_REPO="${PROJECT_OWNER}/${REPOSITORY_NAME}"
 
 # --- 対象ファイル定義 ---
 

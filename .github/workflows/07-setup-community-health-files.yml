@@ -8,8 +8,8 @@ name: "⑦ Community Health Files 一括登録"
 on:
   workflow_dispatch:
     inputs:
-      repository_name:
-        description: "対象リポジトリ名"
+      target_repo:
+        description: "対象 Repository（owner/repo 形式）"
         required: true
         type: string
 
@@ -21,8 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
-      PROJECT_OWNER: ${{ github.repository_owner }}
-      REPOSITORY_NAME: ${{ inputs.repository_name }}
+      TARGET_REPO: ${{ inputs.target_repo }}
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     # 前提: ubuntu-latest には gh (GitHub CLI) と jq がプリインストール済み
     # スクリプト内の require_command チェックはローカル実行時の UX 向上目的で残している
@@ -34,7 +33,7 @@ jobs:
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         run: |
           # トリム（前後の空白のみ削除、内部空白は保持）
-          REPOSITORY_NAME="$(echo "$REPOSITORY_NAME" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          TARGET_REPO="$(echo "$TARGET_REPO" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
           bash scripts/setup-community-health-files.sh
 
   workflow-summary-failure:
