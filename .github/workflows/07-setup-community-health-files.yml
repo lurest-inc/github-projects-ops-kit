@@ -1,0 +1,75 @@
+# ---------------------------------------------------------
+# secrets.PROJECT_PAT には GitHub の Personal Access Token を設定します。
+# PAT の形式（ghp_ または github_pat_ で始まる）を検証し、
+# 無効な値の場合はステップをスキップします。
+# ---------------------------------------------------------
+name: "⑦ Community Health Files 一括登録"
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_owner:
+        description: "リポジトリオーナー（個人 or Organization）"
+        required: true
+        type: string
+      repository_name:
+        description: "対象リポジトリ名"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  setup-community-health-files:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.PROJECT_PAT }}
+      PROJECT_OWNER: ${{ inputs.project_owner }}
+      REPOSITORY_NAME: ${{ inputs.repository_name }}
+      PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
+    # 前提: ubuntu-latest には gh (GitHub CLI) と jq がプリインストール済み
+    # スクリプト内の require_command チェックはローカル実行時の UX 向上目的で残している
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: Community Health Files を登録
+        if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
+        run: |
+          # トリム（前後の空白のみ削除、内部空白は保持）
+          PROJECT_OWNER="$(echo "$PROJECT_OWNER" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          REPOSITORY_NAME="$(echo "$REPOSITORY_NAME" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          bash scripts/setup-community-health-files.sh
+
+  workflow-summary-failure:
+    needs: [setup-community-health-files]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: 失敗サマリーを出力
+        uses: ./.github/actions/workflow-summary
+        with:
+          status: failure
+          project-owner: ${{ inputs.project_owner }}
+          job-results: |
+            {"setup-community-health-files": "${{ needs.setup-community-health-files.result }}"}
+
+  workflow-summary-success:
+    needs: [setup-community-health-files]
+    if: success()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: 成功サマリーを出力
+        uses: ./.github/actions/workflow-summary
+        with:
+          status: success
+          project-owner: ${{ inputs.project_owner }}
+          job-results: |
+            {"setup-community-health-files": "${{ needs.setup-community-health-files.result }}"}
