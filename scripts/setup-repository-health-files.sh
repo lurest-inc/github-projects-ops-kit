@@ -18,26 +18,13 @@ source "${SCRIPT_DIR}/lib/common.sh"
 
 # --- バリデーション ---
 
-require_env "GH_TOKEN" "Secrets に PROJECT_PAT を設定してください。"
-require_env "TARGET_REPO"
-if [[ ! "${TARGET_REPO}" =~ ^[^/]+/[^/]+$ ]]; then
-  echo "::error::TARGET_REPO は owner/repo 形式で指定してください（例: myorg/myrepo）。"
-  exit 1
-fi
-require_command "gh" "GitHub CLI (gh) が必要です。PATH を確認してください。"
-require_command "jq" "JSON の解析に必要です。"
+validate_target_repo_env
 
 # --- 対象ファイル定義（JSON から読み込み） ---
 
-CONFIG_DIR="${SCRIPT_DIR}/config"
-HEALTH_FILE_DEFINITIONS="${CONFIG_DIR}/repo-health-file-definitions.json"
+HEALTH_FILE_DEFINITIONS=$(load_config_file "${SCRIPT_DIR}/config/repo-health-file-definitions.json" "Health File 定義ファイル")
 
-if [[ ! -f "${HEALTH_FILE_DEFINITIONS}" ]]; then
-  echo "::error::設定ファイルが見つかりません: ${HEALTH_FILE_DEFINITIONS}"
-  exit 1
-fi
-
-mapfile -t HEALTH_FILES < <(jq -r '.[].path' "${HEALTH_FILE_DEFINITIONS}")
+mapfile -t HEALTH_FILES < <(echo "${HEALTH_FILE_DEFINITIONS}" | jq -r '.[].path')
 FILE_COUNT=${#HEALTH_FILES[@]}
 
 if [[ "${FILE_COUNT}" -eq 0 ]]; then
@@ -47,55 +34,11 @@ fi
 
 # --- デフォルトブランチの取得 ---
 
-echo ""
-echo "Repository ${TARGET_REPO} のデフォルトブランチを取得しています..."
-
-DEFAULT_BRANCH=$(gh api "repos/${TARGET_REPO}" \
-  -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
-  --jq '.default_branch')
-
-if [[ -z "${DEFAULT_BRANCH}" ]]; then
-  echo "::error::デフォルトブランチの取得に失敗しました。"
-  exit 1
-fi
-
-echo "  デフォルトブランチ: ${DEFAULT_BRANCH}"
-
-# --- デフォルトブランチの SHA 取得 ---
-
-echo ""
-echo "デフォルトブランチの SHA を取得しています..."
-
-DEFAULT_BRANCH_SHA=$(gh api "repos/${TARGET_REPO}/git/ref/heads/${DEFAULT_BRANCH}" \
-  -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
-  --jq '.object.sha')
-
-if [[ -z "${DEFAULT_BRANCH_SHA}" ]]; then
-  echo "::error::デフォルトブランチの SHA 取得に失敗しました。"
-  exit 1
-fi
-
-echo "  SHA: ${DEFAULT_BRANCH_SHA}"
+get_default_branch_info "${TARGET_REPO}"
 
 # --- 既存ファイルチェック＆登録対象の決定 ---
 
-echo ""
-echo "既存ファイルを確認しています..."
-
-FILES_TO_CREATE=()
-SKIPPED_COUNT=0
-
-for file_path in "${HEALTH_FILES[@]}"; do
-  if gh api "repos/${TARGET_REPO}/contents/${file_path}" \
-    -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
-    --jq '.sha' >/dev/null 2>&1; then
-    echo "  ${file_path} → 既存のためスキップ"
-    SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
-  else
-    echo "  ${file_path} → 登録対象"
-    FILES_TO_CREATE+=("${file_path}")
-  fi
-done
+check_existing_repo_files "${TARGET_REPO}" "${HEALTH_FILES[@]}"
 
 CREATED_COUNT=0
 FAILED_COUNT=0
@@ -105,145 +48,23 @@ FAILED_COUNT=0
 if [[ ${#FILES_TO_CREATE[@]} -eq 0 ]]; then
   echo ""
   echo "全ファイルが既に存在するため、処理をスキップします。"
-
-  if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-    {
-      echo "## Community Health Files 一括登録完了"
-      echo ""
-      echo "| 項目 | 件数 |"
-      echo "|------|------|"
-      echo "| 作成 | 0 |"
-      echo "| スキップ | ${SKIPPED_COUNT} |"
-      echo "| 失敗 | 0 |"
-      echo ""
-      echo "> 全ファイルが既に存在するため、PR は作成されませんでした。"
-    } >> "${GITHUB_STEP_SUMMARY}"
-  fi
-
-  print_summary "Repository" "${TARGET_REPO}" "作成" "0 件" "スキップ" "${SKIPPED_COUNT} 件" "失敗" "0 件"
+  output_repo_files_summary "Community Health Files 一括登録完了"
   exit 0
 fi
 
-# --- 作業ブランチ作成 ---
+# --- ファイル登録 & PR 作成 ---
 
-WORK_BRANCH="chore/add-community-health-files"
+create_files_via_pr \
+  "${TARGET_REPO}" \
+  "chore/add-community-health-files" \
+  "docs" \
+  "Community Health Files" \
+  "docs: add community health files" \
+  "## 概要
 
-echo ""
-echo "作業ブランチ ${WORK_BRANCH} を作成しています..."
-
-if ! gh api "repos/${TARGET_REPO}/git/refs" \
-  -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
-  --method POST \
-  -f "ref=refs/heads/${WORK_BRANCH}" \
-  -f "sha=${DEFAULT_BRANCH_SHA}" \
-  >/dev/null 2>&1; then
-  echo "::error::作業ブランチの作成に失敗しました。同名のブランチが既に存在する可能性があります。"
-  exit 1
-fi
-
-echo "  作成しました。"
-
-# --- ファイル登録 ---
-
-echo ""
-echo "Community Health Files を登録します..."
-
-FILE_INDEX=0
-
-for file_path in "${FILES_TO_CREATE[@]}"; do
-  FILE_INDEX=$((FILE_INDEX + 1))
-
-  echo ""
-  echo "  [${FILE_INDEX}/${#FILES_TO_CREATE[@]}] ${file_path}"
-
-  # 空ファイルの内容（base64 エンコード）— 改行のみ
-  CONTENT_BASE64=$(printf '\n' | base64)
-
-  if gh api "repos/${TARGET_REPO}/contents/${file_path}" \
-    -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
-    --method PUT \
-    -f "message=docs: add ${file_path}" \
-    -f "content=${CONTENT_BASE64}" \
-    -f "branch=${WORK_BRANCH}" \
-    >/dev/null 2>&1; then
-    echo "    → 作成しました。"
-    CREATED_COUNT=$((CREATED_COUNT + 1))
-  else
-    echo "    → 作成に失敗しました。"
-    SAFE_FILE_PATH=$(sanitize_for_workflow_command "${file_path}")
-    echo "::error::ファイル '${SAFE_FILE_PATH}' の作成に失敗しました。"
-    FAILED_COUNT=$((FAILED_COUNT + 1))
-  fi
-done
-
-# --- PR 作成 ---
-
-if [[ "${CREATED_COUNT}" -gt 0 ]]; then
-  echo ""
-  echo "PR を作成しています..."
-
-  PR_BODY="## 概要
-
-Community Health Files を一括登録します。
-
-### 追加ファイル
-
-| ファイル | 状態 |
-|---|---|"
-
-  for file_path in "${HEALTH_FILES[@]}"; do
-    # FILES_TO_CREATE に含まれるかチェック
-    local_status="スキップ（既存）"
-    for created_file in "${FILES_TO_CREATE[@]}"; do
-      if [[ "${file_path}" == "${created_file}" ]]; then
-        local_status="追加"
-        break
-      fi
-    done
-    PR_BODY="${PR_BODY}
-| \`${file_path}\` | ${local_status} |"
-  done
-
-  if PR_URL=$(gh pr create \
-    --repo "${TARGET_REPO}" \
-    --base "${DEFAULT_BRANCH}" \
-    --head "${WORK_BRANCH}" \
-    --title "docs: add community health files" \
-    --body "${PR_BODY}" 2>&1); then
-    echo "  PR を作成しました: ${PR_URL}"
-  else
-    echo "::error::PR の作成に失敗しました: ${PR_URL}"
-    FAILED_COUNT=$((FAILED_COUNT + 1))
-  fi
-fi
+Community Health Files を一括登録します。" \
+  "${HEALTH_FILES[@]}"
 
 # --- サマリー出力 ---
 
-if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  {
-    echo "## Community Health Files 一括登録完了"
-    echo ""
-    echo "| 項目 | 件数 |"
-    echo "|------|------|"
-    echo "| 作成 | ${CREATED_COUNT} |"
-    echo "| スキップ | ${SKIPPED_COUNT} |"
-    echo "| 失敗 | ${FAILED_COUNT} |"
-    if [[ -n "${PR_URL:-}" ]] && [[ "${PR_URL}" == http* ]]; then
-      echo ""
-      echo "### 作成された PR"
-      echo ""
-      echo "- ${PR_URL}"
-    fi
-  } >> "${GITHUB_STEP_SUMMARY}"
-fi
-
-print_summary "Repository" "${TARGET_REPO}" "作成" "${CREATED_COUNT} 件" "スキップ" "${SKIPPED_COUNT} 件" "失敗" "${FAILED_COUNT} 件"
-
-if [[ "${FAILED_COUNT}" -gt 0 ]]; then
-  echo ""
-  echo "::error::${FAILED_COUNT} 件の処理に失敗しました。"
-  exit 1
-fi
-
-echo ""
-echo "セットアップが完了しました。"
+output_repo_files_summary "Community Health Files 一括登録完了"

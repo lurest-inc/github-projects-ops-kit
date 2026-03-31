@@ -137,7 +137,7 @@ echo "  合計: ${TOTAL_COUNT} 件（フィルタ後）"
 echo ""
 echo "工数集計を実行しています..."
 
-EXECUTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+EXECUTED_AT=$(get_timestamp_utc)
 
 # 工数データの有無判定・全体サマリー（1 回の jq で算出）
 read -r ITEMS_WITH_EFFORT_COUNT ITEMS_WITHOUT_EFFORT_COUNT TOTAL_ESTIMATED TOTAL_ACTUAL < <(echo "${ITEMS}" | jq -r '
@@ -295,8 +295,7 @@ MISSING_EFFORT_ITEMS=$(echo "${ITEMS}" | jq '
   | sort_by(if .is_done then 0 else 1 end, .number)
 ')
 
-MISSING_EFFORT_COUNT=$(echo "${MISSING_EFFORT_ITEMS}" | jq 'length')
-MISSING_EFFORT_DONE_COUNT=$(echo "${MISSING_EFFORT_ITEMS}" | jq '[.[] | select(.is_done)] | length')
+read -r MISSING_EFFORT_COUNT MISSING_EFFORT_DONE_COUNT < <(echo "${MISSING_EFFORT_ITEMS}" | jq -r '[length, ([.[] | select(.is_done)] | length)] | @tsv')
 
 echo "  工数未入力: ${MISSING_EFFORT_COUNT} 件（うち Done: ${MISSING_EFFORT_DONE_COUNT} 件）"
 

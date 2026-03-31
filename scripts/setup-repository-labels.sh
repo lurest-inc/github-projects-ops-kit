@@ -15,23 +15,11 @@ source "${SCRIPT_DIR}/lib/common.sh"
 
 # --- バリデーション ---
 
-require_env "GH_TOKEN" "Secrets に PROJECT_PAT を設定してください。"
-require_env "TARGET_REPO"
-if [[ ! "${TARGET_REPO}" =~ ^[^/]+/[^/]+$ ]]; then
-  echo "::error::TARGET_REPO は owner/repo 形式で指定してください（例: myorg/myrepo）。"
-  exit 1
-fi
-require_command "gh" "GitHub CLI (gh) が必要です。PATH を確認してください。"
-require_command "jq" "JSON の解析に必要です。"
+validate_target_repo_env
 
 # --- ラベル定義ファイルの読み込み ---
 
-LABEL_DEFINITIONS_FILE="${SCRIPT_DIR}/config/repo-label-definitions.json"
-if [[ ! -f "${LABEL_DEFINITIONS_FILE}" ]]; then
-  echo "::error::ラベル定義ファイルが見つかりません: ${LABEL_DEFINITIONS_FILE}"
-  exit 1
-fi
-LABEL_DEFINITIONS=$(cat "${LABEL_DEFINITIONS_FILE}")
+LABEL_DEFINITIONS=$(load_config_file "${SCRIPT_DIR}/config/repo-label-definitions.json" "ラベル定義ファイル")
 
 # --- JSON バリデーション ---
 

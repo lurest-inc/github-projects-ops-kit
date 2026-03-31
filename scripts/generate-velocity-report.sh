@@ -123,7 +123,7 @@ echo "  合計: ${TOTAL_COUNT} 件（フィルタ後）"
 echo ""
 echo "ベロシティ集計を実行しています..."
 
-EXECUTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+EXECUTED_AT=$(get_timestamp_utc)
 
 # 集計期間の開始日を計算（現在の ISO 週の月曜日から VELOCITY_WEEKS 週前）
 # macOS と Linux の date 互換性のため jq で計算

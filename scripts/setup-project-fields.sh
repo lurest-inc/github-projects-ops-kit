@@ -20,12 +20,7 @@ validate_common_project_env
 
 # --- フィールド定義の読み込み ---
 
-FIELD_DEFINITIONS_FILE="${SCRIPT_DIR}/config/project-field-definitions.json"
-if [[ ! -f "${FIELD_DEFINITIONS_FILE}" ]]; then
-  echo "::error::フィールド定義ファイルが見つかりません: ${FIELD_DEFINITIONS_FILE}"
-  exit 1
-fi
-FIELD_DEFINITIONS=$(cat "${FIELD_DEFINITIONS_FILE}")
+FIELD_DEFINITIONS=$(load_config_file "${SCRIPT_DIR}/config/project-field-definitions.json" "フィールド定義ファイル")
 
 # --- 既存フィールド情報の取得 ---
 
@@ -97,8 +92,8 @@ echo "Field を作成します..."
 
 # ループ前にフィールド定義を 1 回の jq で事前解析する（Issue #122）
 # 各行: name\tdataType\tsingleSelectOptions(JSON)
-PARSED_FIELDS=$(echo "${FIELD_DEFINITIONS}" | jq -r '.[] | [.name, .dataType, (if .options then ([.options[] | {name: ., color: "GRAY", description: ""}] | tojson) else "" end)] | @tsv')
 FIELD_COUNT=$(echo "${FIELD_DEFINITIONS}" | jq 'length')
+PARSED_FIELDS=$(echo "${FIELD_DEFINITIONS}" | jq -r '.[] | [.name, .dataType, (if .options then ([.options[] | {name: ., color: "GRAY", description: ""}] | tojson) else "" end)] | @tsv')
 CREATED_COUNT=0
 SKIPPED_COUNT=0
 FAILED_COUNT=0

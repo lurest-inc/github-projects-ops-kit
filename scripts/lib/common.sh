@@ -8,6 +8,253 @@
 
 REST_API_VERSION="2022-11-28"
 
+# 設定ファイルを読み込み、存在チェックを行う
+# 使用例: DEFINITIONS=$(load_config_file "${SCRIPT_DIR}/config/repo-label-definitions.json" "ラベル定義ファイル")
+load_config_file() {
+  local file_path="$1"
+  local description="${2:-設定ファイル}"
+  if [[ ! -f "${file_path}" ]]; then
+    echo "::error::${description}が見つかりません: ${file_path}"
+    exit 1
+  fi
+  cat "${file_path}"
+}
+
+# UTC タイムスタンプを取得する
+# 使用例: EXECUTED_AT=$(get_timestamp_utc)
+get_timestamp_utc() {
+  date -u +"%Y-%m-%dT%H:%M:%SZ"
+}
+
+# UTC 日付を取得する
+# 使用例: TODAY=$(get_date_utc)
+get_date_utc() {
+  date -u +"%Y-%m-%d"
+}
+
+# TARGET_REPO 環境変数のバリデーション（owner/repo 形式チェック含む）
+# 使用例: validate_target_repo_env
+validate_target_repo_env() {
+  require_env "GH_TOKEN" "Secrets に PROJECT_PAT を設定してください。"
+  require_env "TARGET_REPO"
+  if [[ ! "${TARGET_REPO}" =~ ^[^/]+/[^/]+$ ]]; then
+    echo "::error::TARGET_REPO は owner/repo 形式で指定してください（例: myorg/myrepo）。"
+    exit 1
+  fi
+  require_command "gh" "GitHub CLI (gh) が必要です。PATH を確認してください。"
+  require_command "jq" "JSON の解析に必要です。"
+}
+
+# リポジトリのデフォルトブランチ名と SHA を取得する
+# 成功時: DEFAULT_BRANCH, DEFAULT_BRANCH_SHA をグローバルに設定
+# 使用例: get_default_branch_info "${TARGET_REPO}"
+get_default_branch_info() {
+  local target_repo="$1"
+
+  echo ""
+  echo "Repository ${target_repo} のデフォルトブランチを取得しています..."
+
+  DEFAULT_BRANCH=$(gh api "repos/${target_repo}" \
+    -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
+    --jq '.default_branch')
+
+  if [[ -z "${DEFAULT_BRANCH}" ]]; then
+    echo "::error::デフォルトブランチの取得に失敗しました。"
+    exit 1
+  fi
+  echo "  デフォルトブランチ: ${DEFAULT_BRANCH}"
+
+  echo ""
+  echo "デフォルトブランチの SHA を取得しています..."
+
+  DEFAULT_BRANCH_SHA=$(gh api "repos/${target_repo}/git/ref/heads/${DEFAULT_BRANCH}" \
+    -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
+    --jq '.object.sha')
+
+  if [[ -z "${DEFAULT_BRANCH_SHA}" ]]; then
+    echo "::error::デフォルトブランチの SHA 取得に失敗しました。"
+    exit 1
+  fi
+  echo "  SHA: ${DEFAULT_BRANCH_SHA}"
+}
+
+# リポジトリのファイル存在チェックを行い、登録対象を決定する
+# 成功時: FILES_TO_CREATE 配列と SKIPPED_COUNT をグローバルに設定
+# 引数:
+#   $1 - target_repo: 対象 Repository（owner/repo 形式）
+#   残り - ファイルパスの配列
+# 使用例: check_existing_repo_files "${TARGET_REPO}" "${ALL_FILES[@]}"
+check_existing_repo_files() {
+  local target_repo="$1"
+  shift
+  local all_files=("$@")
+
+  echo ""
+  echo "既存ファイルを確認しています..."
+
+  FILES_TO_CREATE=()
+  SKIPPED_COUNT=0
+
+  for file_path in "${all_files[@]}"; do
+    if gh api "repos/${target_repo}/contents/${file_path}" \
+      -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
+      --jq '.sha' >/dev/null 2>&1; then
+      echo "  ${file_path} → 既存のためスキップ"
+      SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
+    else
+      echo "  ${file_path} → 登録対象"
+      FILES_TO_CREATE+=("${file_path}")
+    fi
+  done
+}
+
+# 作業ブランチを作成し、空ファイルを登録して PR を作成する
+# 引数:
+#   $1 - target_repo: 対象 Repository（owner/repo 形式）
+#   $2 - work_branch: 作業ブランチ名
+#   $3 - commit_prefix: コミットメッセージのプレフィックス（例: "docs" / "chore"）
+#   $4 - file_type_label: ファイル種別ラベル（例: "Community Health Files" / "Scaffold ファイル"）
+#   $5 - pr_title: PR タイトル
+#   $6 - pr_body_intro: PR 本文の冒頭説明文
+# グローバル参照: DEFAULT_BRANCH, DEFAULT_BRANCH_SHA, FILES_TO_CREATE, HEALTH_FILES/SCAFFOLD_FILES (all_files_ref)
+# 使用例: create_files_via_pr "${TARGET_REPO}" "chore/add-files" "docs" "Health Files" "docs: add files" "説明文" "${ALL_FILES[@]}"
+create_files_via_pr() {
+  local target_repo="$1"
+  local work_branch="$2"
+  local commit_prefix="$3"
+  local file_type_label="$4"
+  local pr_title="$5"
+  local pr_body_intro="$6"
+  shift 6
+  local all_files=("$@")
+
+  CREATED_COUNT=0
+  FAILED_COUNT=0
+
+  # 作業ブランチ作成
+  echo ""
+  echo "作業ブランチ ${work_branch} を作成しています..."
+
+  if ! gh api "repos/${target_repo}/git/refs" \
+    -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
+    --method POST \
+    -f "ref=refs/heads/${work_branch}" \
+    -f "sha=${DEFAULT_BRANCH_SHA}" \
+    >/dev/null 2>&1; then
+    echo "::error::作業ブランチの作成に失敗しました。同名のブランチが既に存在する可能性があります。"
+    exit 1
+  fi
+  echo "  作成しました。"
+
+  # ファイル登録
+  echo ""
+  echo "${file_type_label} を登録します..."
+
+  local file_index=0
+  for file_path in "${FILES_TO_CREATE[@]}"; do
+    file_index=$((file_index + 1))
+
+    echo ""
+    echo "  [${file_index}/${#FILES_TO_CREATE[@]}] ${file_path}"
+
+    local content_base64
+    content_base64=$(printf '\n' | base64)
+
+    if gh api "repos/${target_repo}/contents/${file_path}" \
+      -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
+      --method PUT \
+      -f "message=${commit_prefix}: add ${file_path}" \
+      -f "content=${content_base64}" \
+      -f "branch=${work_branch}" \
+      >/dev/null 2>&1; then
+      echo "    → 作成しました。"
+      CREATED_COUNT=$((CREATED_COUNT + 1))
+    else
+      echo "    → 作成に失敗しました。"
+      local safe_file_path
+      safe_file_path=$(sanitize_for_workflow_command "${file_path}")
+      echo "::error::ファイル '${safe_file_path}' の作成に失敗しました。"
+      FAILED_COUNT=$((FAILED_COUNT + 1))
+    fi
+  done
+
+  # PR 作成
+  PR_URL=""
+  if [[ "${CREATED_COUNT}" -gt 0 ]]; then
+    echo ""
+    echo "PR を作成しています..."
+
+    local pr_body="${pr_body_intro}
+
+### 追加ファイル
+
+| ファイル | 状態 |
+|---|---|"
+
+    for file_path in "${all_files[@]}"; do
+      local local_status="スキップ（既存）"
+      for created_file in "${FILES_TO_CREATE[@]}"; do
+        if [[ "${file_path}" == "${created_file}" ]]; then
+          local_status="追加"
+          break
+        fi
+      done
+      pr_body="${pr_body}
+| \`${file_path}\` | ${local_status} |"
+    done
+
+    if PR_URL=$(gh pr create \
+      --repo "${target_repo}" \
+      --base "${DEFAULT_BRANCH}" \
+      --head "${work_branch}" \
+      --title "${pr_title}" \
+      --body "${pr_body}" 2>&1); then
+      echo "  PR を作成しました: ${PR_URL}"
+    else
+      echo "::error::PR の作成に失敗しました: ${PR_URL}"
+      FAILED_COUNT=$((FAILED_COUNT + 1))
+    fi
+  fi
+}
+
+# リポジトリファイル一括登録の GitHub Actions サマリーを出力する
+# 引数:
+#   $1 - summary_title: サマリーのタイトル
+# グローバル参照: CREATED_COUNT, SKIPPED_COUNT, FAILED_COUNT, PR_URL
+# 使用例: output_repo_files_summary "Community Health Files 一括登録完了"
+output_repo_files_summary() {
+  local summary_title="$1"
+
+  if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+    {
+      echo "## ${summary_title}"
+      echo ""
+      echo "| 項目 | 件数 |"
+      echo "|------|------|"
+      echo "| 作成 | ${CREATED_COUNT} |"
+      echo "| スキップ | ${SKIPPED_COUNT} |"
+      echo "| 失敗 | ${FAILED_COUNT} |"
+      if [[ -n "${PR_URL:-}" ]] && [[ "${PR_URL}" == http* ]]; then
+        echo ""
+        echo "### 作成された PR"
+        echo ""
+        echo "- ${PR_URL}"
+      fi
+    } >> "${GITHUB_STEP_SUMMARY}"
+  fi
+
+  print_summary "Repository" "${TARGET_REPO}" "作成" "${CREATED_COUNT} 件" "スキップ" "${SKIPPED_COUNT} 件" "失敗" "${FAILED_COUNT} 件"
+
+  if [[ "${FAILED_COUNT}" -gt 0 ]]; then
+    echo ""
+    echo "::error::${FAILED_COUNT} 件の処理に失敗しました。"
+    exit 1
+  fi
+
+  echo ""
+  echo "セットアップが完了しました。"
+}
+
 # GitHub Actions Workflow コマンドインジェクションを防ぐためのサニタイズ関数
 sanitize_for_workflow_command() {
   local value="$1"
