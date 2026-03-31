@@ -1,4 +1,4 @@
-# 📜 setup-community-health-files.sh
+# 📜 setup-repository-health-files.sh
 
 指定 Repository に対して、Community Health Files を空ファイルとして一括登録するスクリプトです。
 作業ブランチを作成し、Contents API でファイルを登録した後、デフォルトブランチへの PR を作成します。
@@ -146,4 +146,4 @@ Fine-grained PAT の場合は、対象 Repository に対する **Contents** と 
 
 ## 🔄 使用 Workflow
 
-- [⑦ Community Health Files 一括登録](../workflows/07-setup-community-health-files.md)
+- [⑦ Community Health Files 一括登録](../workflows/07-setup-repository-health-files.md)

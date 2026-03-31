@@ -17,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  setup-community-health-files:
+  setup-repository-health-files:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
@@ -34,10 +34,10 @@ jobs:
         run: |
           # トリム（前後の空白のみ削除、内部空白は保持）
           TARGET_REPO="$(echo "$TARGET_REPO" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
-          bash scripts/setup-community-health-files.sh
+          bash scripts/setup-repository-health-files.sh
 
   workflow-summary-failure:
-    needs: [setup-community-health-files]
+    needs: [setup-repository-health-files]
     if: failure()
     runs-on: ubuntu-latest
     steps:
@@ -50,10 +50,10 @@ jobs:
           status: failure
           project-owner: ${{ github.repository_owner }}
           job-results: |
-            {"setup-community-health-files": "${{ needs.setup-community-health-files.result }}"}
+            {"setup-repository-health-files": "${{ needs.setup-repository-health-files.result }}"}
 
   workflow-summary-success:
-    needs: [setup-community-health-files]
+    needs: [setup-repository-health-files]
     if: success()
     runs-on: ubuntu-latest
     steps:
@@ -66,4 +66,4 @@ jobs:
           status: success
           project-owner: ${{ github.repository_owner }}
           job-results: |
-            {"setup-community-health-files": "${{ needs.setup-community-health-files.result }}"}
+            {"setup-repository-health-files": "${{ needs.setup-repository-health-files.result }}"}

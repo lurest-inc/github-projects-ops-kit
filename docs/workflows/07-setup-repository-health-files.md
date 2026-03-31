@@ -60,7 +60,7 @@
 
 ```mermaid
 flowchart TD
-    A["workflow_dispatch\n（target_repo）"] --> B["setup-community-health-files Job\nデフォルトブランチから作業ブランチを作成\nCommunity Health Filesを一括登録\nPRを自動作成"]
+    A["workflow_dispatch\n（target_repo）"] --> B["setup-repository-health-files Job\nデフォルトブランチから作業ブランチを作成\nCommunity Health Filesを一括登録\nPRを自動作成"]
     B --> C{"結果判定"}
     C -- "成功" --> D["workflow-summary-success Job\n成功サマリーを出力"]
     C -- "失敗" --> E["workflow-summary-failure Job\n失敗サマリーを出力"]
@@ -70,7 +70,7 @@ flowchart TD
 
 ### ファイル
 
-`.github/workflows/07-setup-community-health-files.yml`
+`.github/workflows/07-setup-repository-health-files.yml`
 
 ### トリガー
 
@@ -89,9 +89,9 @@ flowchart TD
 ### Job 構成
 
 ```
-.github/workflows/07-setup-community-health-files.yml
-  ├── setup-community-health-files Job
-  │   └── scripts/setup-community-health-files.sh     # Community Health Files 一括登録
+.github/workflows/07-setup-repository-health-files.yml
+  ├── setup-repository-health-files Job
+  │   └── scripts/setup-repository-health-files.sh     # Community Health Files 一括登録
   ├── workflow-summary-failure Job（失敗時）
   │   └── .github/actions/workflow-summary            # 失敗サマリー出力
   └── workflow-summary-success Job（成功時）
@@ -100,4 +100,4 @@ flowchart TD
 
 ## 📜 関連スクリプト
 
-- [setup-community-health-files.sh](../scripts/setup-community-health-files.md) — Community Health Files 一括登録スクリプト
+- [setup-repository-health-files.sh](../scripts/setup-repository-health-files.md) — Community Health Files 一括登録スクリプト

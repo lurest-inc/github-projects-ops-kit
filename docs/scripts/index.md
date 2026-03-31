@@ -23,7 +23,7 @@
 | [setup-project-views.sh](setup-project-views.md) | ビューを自動作成 |
 | [setup-repository-labels.sh](setup-repository-labels.md) | Repository に Label を一括作成 |
 | [create-special-repos.sh](create-special-repos.md) | 特殊 Repository を一括作成 |
-| [setup-community-health-files.sh](setup-community-health-files.md) | Community Health Files を Repository に一括登録 |
+| [setup-repository-health-files.sh](setup-repository-health-files.md) | Community Health Files を Repository に一括登録 |
 
 ### 📥 データ操作系
 
