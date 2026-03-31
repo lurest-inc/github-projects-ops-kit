@@ -25,6 +25,7 @@
 | [create-special-repos.sh](create-special-repos.md) | 特殊 Repository を一括作成 |
 | [setup-repository-health-files.sh](setup-repository-health-files.md) | Community Health Files を Repository に一括登録 |
 | [setup-repository-scaffold-files.sh](setup-repository-scaffold-files.md) | Scaffold ファイル（IDE・AI ツール設定など）を Repository に一括登録 |
+| [setup-repository-rulesets.sh](setup-repository-rulesets.md) | Repository に Branch Ruleset を一括作成 |
 
 ### 📥 データ操作系
 

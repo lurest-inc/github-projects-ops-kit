@@ -1,0 +1,89 @@
+[
+  {
+    "name": "main branch protection",
+    "target": "branch",
+    "enforcement": "active",
+    "description": "main ブランチの保護ルール",
+    "conditions": {
+      "ref_name": {
+        "include": ["refs/heads/main"],
+        "exclude": []
+      }
+    },
+    "rules": [
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 1,
+          "dismiss_stale_reviews_on_push": true,
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": false,
+          "allowed_merge_methods": ["merge", "squash", "rebase"]
+        }
+      },
+      {
+        "type": "non_fast_forward"
+      },
+      {
+        "type": "deletion"
+      }
+    ]
+  },
+  {
+    "name": "develop branch protection",
+    "target": "branch",
+    "enforcement": "active",
+    "description": "develop ブランチの保護ルール",
+    "conditions": {
+      "ref_name": {
+        "include": ["refs/heads/develop"],
+        "exclude": []
+      }
+    },
+    "rules": [
+      {
+        "type": "pull_request",
+        "parameters": {
+          "required_approving_review_count": 1,
+          "dismiss_stale_reviews_on_push": true,
+          "require_code_owner_review": false,
+          "require_last_push_approval": false,
+          "required_review_thread_resolution": false,
+          "allowed_merge_methods": ["merge", "squash", "rebase"]
+        }
+      },
+      {
+        "type": "non_fast_forward"
+      },
+      {
+        "type": "deletion"
+      }
+    ]
+  },
+  {
+    "name": "topic branch protection",
+    "target": "branch",
+    "enforcement": "active",
+    "description": "feature/hotfix 等のトピックブランチの保護ルール",
+    "conditions": {
+      "ref_name": {
+        "include": [
+          "refs/heads/feature/*",
+          "refs/heads/hotfix/*",
+          "refs/heads/release/*",
+          "refs/heads/issues/*"
+        ],
+        "exclude": []
+      }
+    },
+    "rules": [
+      {
+        "type": "non_fast_forward"
+      },
+      {
+        "type": "deletion"
+      }
+    ]
+  }
+]
