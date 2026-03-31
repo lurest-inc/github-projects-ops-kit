@@ -40,7 +40,7 @@ flowchart TD
 
     subgraph repos ["GitHub Repository 用"]
         G["③ 特殊 Repository 一括作成"]
-        C["④ Issue Label 一括追加"]
+        C["④ Issue Label 一括作成"]
         E["⑤ Community Health Files 一括登録"]
     end
 ```
@@ -57,8 +57,8 @@ flowchart TD
       ├── 02-extend-project.yml             # ② Project 拡張 Workflow
       ├── _reusable-extend-project.yml      # Project 拡張（Reusable Workflow）
       ├── 03-create-special-repos.yml       # ③ 特殊 Repository 一括作成 Workflow
-      ├── 04-setup-repository-labels.yml    # ④ Issue Label 一括追加 Workflow
-      ├── 05-setup-repository-files.yml       # ⑤ 初期ファイル一括登録 Workflow
+      ├── 04-setup-repository-labels.yml    # ④ Issue Label 一括作成 Workflow
+      ├── 05-setup-repository-files.yml       # ⑤ 初期ファイル一括作成 Workflow
       ├── 06-add-items-to-project.yml       # ⑥ Issue/PR 一括紐付け Workflow
       └── 07-analyze-project.yml            # ⑦ 統合 Project 分析 Workflow
 scripts/
@@ -130,7 +130,7 @@ scripts/
       └── .github/actions/workflow-summary       # 成功サマリー出力
 ```
 
-### ④ Issue Label 一括追加
+### ④ Issue Label 一括作成
 
 ```
 04-setup-repository-labels.yml
@@ -142,7 +142,7 @@ scripts/
       └── .github/actions/workflow-summary       # 成功サマリー出力
 ```
 
-### ⑤ 初期ファイル一括登録
+### ⑤ 初期ファイル一括作成
 
 ```
 05-setup-repository-files.yml

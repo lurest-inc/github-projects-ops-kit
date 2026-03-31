@@ -1,4 +1,4 @@
-# ④ Issue Label 一括追加
+# ④ Issue Label 一括作成
 
 指定 Repository に対して、設定ファイルで定義した Issue Label を一括作成します。
 既存 Label と同名の Label が存在する場合はスキップします。
@@ -32,7 +32,7 @@
 ## 📖 使い方
 
 1. `Actions` タブを開く
-2. `④ Issue Label 一括追加` を選択
+2. `④ Issue Label 一括作成` を選択
 3. `Run workflow` をクリック
 4. パラメータを入力して実行
 

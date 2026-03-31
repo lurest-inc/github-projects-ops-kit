@@ -118,6 +118,6 @@ Fork 先 Repository の `Actions` タブから Workflow を選択し、`Run work
 - [① GitHub Project 新規作成](../workflows/01-create-project.md)
 - [② GitHub Project 拡張](../workflows/02-extend-project.md)
 - [③ 特殊 Repository 一括作成](../workflows/03-create-special-repos.md)
-- [④ Issue Label 一括追加](../workflows/04-setup-repository-labels.md)
+- [④ Issue Label 一括作成](../workflows/04-setup-repository-labels.md)
 - [⑥ Issue/PR 一括紐付け](../workflows/06-add-items-to-project.md)
 - [⑦ 統合 Project 分析](../workflows/07-analyze-project.md)
