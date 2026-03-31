@@ -5,3 +5,6 @@ google_analytics:
 google-site-verification: google94e25d982f8dafc6
 plugins:
   - jekyll-sitemap
+  - jekyll-feed
+  - jemoji
+  - jekyll-mentions
