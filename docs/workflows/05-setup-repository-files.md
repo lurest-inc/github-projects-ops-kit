@@ -38,9 +38,18 @@
 
 ## ⚙️ パラメータ
 
-| パラメータ | 説明 | 必須 | タイプ | 例 |
-|------------|------|:----:|--------|-----|
-| `target_repo` | 対象 Repository（owner/repo 形式） | ✅ | `string` | `myorg/myrepo` |
+| パラメータ | 説明 | 必須 | タイプ | デフォルト | 例 |
+|------------|------|:----:|--------|------------|-----|
+| `target_repo` | 対象 Repository（owner/repo 形式） | ✅ | `string` | — | `myorg/myrepo` |
+| `setup_types` | 実行するセットアップタイプ | ✅ | `choice` | `all` | `health` / `scaffold` |
+
+`setup_types` の選択肢:
+
+| 値 | 説明 |
+|----|------|
+| `all` | 全機能を実行（Community Health Files + Scaffold ファイル） |
+| `health` | Community Health Files のみ |
+| `scaffold` | Scaffold ファイルのみ |
 
 > **Note:** 対象リポジトリに同名ファイルが既に存在する場合はスキップされます（上書き禁止）。全ファイルが既に存在する場合は PR を作成しません。
 

@@ -12,12 +12,23 @@ on:
         description: "対象 Repository（owner/repo 形式）"
         required: true
         type: string
+      setup_types:
+        description: "実行するセットアップタイプ（all: 全機能, health: Community Health Files, scaffold: Scaffold ファイル）"
+        required: true
+        type: choice
+        default: "all"
+        options:
+          - all
+          - health
+          - scaffold
 
 permissions:
   contents: read
 
 jobs:
   setup-repository-health-files:
+    if: >-
+      inputs.setup_types == 'all' || inputs.setup_types == 'health'
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
@@ -37,6 +48,8 @@ jobs:
           bash scripts/setup-repository-health-files.sh
 
   setup-repository-scaffold-files:
+    if: >-
+      inputs.setup_types == 'all' || inputs.setup_types == 'scaffold'
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
@@ -55,7 +68,7 @@ jobs:
 
   workflow-summary-failure:
     needs: [setup-repository-health-files, setup-repository-scaffold-files]
-    if: failure()
+    if: always() && contains(needs.*.result, 'failure')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -71,7 +84,7 @@ jobs:
 
   workflow-summary-success:
     needs: [setup-repository-health-files, setup-repository-scaffold-files]
-    if: success()
+    if: always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
