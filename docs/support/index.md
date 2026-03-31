@@ -6,7 +6,9 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 <details><summary>（ここをクリック）目次</summary><ul>
-<li><a href="#-faq%E3%83%BB%E3%83%88%E3%83%A9%E3%83%96%E3%83%AB%E3%82%B7%E3%83%A5%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">🔧 FAQ・トラブルシューティング</a></li>
+<li><a href="#%E3%83%9A%E3%83%BC%E3%82%B8%E4%B8%80%E8%A6%A7">ページ一覧</a></li>
+
+<li><a href="#%E3%81%9D%E3%82%8C%E3%81%A7%E3%82%82%E8%A7%A3%E6%B1%BA%E3%81%97%E3%81%AA%E3%81%84%E5%A0%B4%E5%90%88">それでも解決しない場合</a></li>
 </ul></details>
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
