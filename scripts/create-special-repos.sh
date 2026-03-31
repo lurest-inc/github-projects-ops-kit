@@ -42,12 +42,7 @@ esac
 
 # --- Repository 定義ファイルの読み込み ---
 
-if [[ ! -f "${REPO_DEFINITIONS_FILE}" ]]; then
-  echo "::error::Repository 定義ファイルが見つかりません: ${REPO_DEFINITIONS_FILE}"
-  exit 1
-fi
-
-REPO_DEFINITIONS=$(cat "${REPO_DEFINITIONS_FILE}")
+REPO_DEFINITIONS=$(load_config_file "${REPO_DEFINITIONS_FILE}" "Repository 定義ファイル")
 
 # --- JSON バリデーション ---
 

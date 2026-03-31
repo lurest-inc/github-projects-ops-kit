@@ -21,12 +21,7 @@ source "${SCRIPT_DIR}/lib/common.sh"
 # --- バリデーション ---
 
 validate_common_project_env
-require_env "TARGET_REPO"
-
-if [[ ! "${TARGET_REPO}" =~ ^[^/]+/[^/]+$ ]]; then
-  echo "::error::TARGET_REPO は owner/repo 形式で指定してください（例: myorg/myrepo）。"
-  exit 1
-fi
+validate_target_repo_env
 
 ITEM_TYPE="${ITEM_TYPE:-all}"
 ITEM_STATE="${ITEM_STATE:-open}"

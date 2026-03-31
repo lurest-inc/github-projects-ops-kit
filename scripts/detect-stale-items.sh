@@ -206,32 +206,24 @@ format_stale_markdown() {
     if [[ "${STALE_COUNT}" -eq 0 ]]; then
       echo "> 滞留 Item はありません。"
     else
-      if [[ "${IN_REVIEW_COUNT}" -gt 0 ]]; then
-        echo "## In Review（${STALE_DAYS_IN_REVIEW} 日以上）: ${IN_REVIEW_COUNT} 件"
-        echo ""
-        echo "| # | タイトル | Repository | アサイン | 最終更新 | 経過日数 |"
-        echo "|---|---------|-----------|---------|---------|---------|"
-        echo "${stale_items}" | jq -r "[.[] | select(.status == \"In Review\")] | sort_by(-.days_stale)[] | ${md_row_filter}"
-        echo ""
-      fi
+      # ステータス定義: 名前、閾値日数、件数
+      local -a status_defs=(
+        "In Review:${STALE_DAYS_IN_REVIEW}:${IN_REVIEW_COUNT}"
+        "In Progress:${STALE_DAYS_IN_PROGRESS}:${IN_PROGRESS_COUNT}"
+        "Todo:${STALE_DAYS_TODO}:${TODO_COUNT}"
+      )
 
-      if [[ "${IN_PROGRESS_COUNT}" -gt 0 ]]; then
-        echo "## In Progress（${STALE_DAYS_IN_PROGRESS} 日以上）: ${IN_PROGRESS_COUNT} 件"
-        echo ""
-        echo "| # | タイトル | Repository | アサイン | 最終更新 | 経過日数 |"
-        echo "|---|---------|-----------|---------|---------|---------|"
-        echo "${stale_items}" | jq -r "[.[] | select(.status == \"In Progress\")] | sort_by(-.days_stale)[] | ${md_row_filter}"
-        echo ""
-      fi
-
-      if [[ "${TODO_COUNT}" -gt 0 ]]; then
-        echo "## Todo（${STALE_DAYS_TODO} 日以上）: ${TODO_COUNT} 件"
-        echo ""
-        echo "| # | タイトル | Repository | アサイン | 最終更新 | 経過日数 |"
-        echo "|---|---------|-----------|---------|---------|---------|"
-        echo "${stale_items}" | jq -r "[.[] | select(.status == \"Todo\")] | sort_by(-.days_stale)[] | ${md_row_filter}"
-        echo ""
-      fi
+      for status_def in "${status_defs[@]}"; do
+        IFS=':' read -r status_name threshold_days status_count <<< "${status_def}"
+        if [[ "${status_count}" -gt 0 ]]; then
+          echo "## ${status_name}（${threshold_days} 日以上）: ${status_count} 件"
+          echo ""
+          echo "| # | タイトル | Repository | アサイン | 最終更新 | 経過日数 |"
+          echo "|---|---------|-----------|---------|---------|---------|"
+          echo "${stale_items}" | jq -r --arg status "${status_name}" "[.[] | select(.status == \$status)] | sort_by(-.days_stale)[] | ${md_row_filter}"
+          echo ""
+        fi
+      done
     fi
   }
 }
@@ -257,7 +249,7 @@ format_stale_tsv() {
 echo ""
 echo "レポートを生成しています..."
 
-EXECUTED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+EXECUTED_AT=$(get_timestamp_utc)
 
 FILE_EXT=$(get_file_extension "${OUTPUT_FORMAT}")
 OUTPUT_FILE="stale-items-report.${FILE_EXT}"

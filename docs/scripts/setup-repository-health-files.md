@@ -99,16 +99,12 @@ flowchart TD
 
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
-| 環境変数バリデーション | `require_env` で `GH_TOKEN`, `TARGET_REPO` を検証 | `common.sh` |
-| TARGET_REPO 形式チェック | `owner/repo` 形式であることを正規表現で検証 | — |
-| コマンド存在チェック | `require_command` で `gh`, `jq` の存在を確認 | `common.sh` |
-| デフォルトブランチ取得 | 対象リポジトリのデフォルトブランチ名を取得 | `GET /repos/{owner}/{repo}` |
-| デフォルトブランチ SHA 取得 | 作業ブランチ作成用にデフォルトブランチの最新 SHA を取得 | `GET /repos/{owner}/{repo}/git/ref/heads/{branch}` |
-| 既存ファイルチェック | 対象ファイルごとに Contents API で存在確認。存在すればスキップ | `GET /repos/{owner}/{repo}/contents/{path}` |
-| 作業ブランチ作成 | デフォルトブランチの SHA から `chore/add-community-health-files` ブランチを作成 | `POST /repos/{owner}/{repo}/git/refs` |
-| ファイル登録 | Contents API で空ファイル（改行のみ）を base64 エンコードして作成。1 ファイル 1 コミット | `PUT /repos/{owner}/{repo}/contents/{path}` |
-| PR 作成 | 作成ファイルが 1 件以上あればデフォルトブランチへの PR を作成 | `gh pr create` |
-| サマリー出力 | 作成/スキップ/失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `print_summary`, `GITHUB_STEP_SUMMARY` |
+| 環境変数バリデーション | `validate_target_repo_env` で `GH_TOKEN`, `TARGET_REPO` を一括検証 | `common.sh` |
+| 設定ファイル読み込み | `load_config_file` で Health File 定義 JSON を読み込み | `common.sh` |
+| デフォルトブランチ取得 | `get_default_branch_info` でブランチ名と SHA を一括取得 | `common.sh` → `GET /repos/{owner}/{repo}`, `GET /repos/{owner}/{repo}/git/ref/heads/{branch}` |
+| 既存ファイルチェック | `check_existing_repo_files` で対象ファイルごとに Contents API で存在確認。存在すればスキップ | `common.sh` → `GET /repos/{owner}/{repo}/contents/{path}` |
+| ファイル登録 & PR 作成 | `create_files_via_pr` で作業ブランチ作成、空ファイル登録、PR 作成を一括実行 | `common.sh` → `POST /repos/{owner}/{repo}/git/refs`, `PUT /repos/{owner}/{repo}/contents/{path}`, `gh pr create` |
+| サマリー出力 | `output_repo_files_summary` で作成/スキップ/失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `common.sh` |
 
 ### 実行結果サマリーの出力形式
 
