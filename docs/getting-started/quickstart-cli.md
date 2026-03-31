@@ -100,6 +100,12 @@ gh workflow run 02-extend-project.yml \
   --field project_number="<PROJECT_NUMBER>"
 ```
 
+### ③ 特殊 Repository 一括作成
+
+```bash
+gh workflow run 03-create-special-repos.yml
+```
+
 ### ④ Issue Label 一括追加
 
 ```bash
@@ -117,7 +123,15 @@ gh workflow run 05-add-items-to-project.yml \
   --field item_state="open"
 ```
 
-## 👀 Workflow 実行状況の確認
+### ⑥ 統合 Project 分析
+
+```bash
+gh workflow run 06-analyze-project.yml \
+  --field project_number="<PROJECT_NUMBER>" \
+  --field report_types="all"
+```
+
+### 👀 Workflow 実行状況の確認
 
 ```bash
 # 実行一覧を表示
@@ -126,6 +140,8 @@ gh run list
 # 最新の実行をリアルタイムで監視
 gh run watch
 ```
+
+### 📖 各 Workflow の詳細
 
 各 Workflow の詳細は個別ページをご参照ください。
 
