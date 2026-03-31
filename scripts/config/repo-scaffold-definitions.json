@@ -1,31 +1,43 @@
 [
   {
-    "path": ".vscode/.gitkeep",
-    "description": "VS Code 設定ディレクトリの保持"
+    "path": ".claude/.gitignore",
+    "description": "Claude Code 用 gitignore"
   },
   {
     "path": ".claude/.gitkeep",
     "description": "Claude Code 設定ディレクトリの保持"
   },
   {
-    "path": ".claude/.gitignore",
-    "description": "Claude Code 用 gitignore"
+    "path": ".cline/.gitignore",
+    "description": "Cline 用 gitignore"
   },
   {
-    "path": ".cursor/.gitkeep",
-    "description": "Cursor 設定ディレクトリの保持"
+    "path": ".cline/.gitkeep",
+    "description": "Cline 設定ディレクトリの保持"
+  },
+  {
+    "path": ".codex/.gitignore",
+    "description": "OpenAI Codex CLI 用 gitignore"
+  },
+  {
+    "path": ".codex/.gitkeep",
+    "description": "OpenAI Codex CLI 設定ディレクトリの保持"
   },
   {
     "path": ".cursor/.gitignore",
     "description": "Cursor 用 gitignore"
   },
   {
-    "path": ".windsurf/.gitkeep",
-    "description": "Windsurf 設定ディレクトリの保持"
+    "path": ".cursor/.gitkeep",
+    "description": "Cursor 設定ディレクトリの保持"
   },
   {
-    "path": ".windsurf/.gitignore",
-    "description": "Windsurf 用 gitignore"
+    "path": ".gemini/.gitignore",
+    "description": "Gemini 用 gitignore"
+  },
+  {
+    "path": ".gemini/.gitkeep",
+    "description": "Gemini 設定ディレクトリの保持"
   },
   {
     "path": ".github/copilot-instructions.md",
@@ -34,5 +46,25 @@
   {
     "path": ".idea/.gitkeep",
     "description": "JetBrains IDE 設定ディレクトリの保持"
+  },
+  {
+    "path": ".vscode/.gitkeep",
+    "description": "VS Code 設定ディレクトリの保持"
+  },
+  {
+    "path": ".windsurf/.gitignore",
+    "description": "Windsurf 用 gitignore"
+  },
+  {
+    "path": ".windsurf/.gitkeep",
+    "description": "Windsurf 設定ディレクトリの保持"
+  },
+  {
+    "path": ".gitignore",
+    "description": "プロジェクト用 gitignore"
+  },
+  {
+    "path": "README.md",
+    "description": "プロジェクト README"
   }
 ]

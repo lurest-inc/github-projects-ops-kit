@@ -75,15 +75,25 @@ JSON ファイルを編集することで、スクリプトを変更せずに登
 
 | ファイル | パス |
 |----------|------|
-| `.gitkeep` | `.vscode/.gitkeep` |
-| `.gitkeep` | `.claude/.gitkeep` |
+| `.gitignore` | `.amazonq/.gitignore` |
+| `.gitkeep` | `.amazonq/.gitkeep` |
 | `.gitignore` | `.claude/.gitignore` |
-| `.gitkeep` | `.cursor/.gitkeep` |
+| `.gitkeep` | `.claude/.gitkeep` |
+| `.gitignore` | `.cline/.gitignore` |
+| `.gitkeep` | `.cline/.gitkeep` |
+| `.gitignore` | `.codex/.gitignore` |
+| `.gitkeep` | `.codex/.gitkeep` |
 | `.gitignore` | `.cursor/.gitignore` |
-| `.gitkeep` | `.windsurf/.gitkeep` |
-| `.gitignore` | `.windsurf/.gitignore` |
+| `.gitkeep` | `.cursor/.gitkeep` |
+| `.gitignore` | `.gemini/.gitignore` |
+| `.gitkeep` | `.gemini/.gitkeep` |
 | `copilot-instructions.md` | `.github/copilot-instructions.md` |
 | `.gitkeep` | `.idea/.gitkeep` |
+| `.gitkeep` | `.vscode/.gitkeep` |
+| `.gitignore` | `.windsurf/.gitignore` |
+| `.gitkeep` | `.windsurf/.gitkeep` |
+| `.gitignore` | `.gitignore` |
+| `README.md` | `README.md` |
 
 ## 📊 処理フロー
 

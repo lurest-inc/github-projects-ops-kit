@@ -37,15 +37,25 @@
 
 | ファイル | パス | 説明 |
 |----------|------|------|
-| `.gitkeep` | `.vscode/.gitkeep` | VS Code 設定ディレクトリの保持 |
-| `.gitkeep` | `.claude/.gitkeep` | Claude Code 設定ディレクトリの保持 |
+| `.gitignore` | `.amazonq/.gitignore` | Amazon Q Developer 用 gitignore |
+| `.gitkeep` | `.amazonq/.gitkeep` | Amazon Q Developer 設定ディレクトリの保持 |
 | `.gitignore` | `.claude/.gitignore` | Claude Code 用 gitignore |
-| `.gitkeep` | `.cursor/.gitkeep` | Cursor 設定ディレクトリの保持 |
+| `.gitkeep` | `.claude/.gitkeep` | Claude Code 設定ディレクトリの保持 |
+| `.gitignore` | `.cline/.gitignore` | Cline 用 gitignore |
+| `.gitkeep` | `.cline/.gitkeep` | Cline 設定ディレクトリの保持 |
+| `.gitignore` | `.codex/.gitignore` | OpenAI Codex CLI 用 gitignore |
+| `.gitkeep` | `.codex/.gitkeep` | OpenAI Codex CLI 設定ディレクトリの保持 |
 | `.gitignore` | `.cursor/.gitignore` | Cursor 用 gitignore |
-| `.gitkeep` | `.windsurf/.gitkeep` | Windsurf 設定ディレクトリの保持 |
-| `.gitignore` | `.windsurf/.gitignore` | Windsurf 用 gitignore |
+| `.gitkeep` | `.cursor/.gitkeep` | Cursor 設定ディレクトリの保持 |
+| `.gitignore` | `.gemini/.gitignore` | Gemini 用 gitignore |
+| `.gitkeep` | `.gemini/.gitkeep` | Gemini 設定ディレクトリの保持 |
 | `copilot-instructions.md` | `.github/copilot-instructions.md` | GitHub Copilot カスタム指示ファイル |
 | `.gitkeep` | `.idea/.gitkeep` | JetBrains IDE 設定ディレクトリの保持 |
+| `.gitkeep` | `.vscode/.gitkeep` | VS Code 設定ディレクトリの保持 |
+| `.gitignore` | `.windsurf/.gitignore` | Windsurf 用 gitignore |
+| `.gitkeep` | `.windsurf/.gitkeep` | Windsurf 設定ディレクトリの保持 |
+| `.gitignore` | `.gitignore` | プロジェクト用 gitignore |
+| `README.md` | `README.md` | プロジェクト README |
 
 ### 設定ファイルのカスタマイズ
 
@@ -160,7 +170,7 @@ Fine-grained PAT の場合は、対象 Repository に対する **Contents** と 
 |---------|------|------|
 | REST API (Core) | 5,000 リクエスト/時 | 認証済みユーザーの場合 |
 
-対象ファイル 9 件に対して、既存チェック (9) + ブランチ作成 (1) + ファイル作成 (最大 9) + PR 作成 (1) = 最大 20 リクエストを消費します。
+対象ファイル 19 件に対して、既存チェック (19) + ブランチ作成 (1) + ファイル作成 (最大 19) + PR 作成 (1) = 最大 40 リクエストを消費します。
 レート制限の影響はありません。
 
 ## 🔄 使用 Workflow
