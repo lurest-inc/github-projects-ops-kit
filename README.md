@@ -89,7 +89,7 @@ gh workflow run 01-create-project.yml
 | [② GitHub Project 拡張](.github/workflows/02-extend-project.yml) | 既存 Project に Field・Status・View を追加 |
 | [③ 特殊 Repository 一括作成](.github/workflows/03-create-special-repos.yml) | プロフィール README・GitHub Pages 等の特殊命名 Repository を一括作成 |
 | [④ Issue Label 一括追加](.github/workflows/04-setup-repository-labels.yml) | 指定 Repository に Issue Label を一括作成 |
-| [⑤ Repository 初期ファイル一括登録](.github/workflows/05-setup-repository-files.yml) | Community Health Files・Scaffold ファイルを Repository に一括登録 |
+| [⑤ 初期ファイル一括登録](.github/workflows/05-setup-repository-files.yml) | Community Health Files・Scaffold ファイルを Repository に一括登録 |
 | [⑥ Issue/PR 一括紐付け](.github/workflows/06-add-items-to-project.yml) | Issue や PR を Project に一括追加（種別・状態・ラベルでフィルタ可能） |
 
 ### 運用・分析系

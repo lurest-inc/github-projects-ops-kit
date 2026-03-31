@@ -159,4 +159,4 @@ Fine-grained PAT の場合は、対象 Repository に対する **Contents** と 
 
 ## 🔄 使用 Workflow
 
-- [⑤ Repository 初期ファイル一括登録](../workflows/05-setup-repository-files.md)
+- [⑤ 初期ファイル一括登録](../workflows/05-setup-repository-files.md)

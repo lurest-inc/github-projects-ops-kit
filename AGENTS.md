@@ -33,7 +33,7 @@ scripts/
   _reusable-extend-project.yml # 再利用可能ワークフロー
   03-create-special-repos.yml  # 特殊リポジトリ作成
   04-setup-repository-labels.yml
-  05-setup-repository-files.yml  # Repository 初期ファイル一括登録
+  05-setup-repository-files.yml  # 初期ファイル一括登録
   06-add-items-to-project.yml
   07-analyze-project.yml       # 統合分析 (エクスポート・停滞検出・レポート)
 ```
