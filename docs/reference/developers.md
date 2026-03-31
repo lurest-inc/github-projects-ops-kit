@@ -51,16 +51,16 @@ flowchart TD
 .github/
   ├── actions/
   │   └── workflow-summary/
-  │       └── action.yml                    # Workflow サマリー出力アクション
+  │       └── action.yml                     # Workflow サマリー出力アクション
   └── workflows/
-      ├── 01-create-project.yml             # ① Project 新規作成 Workflow
-      ├── 02-extend-project.yml             # ② Project 拡張 Workflow
-      ├── _reusable-extend-project.yml      # Project 拡張（Reusable Workflow）
-      ├── 03-create-special-repos.yml       # ③ 特殊 Repository 一括作成 Workflow
-      ├── 04-setup-repository-labels.yml    # ④ Issue Label 一括作成 Workflow
-      ├── 05-setup-repository-files.yml     # ⑤ 初期ファイル一括作成 Workflow
-      ├── 06-add-items-to-project.yml       # ⑥ Issue/PR 一括紐付け Workflow
-      └── 07-analyze-project.yml            # ⑦ 統合 Project 分析 Workflow
+      ├── 01-create-project.yml              # ① Project 新規作成 Workflow
+      ├── 02-extend-project.yml              # ② Project 拡張 Workflow
+      ├── _reusable-extend-project.yml       # Project 拡張（Reusable Workflow）
+      ├── 03-create-special-repos.yml        # ③ 特殊 Repository 一括作成 Workflow
+      ├── 04-setup-repository-labels.yml     # ④ Issue Label 一括作成 Workflow
+      ├── 05-setup-repository-files.yml      # ⑤ 初期ファイル一括作成 Workflow
+      ├── 06-add-items-to-project.yml        # ⑥ Issue/PR 一括紐付け Workflow
+      └── 07-analyze-project.yml             # ⑦ 統合 Project 分析 Workflow
 scripts/
   ├── config/
   │   ├── project-status-options.json        # カスタム Status 定義
@@ -150,13 +150,13 @@ scripts/
 ```
 05-setup-repository-files.yml
   ├── setup-repository-health-files Job
-  │   └── scripts/setup-repository-health-files.sh  # Community Health Files 一括登録
+  │   └── scripts/setup-repository-health-files.sh   # Community Health Files 一括登録
   ├── setup-repository-scaffold-files Job
   │   └── scripts/setup-repository-scaffold-files.sh # Scaffold ファイル一括登録
   ├── workflow-summary-failure Job（失敗時）
-  │   └── .github/actions/workflow-summary       # 失敗サマリー出力
+  │   └── .github/actions/workflow-summary           # 失敗サマリー出力
   └── workflow-summary-success Job（成功時）
-      └── .github/actions/workflow-summary       # 成功サマリー出力
+      └── .github/actions/workflow-summary           # 成功サマリー出力
 ```
 
 ### ⑥ Issue/PR 一括紐付け
