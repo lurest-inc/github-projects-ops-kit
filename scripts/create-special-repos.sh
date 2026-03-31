@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # 特殊 Repository 一括作成スクリプト
-# https://lurest-inc.github.io/github-projects-ops-kit/workflows/03-create-special-repos
+# https://lurest-inc.github.io/github-projects-ops-kit/scripts/create-special-repos
 #
 # オーナータイプ（User / Organization）を自動判定し、対応する Repository を一括作成する。
 # Workflow（03-create-special-repos.yml）から呼び出される。
