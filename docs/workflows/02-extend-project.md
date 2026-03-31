@@ -1,7 +1,7 @@
 # ② GitHub Project 拡張
 
 既存の Project に Field ・ Status ・ View を追加します。
-[① GitHub Project 新規作成](01-create-project) を実行していない既存 Project 向けです。
+[① GitHub Project 新規作成](01-create-project.md) を実行していない既存 Project 向けです。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -26,8 +26,8 @@
 
 この Workflow を実行する前に、クイックスタートを完了してください。
 
-- [クイックスタート（GUI）](../getting-started/quickstart-gui)
-- [クイックスタート（CLI）](../getting-started/quickstart-cli)
+- [クイックスタート（GUI）](../getting-started/quickstart-gui.md)
+- [クイックスタート（CLI）](../getting-started/quickstart-cli.md)
 
 ## 📖 使い方
 
@@ -90,6 +90,6 @@ flowchart TD
 
 ## 📜 関連スクリプト
 
-- [setup-project-status.sh](../scripts/setup-project-status) — カスタム Status 作成スクリプト
-- [setup-project-fields.sh](../scripts/setup-project-fields) — カスタム Field 作成スクリプト
-- [setup-project-views.sh](../scripts/setup-project-views) — View 作成スクリプト
+- [setup-project-status.sh](../scripts/setup-project-status.md) — カスタム Status 作成スクリプト
+- [setup-project-fields.sh](../scripts/setup-project-fields.md) — カスタム Field 作成スクリプト
+- [setup-project-views.sh](../scripts/setup-project-views.md) — View 作成スクリプト

@@ -15,6 +15,6 @@
 
 | ページ | 内容 |
 |--------|------|
-| [🧑‍💻 個人開発者・ソロメンテナー向けガイド](use-case-personal) | Fork して Workflow を実行するだけ。約 1 分でセットアップ完了 |
-| [🤝 OSS メンテナー・小規模チーム向けガイド](use-case-oss-team) | JSON 定義で構成を管理し、チーム全員で同じ環境を再現 |
-| [🏢 Organization 管理者・PM・EM 向けガイド](use-case-organization) | 複数チーム・リポジトリの横断管理とレポート自動生成 |
+| [🧑‍💻 個人開発者・ソロメンテナー向けガイド](use-case-personal.md) | Fork して Workflow を実行するだけ。約 1 分でセットアップ完了 |
+| [🤝 OSS メンテナー・小規模チーム向けガイド](use-case-oss-team.md) | JSON 定義で構成を管理し、チーム全員で同じ環境を再現 |
+| [🏢 Organization 管理者・PM・EM 向けガイド](use-case-organization.md) | 複数チーム・リポジトリの横断管理とレポート自動生成 |

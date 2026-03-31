@@ -37,8 +37,8 @@
 
 この Workflow を実行する前に、クイックスタートを完了してください。
 
-- [クイックスタート（GUI）](../getting-started/quickstart-gui)
-- [クイックスタート（CLI）](../getting-started/quickstart-cli)
+- [クイックスタート（GUI）](../getting-started/quickstart-gui.md)
+- [クイックスタート（CLI）](../getting-started/quickstart-cli.md)
 
 ## 📖 使い方
 
@@ -442,8 +442,8 @@ flowchart TD
 
 ## 📜 関連スクリプト
 
-- [generate-summary-report.sh](../scripts/generate-summary-report) — サマリーレポート生成スクリプト
-- [generate-effort-report.sh](../scripts/generate-effort-report) — 工数集計レポート生成スクリプト
-- [generate-velocity-report.sh](../scripts/generate-velocity-report) — ベロシティレポート生成スクリプト
-- [detect-stale-items.sh](../scripts/detect-stale-items) — 滞留 Item 検知スクリプト
-- [export-project-items.sh](../scripts/export-project-items) — Item エクスポートスクリプト
+- [generate-summary-report.sh](../scripts/generate-summary-report.md) — サマリーレポート生成スクリプト
+- [generate-effort-report.sh](../scripts/generate-effort-report.md) — 工数集計レポート生成スクリプト
+- [generate-velocity-report.sh](../scripts/generate-velocity-report.md) — ベロシティレポート生成スクリプト
+- [detect-stale-items.sh](../scripts/detect-stale-items.md) — 滞留 Item 検知スクリプト
+- [export-project-items.sh](../scripts/export-project-items.md) — Item エクスポートスクリプト

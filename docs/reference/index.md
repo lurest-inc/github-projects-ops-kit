@@ -15,7 +15,7 @@
 
 | ページ | 内容 |
 |--------|------|
-| [📖 用語集](glossary) | GitHub 関連の専門用語の解説 |
-| [👨‍💻 開発者向け](developers) | 内部アーキテクチャ・Workflow 設計・コントリビューション情報 |
-| [📊 workflow-summary アクション](../actions/workflow-summary) | Workflow 実行結果のサマリーレポートを出力する複合アクション |
-| [🏢 About](about) | 運営元 Lurest・開発者 mabubu0203 の紹介 |
+| [📖 用語集](glossary.md) | GitHub 関連の専門用語の解説 |
+| [👨‍💻 開発者向け](developers.md) | 内部アーキテクチャ・Workflow 設計・コントリビューション情報 |
+| [📊 workflow-summary アクション](../actions/workflow-summary.md) | Workflow 実行結果のサマリーレポートを出力する複合アクション |
+| [🏢 About](about.md) | 運営元 Lurest・開発者 mabubu0203 の紹介 |

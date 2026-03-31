@@ -179,15 +179,15 @@ scripts/
 
 | スクリプト | 概要 |
 |-----------|------|
-| [setup-github-project.sh](../scripts/setup-github-project) | Fork 先の個人用アカウント/Organization に Project を新規作成する |
-| [setup-project-status.sh](../scripts/setup-project-status) | `Backlog`・`Todo`・`In Progress`・`In Review`・`Done` のカスタム Status を作成する |
-| [setup-project-fields.sh](../scripts/setup-project-fields) | `見積もり工数(h)`・`開始予定`・`終了予定`・`実績工数(h)`・`開始実績`・`終了実績`・`終了期日`・`依頼元` のカスタム Field を作成する |
-| [setup-project-views.sh](../scripts/setup-project-views) | `Table`・`Board`・`Roadmap` の 3 種類の View を作成する |
-| [create-special-repos.sh](../scripts/create-special-repos) | オーナータイプを自動判定し、特殊 Repository（プロフィール README、`GitHub Pages`、dotfiles 等）を一括作成する |
-| [setup-repository-labels.sh](../scripts/setup-repository-labels) | 指定 Repository に対して、設定ファイルで定義した Issue Label を一括作成する |
-| [add-items-to-project.sh](../scripts/add-items-to-project) | 指定 Repository の Issue/PR を Project に一括追加する。追加済み Item は自動スキップ |
-| [export-project-items.sh](../scripts/export-project-items) | 指定 Project の Issue/PR 一覧を取得し、指定形式でエクスポートする |
-| [detect-stale-items.sh](../scripts/detect-stale-items) | 指定 Project の Item を走査し、 Status 別の閾値に基づいて滞留 Item を検知する |
-| [generate-summary-report.sh](../scripts/generate-summary-report) | 指定 Project の Item を Status 別・担当者別・ Label 別に集計しサマリーレポートを生成する |
-| [generate-effort-report.sh](../scripts/generate-effort-report) | 指定 Project の見積もり工数・実績工数を多角的に集計・分析しレポートを生成する |
-| [generate-velocity-report.sh](../scripts/generate-velocity-report) | 指定 Project の Done Item を週別に集計し、ベロシティレポートを生成する |
+| [setup-github-project.sh](../scripts/setup-github-project.md) | Fork 先の個人用アカウント/Organization に Project を新規作成する |
+| [setup-project-status.sh](../scripts/setup-project-status.md) | `Backlog`・`Todo`・`In Progress`・`In Review`・`Done` のカスタム Status を作成する |
+| [setup-project-fields.sh](../scripts/setup-project-fields.md) | `見積もり工数(h)`・`開始予定`・`終了予定`・`実績工数(h)`・`開始実績`・`終了実績`・`終了期日`・`依頼元` のカスタム Field を作成する |
+| [setup-project-views.sh](../scripts/setup-project-views.md) | `Table`・`Board`・`Roadmap` の 3 種類の View を作成する |
+| [create-special-repos.sh](../scripts/create-special-repos.md) | オーナータイプを自動判定し、特殊 Repository（プロフィール README、`GitHub Pages`、dotfiles 等）を一括作成する |
+| [setup-repository-labels.sh](../scripts/setup-repository-labels.md) | 指定 Repository に対して、設定ファイルで定義した Issue Label を一括作成する |
+| [add-items-to-project.sh](../scripts/add-items-to-project.md) | 指定 Repository の Issue/PR を Project に一括追加する。追加済み Item は自動スキップ |
+| [export-project-items.sh](../scripts/export-project-items.md) | 指定 Project の Issue/PR 一覧を取得し、指定形式でエクスポートする |
+| [detect-stale-items.sh](../scripts/detect-stale-items.md) | 指定 Project の Item を走査し、 Status 別の閾値に基づいて滞留 Item を検知する |
+| [generate-summary-report.sh](../scripts/generate-summary-report.md) | 指定 Project の Item を Status 別・担当者別・ Label 別に集計しサマリーレポートを生成する |
+| [generate-effort-report.sh](../scripts/generate-effort-report.md) | 指定 Project の見積もり工数・実績工数を多角的に集計・分析しレポートを生成する |
+| [generate-velocity-report.sh](../scripts/generate-velocity-report.md) | 指定 Project の Done Item を週別に集計し、ベロシティレポートを生成する |

@@ -129,4 +129,4 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 
 ## 🔄 使用 Workflow
 
-- [⑥ 統合プロジェクト分析](../workflows/06-analyze-project)
+- [⑥ 統合プロジェクト分析](../workflows/06-analyze-project.md)

@@ -26,8 +26,8 @@
 
 この Workflow を実行する前に、クイックスタートを完了してください。
 
-- [クイックスタート（GUI）](../getting-started/quickstart-gui)
-- [クイックスタート（CLI）](../getting-started/quickstart-cli)
+- [クイックスタート（GUI）](../getting-started/quickstart-gui.md)
+- [クイックスタート（CLI）](../getting-started/quickstart-cli.md)
 
 ## 📖 使い方
 
@@ -88,4 +88,4 @@ flowchart TD
 
 ## 📜 関連スクリプト
 
-- [setup-repository-labels.sh](../scripts/setup-repository-labels) — Issue Label 一括作成スクリプト
+- [setup-repository-labels.sh](../scripts/setup-repository-labels.md) — Issue Label 一括作成スクリプト

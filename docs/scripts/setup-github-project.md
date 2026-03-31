@@ -97,4 +97,4 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 
 ## 🔄 使用 Workflow
 
-- [① GitHub Project 新規作成](../workflows/01-create-project)
+- [① GitHub Project 新規作成](../workflows/01-create-project.md)

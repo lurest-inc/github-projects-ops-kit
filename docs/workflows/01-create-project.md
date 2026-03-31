@@ -25,8 +25,8 @@
 
 この Workflow を実行する前に、クイックスタートを完了してください。
 
-- [クイックスタート（GUI）](../getting-started/quickstart-gui)
-- [クイックスタート（CLI）](../getting-started/quickstart-cli)
+- [クイックスタート（GUI）](../getting-started/quickstart-gui.md)
+- [クイックスタート（CLI）](../getting-started/quickstart-cli.md)
 
 ## 📖 使い方
 
@@ -106,7 +106,7 @@ flowchart TD
 
 ## 📜 関連スクリプト
 
-- [setup-github-project.sh](../scripts/setup-github-project) — Project 新規作成スクリプト
-- [setup-project-status.sh](../scripts/setup-project-status) — カスタム Status 作成スクリプト
-- [setup-project-fields.sh](../scripts/setup-project-fields) — カスタム Field 作成スクリプト
-- [setup-project-views.sh](../scripts/setup-project-views) — View 作成スクリプト
+- [setup-github-project.sh](../scripts/setup-github-project.md) — Project 新規作成スクリプト
+- [setup-project-status.sh](../scripts/setup-project-status.md) — カスタム Status 作成スクリプト
+- [setup-project-fields.sh](../scripts/setup-project-fields.md) — カスタム Field 作成スクリプト
+- [setup-project-views.sh](../scripts/setup-project-views.md) — View 作成スクリプト

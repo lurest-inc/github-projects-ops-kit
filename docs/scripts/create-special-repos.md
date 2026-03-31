@@ -206,4 +206,4 @@ Repository 作成は 1 件あたり 2 リクエスト（存在確認 + 作成）
 
 ## 🔄 使用 Workflow
 
-- [③ 特殊 Repository 一括作成](../workflows/03-create-special-repos)
+- [③ 特殊 Repository 一括作成](../workflows/03-create-special-repos.md)

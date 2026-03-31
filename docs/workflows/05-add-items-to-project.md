@@ -26,8 +26,8 @@ Project に Repository の `Issue`/`PR` を一括追加します。
 
 この Workflow を実行する前に、クイックスタートを完了してください。
 
-- [クイックスタート（GUI）](../getting-started/quickstart-gui)
-- [クイックスタート（CLI）](../getting-started/quickstart-cli)
+- [クイックスタート（GUI）](../getting-started/quickstart-gui.md)
+- [クイックスタート（CLI）](../getting-started/quickstart-cli.md)
 
 ## 📖 使い方
 
@@ -115,4 +115,4 @@ flowchart TD
 
 ## 📜 関連スクリプト
 
-- [add-items-to-project.sh](../scripts/add-items-to-project) — Issue/PR 一括追加スクリプト
+- [add-items-to-project.sh](../scripts/add-items-to-project.md) — Issue/PR 一括追加スクリプト

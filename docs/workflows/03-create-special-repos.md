@@ -26,8 +26,8 @@ GitHub の特殊命名規則 Repository（プロフィール README、`GitHub Pa
 
 この Workflow を実行する前に、クイックスタートを完了してください。
 
-- [クイックスタート（GUI）](../getting-started/quickstart-gui)
-- [クイックスタート（CLI）](../getting-started/quickstart-cli)
+- [クイックスタート（GUI）](../getting-started/quickstart-gui.md)
+- [クイックスタート（CLI）](../getting-started/quickstart-cli.md)
 
 ## 📖 使い方
 
@@ -103,4 +103,4 @@ flowchart TD
 
 ## 📜 関連スクリプト
 
-- [create-special-repos.sh](../scripts/create-special-repos) — 特殊 Repository 一括作成スクリプト
+- [create-special-repos.sh](../scripts/create-special-repos.md) — 特殊 Repository 一括作成スクリプト

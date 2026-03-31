@@ -60,7 +60,7 @@ GitHub の [Settings > Developer settings > Personal access tokens](https://gith
 
 </details>
 
-必要な権限の詳細は [認証・トークンガイド](../guide/auth-tokens) を参照してください。`Fine-grained token` の制約事項については [`Fine-grained token` の制約事項](../guide/auth-tokens#fine-grained-token-の制約事項) も合わせてご確認ください。
+必要な権限の詳細は [認証・トークンガイド](../guide/auth-tokens.md) を参照してください。`Fine-grained token` の制約事項については [`Fine-grained token` の制約事項](../guide/auth-tokens.md#fine-grained-token-の制約事項) も合わせてご確認ください。
 
 ## 3. 🔒 Secrets を設定する
 
@@ -81,7 +81,7 @@ gh api repos/<owner>/github-projects-ops-kit/actions/permissions \
   --field allowed_actions="all"
 ```
 
-> **Note:** 詳しくは [トラブルシューティング > Fork 後に GitHub Actions が動かない](../support/troubleshooting#fork-後に-github-actions-が動かない) を参照してください。
+> **Note:** 詳しくは [トラブルシューティング > Fork 後に GitHub Actions が動かない](../support/troubleshooting.md#fork-後に-github-actions-が動かない) を参照してください。
 
 ## 5. ▶️ Workflow を実行する
 
@@ -129,9 +129,9 @@ gh run watch
 
 各 Workflow の詳細は個別ページをご参照ください。
 
-- [① GitHub Project 新規作成](../workflows/01-create-project)
-- [② GitHub Project 拡張](../workflows/02-extend-project)
-- [③ 特殊 Repository 一括作成](../workflows/03-create-special-repos)
-- [④ Issue Label 一括追加](../workflows/04-setup-repository-labels)
-- [⑤ Issue/PR 一括紐付け](../workflows/05-add-items-to-project)
-- [⑥ 統合 Project 分析](../workflows/06-analyze-project)
+- [① GitHub Project 新規作成](../workflows/01-create-project.md)
+- [② GitHub Project 拡張](../workflows/02-extend-project.md)
+- [③ 特殊 Repository 一括作成](../workflows/03-create-special-repos.md)
+- [④ Issue Label 一括追加](../workflows/04-setup-repository-labels.md)
+- [⑤ Issue/PR 一括紐付け](../workflows/05-add-items-to-project.md)
+- [⑥ 統合 Project 分析](../workflows/06-analyze-project.md)

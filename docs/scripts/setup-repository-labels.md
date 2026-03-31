@@ -225,4 +225,4 @@ Label 定義が 100 件以下であればレート制限の影響はありませ
 
 ## 🔄 使用 Workflow
 
-- [④ Issue Label 一括追加](../workflows/04-setup-repository-labels)
+- [④ Issue Label 一括追加](../workflows/04-setup-repository-labels.md)
