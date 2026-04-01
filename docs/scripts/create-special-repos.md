@@ -160,7 +160,7 @@ flowchart TD
 | 既存 Repository チェック | `gh api repos/{owner}/{repo}` で既存 Repository の存在を確認 | `gh api repos/{owner}/{repo}` |
 | Repository 作成（User） | `gh api user/repos` で Repository を作成。`visibility` を `private` パラメータに変換 | `POST /user/repos` |
 | Repository 作成（Organization） | `gh api orgs/{org}/repos` で Repository を作成。`visibility` パラメータをそのまま使用 | `POST /orgs/{org}/repos` |
-| サマリー出力 | 作成/スキップ/失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `print_summary`, `GITHUB_STEP_SUMMARY` |
+| サマリー出力 | 作成/スキップ/失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `print_summary`, `write_workflow_summary` |
 
 ### 実行結果サマリーの出力形式
 

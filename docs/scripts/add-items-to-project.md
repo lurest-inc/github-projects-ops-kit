@@ -73,10 +73,10 @@ flowchart TD
 |---------|---------|-------------------|
 | オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別 | `gh api users/{owner}` |
 | `Status` Field 取得 | GraphQL で `Project ID`・`Status Field ID`・各 Status の `Option ID` を一括抽出 | `gh api graphql` — `projectV2.fields` |
-| 既存 Item 取得 | GraphQL クエリで Project に紐づく全 Item の URL をページネーション付きで取得。重複防止に使用 | `gh api graphql` — `projectV2.items(first: 100)` |
-| Item 取得・追加 | `fetch_and_add_items` 関数で `Issue` / `PR` を共通処理。`ITEM_STATE`・`ITEM_LABEL` で絞り込んで一覧を取得し、重複チェック・追加・ Status 設定を実行（`Issue` / `PR` 各種別ごとに最大 100 件、1件ごとに 1秒の sleep） | `gh issue list` / `gh pr list`・`gh project item-add`・`updateProjectV2ItemFieldValue` |
+| 既存 Item 取得 | GraphQL クエリで Project に紐づく全 Item の URL をページネーション付きで取得し、連想配列に格納。O(1) の重複チェックに使用 | `gh api graphql` — `projectV2.items(first: 100)` |
+| Item 取得・追加 | `fetch_and_add_items` 関数で `Issue` / `PR` を共通処理。`ITEM_STATE`・`ITEM_LABEL` で絞り込んで一覧を取得し、連想配列による重複チェック・追加・ Status 設定を実行（`Issue` / `PR` 各種別ごとに最大 100 件、1件ごとに 1秒の sleep） | `gh issue list` / `gh pr list`・`gh project item-add`・`updateProjectV2ItemFieldValue` |
 | Status 設定 | 追加した Item に Status を自動付与。`open → Backlog、closed/merged → Done` | `gh api graphql` — `updateProjectV2ItemFieldValue` |
-| サマリー出力 | `Issue`・`PR` それぞれの追加・スキップ・失敗件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
+| サマリー出力 | `Issue`・`PR` それぞれの追加・スキップ・失敗件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `print_summary`, `write_workflow_summary` |
 
 ## 📚 API リファレンス
 

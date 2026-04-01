@@ -72,7 +72,7 @@ flowchart TD
 | Status 定義ファイル読み込み | `scripts/config/project-status-options.json` から Status カラム定義を読み込み | `cat` |
 | `Status` Field 取得 | GraphQL クエリで `Project` ID と `Status` Field ID を一括取得し、現在のカラム一覧を表示 | `gh api graphql` — `projectV2.fields(first: 100)` |
 | カラム更新 | `singleSelectOptions` に Backlog（GRAY）・ Todo（BLUE）・ In Progress（YELLOW）・ In Review（ORANGE）・ Done（GREEN）を指定して一括更新 | `gh api graphql` — `updateProjectV2Field` mutation |
-| サマリー出力 | カラム構成（`Backlog → Todo → In Progress → In Review → Done`）をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
+| サマリー出力 | カラム構成（`Backlog → Todo → In Progress → In Review → Done`）をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `print_summary`, `write_workflow_summary` |
 
 ## 📚 API リファレンス
 

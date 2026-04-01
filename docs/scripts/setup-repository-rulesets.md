@@ -171,7 +171,7 @@ flowchart TD
 | Ruleset 作成 | 重複していない Ruleset を REST API で作成 | `gh api repos/.../rulesets --method POST` |
 | enforcement 確認 | 作成後の `enforcement` が `evaluate` になった場合は警告を出力（Free プランの制約） | `jq` |
 | エラーハンドリング | 作成失敗時はエラーカウントを記録して次の Ruleset へ続行 | — |
-| サマリー出力 | 作成/スキップ/失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `print_summary`, `GITHUB_STEP_SUMMARY` |
+| サマリー出力 | 作成/スキップ/失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `print_summary`, `write_workflow_summary` |
 
 ### 実行結果サマリーの出力形式
 

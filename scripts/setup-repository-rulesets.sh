@@ -95,14 +95,12 @@ EVALUATE_COUNT=0
 if [[ "${PLAN_RESTRICTED}" == true ]]; then
   echo ""
 
-  if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-    {
-      echo "## Ruleset 一括作成"
-      echo ""
-      echo "> **⚠️ プラン制約:** Free プランの Private リポジトリでは Rulesets API を利用できません。"
-      echo "> リポジトリを Public にするか、GitHub Pro 以上にアップグレードしてください。"
-    } >> "${GITHUB_STEP_SUMMARY}"
-  fi
+  write_workflow_summary <<'MD'
+## Ruleset 一括作成
+
+> **⚠️ プラン制約:** Free プランの Private リポジトリでは Rulesets API を利用できません。
+> リポジトリを Public にするか、GitHub Pro 以上にアップグレードしてください。
+MD
 
   print_summary "Repository" "${TARGET_REPO}" "状態" "プラン制約によりスキップ"
   echo ""
@@ -170,23 +168,23 @@ done <<< "${PARSED_NAMES}"
 
 # --- サマリー出力 ---
 
-if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  {
-    echo "## Ruleset 一括作成完了"
+{
+  cat <<MD
+## Ruleset 一括作成完了
+
+| 項目 | 件数 |
+|------|------|
+| 作成 | ${CREATED_COUNT} |
+| スキップ | ${SKIPPED_COUNT} |
+| 失敗 | ${FAILED_COUNT} |
+MD
+  if [[ "${EVALUATE_COUNT}" -gt 0 ]]; then
     echo ""
-    echo "| 項目 | 件数 |"
-    echo "|------|------|"
-    echo "| 作成 | ${CREATED_COUNT} |"
-    echo "| スキップ | ${SKIPPED_COUNT} |"
-    echo "| 失敗 | ${FAILED_COUNT} |"
-    if [[ "${EVALUATE_COUNT}" -gt 0 ]]; then
-      echo ""
-      echo "> **⚠️ 注意:** ${EVALUATE_COUNT} 件の Ruleset が \`evaluate\` モードになっています。"
-      echo "> Free プラン（Private リポジトリ）では Ruleset を \`active\` にできない場合があります。"
-      echo "> 詳細は [GitHub Docs: Repository Rulesets](https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets) を参照してください。"
-    fi
-  } >> "${GITHUB_STEP_SUMMARY}"
-fi
+    echo "> **⚠️ 注意:** ${EVALUATE_COUNT} 件の Ruleset が \`evaluate\` モードになっています。"
+    echo "> Free プラン（Private リポジトリ）では Ruleset を \`active\` にできない場合があります。"
+    echo "> 詳細は [GitHub Docs: Repository Rulesets](https://docs.github.com/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets) を参照してください。"
+  fi
+} | write_workflow_summary
 
 SUMMARY_ARGS=("Repository" "${TARGET_REPO}" "作成" "${CREATED_COUNT} 件" "スキップ" "${SKIPPED_COUNT} 件" "失敗" "${FAILED_COUNT} 件")
 if [[ "${EVALUATE_COUNT}" -gt 0 ]]; then

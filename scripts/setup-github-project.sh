@@ -177,20 +177,17 @@ if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
   echo "project_url=${PROJECT_URL}" >> "${GITHUB_OUTPUT}"
 fi
 
-# GitHub Actions のサマリーに出力
-if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  {
-    echo "## GitHub Project 作成完了"
-    echo ""
-    echo "| 項目 | 値 |"
-    echo "|------|-----|"
-    echo "| Title | ${PROJECT_TITLE} |"
-    echo "| Type | ${OWNER_TYPE} |"
-    echo "| Visibility | ${PROJECT_VISIBILITY} |"
-    echo "| Number | ${PROJECT_NUMBER} |"
-    echo "| URL | ${PROJECT_URL} |"
-  } >> "${GITHUB_STEP_SUMMARY}"
-fi
+write_workflow_summary <<MD
+## GitHub Project 作成完了
+
+| 項目 | 値 |
+|------|-----|
+| Title | ${PROJECT_TITLE} |
+| Type | ${OWNER_TYPE} |
+| Visibility | ${PROJECT_VISIBILITY} |
+| Number | ${PROJECT_NUMBER} |
+| URL | ${PROJECT_URL} |
+MD
 
 echo ""
 echo "セットアップが完了しました。"

@@ -140,15 +140,13 @@ echo "${UPDATE_RESULT}" | jq -r '.data.updateProjectV2Field.projectV2Field.optio
 
 COLUMN_NAMES=$(echo "${STATUS_OPTIONS}" | jq -r '[.[].name] | join(" → ")')
 
-if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  {
-    echo "## ステータスカラム設定完了"
-    echo ""
-    echo "| 項目 | 値 |"
-    echo "|------|-----|"
-    echo "| カラム構成 | ${COLUMN_NAMES} |"
-  } >> "${GITHUB_STEP_SUMMARY}"
-fi
+write_workflow_summary <<MD
+## ステータスカラム設定完了
+
+| 項目 | 値 |
+|------|-----|
+| カラム構成 | ${COLUMN_NAMES} |
+MD
 
 print_summary "カラム" "${COLUMN_NAMES}"
 
