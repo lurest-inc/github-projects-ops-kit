@@ -1,4 +1,4 @@
-# Repository Ruleset 一括作成
+# ⑥ Repository Ruleset 一括作成
 
 指定 Repository に対して、設定ファイルで定義した Branch Ruleset を一括作成します。
 既存 Ruleset と同名の Ruleset が存在する場合はスキップします。
@@ -32,7 +32,7 @@
 ## 📖 使い方
 
 1. `Actions` タブを開く
-2. `Repository Ruleset 一括作成` を選択
+2. `⑥ Repository Ruleset 一括作成` を選択
 3. `Run workflow` をクリック
 4. パラメータを入力して実行
 
@@ -58,7 +58,7 @@ flowchart TD
 
 ### ファイル
 
-`.github/workflows/setup-repository-rulesets.yml`
+`.github/workflows/06-setup-repository-rulesets.yml`
 
 ### トリガー
 
@@ -68,16 +68,16 @@ flowchart TD
 
 | 環境変数 | ソース | 説明 |
 |----------|--------|------|
-| `GH_TOKEN` | `secrets.PROJECT_PAT` | GitHub PAT（`repo` または `public_repo` Scope） |
+| `GH_TOKEN` | `secrets.PROJECT_PAT` | GitHub PAT（Classic: `repo` Scope 必須 / Fine-grained: 対象リポジトリの Administration 権限が必要） |
 | `TARGET_REPO` | `inputs.target_repo` | 対象 Repository  |
 | `PROJECT_PAT` | `secrets.PROJECT_PAT` | PAT 形式検証用（`ghp_` または `github_pat_` で始まるか検証） |
 
-> **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、 PAT を使用するステップはスキップされます。
+> **Note:** `PROJECT_PAT` が未設定または無効な形式の場合、 PAT を使用するステップはスキップされます。使用する PAT は Classic の場合 `repo` Scope、Fine-grained の場合は対象リポジトリの Administration 権限を付与してください。
 
 ### Job 構成
 
 ```
-.github/workflows/setup-repository-rulesets.yml
+.github/workflows/06-setup-repository-rulesets.yml
   ├── setup-repository-rulesets Job
   │   └── scripts/setup-repository-rulesets.sh     # Ruleset 一括作成
   ├── workflow-summary-failure Job（失敗時）

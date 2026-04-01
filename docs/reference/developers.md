@@ -34,8 +34,8 @@ flowchart TD
     subgraph projects ["GitHub Projects 用"]
         A["① Project 新規作成"]
         B["② Project 拡張"]
-        D["⑥ Issue/PR 一括紐付け"]
-        F["⑦ 統合 Project 分析"]
+        D["⑦ Issue/PR 一括紐付け"]
+        F["⑧ 統合 Project 分析"]
     end
 
     subgraph repos ["GitHub Repository 用"]
@@ -59,8 +59,9 @@ flowchart TD
       ├── 03-create-special-repos.yml        # ③ 特殊 Repository 一括作成 Workflow
       ├── 04-setup-repository-labels.yml     # ④ Issue Label 一括作成 Workflow
       ├── 05-setup-repository-files.yml      # ⑤ 初期ファイル一括作成 Workflow
-      ├── 06-add-items-to-project.yml        # ⑥ Issue/PR 一括紐付け Workflow
-      └── 07-analyze-project.yml             # ⑦ 統合 Project 分析 Workflow
+      ├── 06-setup-repository-rulesets.yml    # ⑥ Repository Ruleset 一括作成 Workflow
+      ├── 07-add-items-to-project.yml        # ⑦ Issue/PR 一括紐付け Workflow
+      └── 08-analyze-project.yml             # ⑧ 統合 Project 分析 Workflow
 scripts/
   ├── config/
   │   ├── project-status-options.json        # カスタム Status 定義
@@ -159,10 +160,22 @@ scripts/
       └── .github/actions/workflow-summary           # 成功サマリー出力
 ```
 
-### ⑥ Issue/PR 一括紐付け
+### ⑥ Repository Ruleset 一括作成
 
 ```
-06-add-items-to-project.yml
+06-setup-repository-rulesets.yml
+  ├── setup-repository-rulesets Job
+  │   └── scripts/setup-repository-rulesets.sh     # Ruleset 一括作成
+  ├── workflow-summary-failure Job（失敗時）
+  │   └── .github/actions/workflow-summary       # 失敗サマリー出力
+  └── workflow-summary-success Job（成功時）
+      └── .github/actions/workflow-summary       # 成功サマリー出力
+```
+
+### ⑦ Issue/PR 一括紐付け
+
+```
+07-add-items-to-project.yml
   ├── add-items Job
   │   └── scripts/add-items-to-project.sh        # Item 一括追加
   ├── workflow-summary-failure Job（失敗時）
@@ -171,10 +184,10 @@ scripts/
       └── .github/actions/workflow-summary       # 成功サマリー出力
 ```
 
-### ⑦ 統合 Project 分析
+### ⑧ 統合 Project 分析
 
 ```
-07-analyze-project.yml
+08-analyze-project.yml
   ├── generate-summary-report Job（report_types: all or summary）
   │   ├── scripts/generate-summary-report.sh     # サマリーレポート生成
   │   └── actions/upload-artifact                # サマリーレポートを保存

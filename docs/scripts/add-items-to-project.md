@@ -103,4 +103,4 @@ REST API バージョン `2022-11-28` を使用します。共通ライブラリ
 
 ## 🔄 使用 Workflow
 
-- [⑥ Issue/PR 一括紐付け](../workflows/06-add-items-to-project.md)
+- [⑦ Issue/PR 一括紐付け](../workflows/07-add-items-to-project.md)

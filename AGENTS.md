@@ -34,15 +34,16 @@ scripts/
   03-create-special-repos.yml    # 特殊 Repository 一括作成
   04-setup-repository-labels.yml # Issue Label 一括作成
   05-setup-repository-files.yml  # 初期ファイル一括作成
-  06-add-items-to-project.yml    # Issue/PR 一括紐付け
-  07-analyze-project.yml         # 統合分析 (エクスポート・停滞検出・レポート)
+  06-setup-repository-rulesets.yml # Repository Ruleset 一括作成
+  07-add-items-to-project.yml    # Issue/PR 一括紐付け
+  08-analyze-project.yml         # 統合分析 (エクスポート・停滞検出・レポート)
 ```
 
 ## アーキテクチャ上の重要ポイント
 
 - `scripts/lib/common.sh` は全スクリプトが `source` する共通ライブラリ。環境変数チェック (`require_env`)、コマンド存在確認 (`require_command`)、ワークフローコマンドインジェクション防止 (`sanitize_for_workflow_command`) 等を提供
 - `scripts/config/` 配下の JSON ファイルがプロジェクトのフィールド定義・ステータス・ラベル等の設定を保持。スクリプトはこれらを `jq` で読み取って GitHub API を呼び出す
-- ワークフローは番号付きで実行順序を示す (01 → 02 → ... → 07)
+- ワークフローは番号付きで実行順序を示す (01 → 02 → ... → 08)
 - すべてのワークフローは `PROJECT_PAT` シークレット (GitHub Personal Access Token) を必要とする
 - `.github/actions/workflow-summary/` にワークフロー実行結果のサマリー表示用カスタムアクションがある
 

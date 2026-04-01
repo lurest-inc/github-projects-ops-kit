@@ -150,7 +150,7 @@ GitHub には特殊な命名規則を持つ Repository があります。
 </details>
 
 <details>
-<summary>⑥ Issue/PR 一括紐付け</summary>
+<summary>⑦ Issue/PR 一括紐付け</summary>
 
 - Repository の Issue や PR を Project に一括追加
 - **種別フィルタ**: Issue のみ / PR のみ / すべて
@@ -160,7 +160,7 @@ GitHub には特殊な命名規則を持つ Repository があります。
 </details>
 
 <details>
-<summary>⑦ 統合 Project 分析</summary>
+<summary>⑧ 統合 Project 分析</summary>
 
 5 種類の分析・レポートを一括生成できます。
 
@@ -215,8 +215,9 @@ github-projects-ops-kit/
 │   ├── 03-create-special-repos.yml
 │   ├── 04-setup-repository-labels.yml
 │   ├── 05-setup-repository-files.yml
-│   ├── 06-add-items-to-project.yml
-│   └── 07-analyze-project.yml
+│   ├── 06-setup-repository-rulesets.yml
+│   ├── 07-add-items-to-project.yml
+│   └── 08-analyze-project.yml
 ├── scripts/
 │   ├── lib/common.sh           # 共通関数ライブラリ
 │   ├── config/                 # JSON 定義ファイル群

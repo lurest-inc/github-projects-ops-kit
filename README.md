@@ -90,13 +90,14 @@ gh workflow run 01-create-project.yml
 | [③ 特殊 Repository 一括作成](.github/workflows/03-create-special-repos.yml) | 特殊命名 Repository（プロフィール README・GitHub Pages 等）を一括作成 |
 | [④ Issue Label 一括作成](.github/workflows/04-setup-repository-labels.yml) | 指定 Repository に Issue Label を一括作成 |
 | [⑤ 初期ファイル一括作成](.github/workflows/05-setup-repository-files.yml) | 指定 Repository に初期ファイル（Community Health Files・Scaffold）を一括作成 |
-| [⑥ Issue/PR 一括紐付け](.github/workflows/06-add-items-to-project.yml) | Repository の Issue/PR を Project に一括追加（種別・状態・ラベルでフィルタ可能） |
+| [⑥ Repository Ruleset 一括作成](.github/workflows/06-setup-repository-rulesets.yml) | 指定 Repository に Branch Ruleset を一括作成 |
+| [⑦ Issue/PR 一括紐付け](.github/workflows/07-add-items-to-project.yml) | Repository の Issue/PR を Project に一括追加（種別・状態・ラベルでフィルタ可能） |
 
 ### 運用・分析系
 
 | Workflow | 概要 |
 |---|---|
-| [⑦ 統合 Project 分析](.github/workflows/07-analyze-project.yml) | エクスポート・滞留検知・各種レポートを生成（Artifact としてダウンロード可能） |
+| [⑧ 統合 Project 分析](.github/workflows/08-analyze-project.yml) | エクスポート・滞留検知・各種レポートを生成（Artifact としてダウンロード可能） |
 
 すべての Workflow は `GitHub Actions` の手動実行（`workflow_dispatch`）で利用できます。
 

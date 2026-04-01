@@ -120,5 +120,6 @@ Fork 先 Repository の `Actions` タブから Workflow を選択し、`Run work
 - [③ 特殊 Repository 一括作成](../workflows/03-create-special-repos.md)
 - [④ Issue Label 一括作成](../workflows/04-setup-repository-labels.md)
 - [⑤ 初期ファイル一括作成](../workflows/05-setup-repository-files.md)
-- [⑥ Issue/PR 一括紐付け](../workflows/06-add-items-to-project.md)
-- [⑦ 統合 Project 分析](../workflows/07-analyze-project.md)
+- [⑥ Repository Ruleset 一括作成](../workflows/06-setup-repository-rulesets.md)
+- [⑦ Issue/PR 一括紐付け](../workflows/07-add-items-to-project.md)
+- [⑧ 統合 Project 分析](../workflows/08-analyze-project.md)

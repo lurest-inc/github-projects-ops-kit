@@ -1,4 +1,4 @@
-# ⑦ 統合 Project 分析
+# ⑧ 統合 Project 分析
 
 指定した Project の Item を走査し、滞留 Item 検知・プロジェクトサマリーレポート・工数集計レポート・ベロシティレポート・ Item エクスポートを**1**回の実行でまとめて生成します。`report_types` パラメータで実行する機能を選択することも可能です。
 
@@ -43,7 +43,7 @@
 ## 📖 使い方
 
 1. `Actions` タブを開く
-2. `⑦ 統合 Project 分析` を選択
+2. `⑧ 統合 Project 分析` を選択
 3. `Run workflow` をクリック
 4. パラメータを入力して実行
 
@@ -398,7 +398,7 @@ flowchart TD
 
 ### ファイル
 
-`.github/workflows/07-analyze-project.yml`
+`.github/workflows/08-analyze-project.yml`
 
 ### トリガー
 
@@ -421,7 +421,7 @@ flowchart TD
 ### Job 構成
 
 ```
-.github/workflows/07-analyze-project.yml
+.github/workflows/08-analyze-project.yml
   ├── validate-inputs Job
   │   └── retention_days の範囲検証（1〜7）
   ├── generate-summary-report Job（all or summary 選択時）

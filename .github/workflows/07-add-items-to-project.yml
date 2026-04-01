@@ -3,25 +3,52 @@
 # PAT の形式（ghp_ または github_pat_ で始まる）を検証し、
 # 無効な値の場合はステップをスキップします。
 # ---------------------------------------------------------
-name: "Repository Ruleset 一括作成"
+name: "⑦ Issue/PR 一括紐付け"
 
 on:
   workflow_dispatch:
     inputs:
-      target_repo:
-        description: "対象 Repository（owner/repo 形式）"
+      project_number:
+        description: "対象 Project の Number"
         required: true
+        type: number
+      target_repo:
+        description: "対象 Repository（owner/repo 形式、1 回の実行で 1 Repository）"
+        required: true
+        type: string
+      item_type:
+        description: "対象 Item の種別"
+        required: true
+        type: choice
+        options:
+          - all
+          - issues
+          - prs
+        default: "all"
+      item_state:
+        description: "取得する Item の状態"
+        required: true
+        type: choice
+        options:
+          - open
+          - closed
+          - all
+        default: "open"
+      item_label:
+        description: "絞り込みラベル（指定ラベルの Issue/PR のみ追加、省略可）"
+        required: false
         type: string
 
 permissions:
   contents: read
 
 jobs:
-  setup-repository-rulesets:
+  add-items:
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.PROJECT_PAT }}
-      TARGET_REPO: ${{ inputs.target_repo }}
+      PROJECT_OWNER: ${{ github.repository_owner }}
+      PROJECT_NUMBER: ${{ inputs.project_number }}
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     # 前提: ubuntu-latest には gh (GitHub CLI) と jq がプリインストール済み
     # スクリプト内の require_command チェックはローカル実行時の UX 向上目的で残している
@@ -29,15 +56,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
 
-      - name: Ruleset を一括作成
+      - name: Issue/PR を Project に追加
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
+        env:
+          TARGET_REPO: ${{ inputs.target_repo }}
+          ITEM_TYPE: ${{ inputs.item_type }}
+          ITEM_STATE: ${{ inputs.item_state }}
+          ITEM_LABEL: ${{ inputs.item_label }}
         run: |
           # トリム（前後の空白のみ削除、内部空白は保持）
           TARGET_REPO="$(echo "$TARGET_REPO" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
-          bash scripts/setup-repository-rulesets.sh
+          ITEM_LABEL="$(echo "$ITEM_LABEL" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+          bash scripts/add-items-to-project.sh
 
   workflow-summary-failure:
-    needs: [setup-repository-rulesets]
+    needs: [add-items]
     if: failure()
     runs-on: ubuntu-latest
     steps:
@@ -49,11 +82,12 @@ jobs:
         with:
           status: failure
           project-owner: ${{ github.repository_owner }}
+          project-number: ${{ inputs.project_number }}
           job-results: |
-            {"setup-repository-rulesets": "${{ needs.setup-repository-rulesets.result }}"}
+            {"add-items": "${{ needs.add-items.result }}"}
 
   workflow-summary-success:
-    needs: [setup-repository-rulesets]
+    needs: [add-items]
     if: success()
     runs-on: ubuntu-latest
     steps:
@@ -65,5 +99,6 @@ jobs:
         with:
           status: success
           project-owner: ${{ github.repository_owner }}
+          project-number: ${{ inputs.project_number }}
           job-results: |
-            {"setup-repository-rulesets": "${{ needs.setup-repository-rulesets.result }}"}
+            {"add-items": "${{ needs.add-items.result }}"}

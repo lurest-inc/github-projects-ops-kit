@@ -119,20 +119,27 @@ gh workflow run 05-setup-repository-files.yml \
   --field setup_types="all"
 ```
 
-### ⑥ Issue/PR 一括紐付け
+### ⑥ Repository Ruleset 一括作成
 
 ```bash
-gh workflow run 06-add-items-to-project.yml \
+gh workflow run 06-setup-repository-rulesets.yml \
+  --field target_repo="<owner/repo>"
+```
+
+### ⑦ Issue/PR 一括紐付け
+
+```bash
+gh workflow run 07-add-items-to-project.yml \
   --field project_number="<PROJECT_NUMBER>" \
   --field target_repo="<owner/repo>" \
   --field item_type="all" \
   --field item_state="open"
 ```
 
-### ⑦ 統合 Project 分析
+### ⑧ 統合 Project 分析
 
 ```bash
-gh workflow run 07-analyze-project.yml \
+gh workflow run 08-analyze-project.yml \
   --field project_number="<PROJECT_NUMBER>" \
   --field report_types="all"
 ```
@@ -156,5 +163,6 @@ gh run watch
 - [③ 特殊 Repository 一括作成](../workflows/03-create-special-repos.md)
 - [④ Issue Label 一括作成](../workflows/04-setup-repository-labels.md)
 - [⑤ 初期ファイル一括作成](../workflows/05-setup-repository-files.md)
-- [⑥ Issue/PR 一括紐付け](../workflows/06-add-items-to-project.md)
-- [⑦ 統合 Project 分析](../workflows/07-analyze-project.md)
+- [⑥ Repository Ruleset 一括作成](../workflows/06-setup-repository-rulesets.md)
+- [⑦ Issue/PR 一括紐付け](../workflows/07-add-items-to-project.md)
+- [⑧ 統合 Project 分析](../workflows/08-analyze-project.md)
