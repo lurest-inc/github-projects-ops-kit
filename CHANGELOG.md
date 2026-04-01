@@ -1,5 +1,49 @@
 # Changelog
 
+## [1.4.0](https://github.com/lurest-inc/github-projects-ops-kit/compare/v1.3.0...v1.4.0) (2026-04-01)
+
+
+### 新機能
+
+* Repository Ruleset 一括作成ワークフローとドキュメントを追加 ([48094f3](https://github.com/lurest-inc/github-projects-ops-kit/commit/48094f315dd9a373a5e32fee0807d4b83ffe2609))
+* Repository Ruleset 一括作成ワークフローを追加 ([afa31a8](https://github.com/lurest-inc/github-projects-ops-kit/commit/afa31a801d4a736effb931c5ce0aef1eaf18121f))
+
+
+### ドキュメント
+
+* Qiita リリース記事を v1.3.0 に最新化 ([3f5264f](https://github.com/lurest-inc/github-projects-ops-kit/commit/3f5264fc561af01d2678cf4694d793a75ee769c6))
+* Qiita リリース記事を v1.3.0 の実装に合わせて最新化 ([9f429ff](https://github.com/lurest-inc/github-projects-ops-kit/commit/9f429ff639dc5ef60c961437b238b97e9fa6dab8)), closes [#475](https://github.com/lurest-inc/github-projects-ops-kit/issues/475)
+* use-cases 配下のワークフロー番号・参照を最新の実装に合わせて更新 ([54b43b4](https://github.com/lurest-inc/github-projects-ops-kit/commit/54b43b4ba78a11f0ea1cd1842e5996692ef0db74))
+* use-cases 配下のワークフロー番号・参照を最新の実装に合わせて更新 ([87657b5](https://github.com/lurest-inc/github-projects-ops-kit/commit/87657b5b2eb46600eb8c0cd70d628c560261c5b8))
+* トップページ「詳しく知りたい方へ」テーブルにブランチ運用ルールを追加 ([a64c8a1](https://github.com/lurest-inc/github-projects-ops-kit/commit/a64c8a1e3b7c815661dbf011912b448a84777203))
+* トップページ「詳しく知りたい方へ」テーブルを運用ガイド index と統一 ([1dca2cc](https://github.com/lurest-inc/github-projects-ops-kit/commit/1dca2cc73516551381fe9fbe6660552b0725ff1d)), closes [#469](https://github.com/lurest-inc/github-projects-ops-kit/issues/469)
+* トップページと運用ガイド index のテーブル書式を統一 ([4ab067f](https://github.com/lurest-inc/github-projects-ops-kit/commit/4ab067f62392de203e44cee8723e64561c555758))
+* ブランチ運用ルールガイドを guide 配下に追加 ([7e08a10](https://github.com/lurest-inc/github-projects-ops-kit/commit/7e08a1036f71f64c10d1868780430485d24b5010))
+* ブランチ運用ルールガイドを guide 配下に追加 ([b9fb1b6](https://github.com/lurest-inc/github-projects-ops-kit/commit/b9fb1b64928ea9e678ed008b06b350f7410ee8b1))
+* やりたいこと別ガイドに⑤初期ファイル一括作成のリンクを追加 ([81a9313](https://github.com/lurest-inc/github-projects-ops-kit/commit/81a93137d76187080ef2c56fa8e1474ab68b4055))
+* やりたいこと別ガイドに⑤初期ファイル一括作成のリンクを追加 ([ef5d8b2](https://github.com/lurest-inc/github-projects-ops-kit/commit/ef5d8b207b5a04072bbe0025f625db2870615764))
+* 用語集に Ruleset・Scaffold・REST API 関連の用語を追加 ([c4e8786](https://github.com/lurest-inc/github-projects-ops-kit/commit/c4e87862794eb537754d1a4007d07a1ddc4548ac))
+* 用語集に Ruleset・Scaffold・REST API 関連の用語を追加 ([740db6f](https://github.com/lurest-inc/github-projects-ops-kit/commit/740db6f1015573455f76ea6b9d5334e89e1fe6f5)), closes [#463](https://github.com/lurest-inc/github-projects-ops-kit/issues/463)
+
+
+### スタイル
+
+* ⑥ Ruleset 関連のコメントインデントを整列 ([2cd2059](https://github.com/lurest-inc/github-projects-ops-kit/commit/2cd2059d1bd9be341547d0e9dbb89415a07a39bc))
+
+
+### その他の変更
+
+* **docs:** update TOC ([a35aa7b](https://github.com/lurest-inc/github-projects-ops-kit/commit/a35aa7bf443f9b72278bd98f8ff5f0de7ae7823d))
+
+
+### リファクタリング
+
+* ⑥ ワークフロー論理名を「Repository Ruleset 一括作成」から「Ruleset 一括作成」に統一 ([3e0816b](https://github.com/lurest-inc/github-projects-ops-kit/commit/3e0816b2a1201dcd9c271e1cdc49c368c81e928c))
+* ⑥ ワークフロー論理名を他ワークフローの命名規則に統一 ([cb8dade](https://github.com/lurest-inc/github-projects-ops-kit/commit/cb8dade0cdeba8f7d92c8685e73d28dceda5f485))
+* scripts 配下のコード品質改善とドキュメント最新化 ([b17af22](https://github.com/lurest-inc/github-projects-ops-kit/commit/b17af22ab7c3f460b8a35b57df9108fe28bbbd6e))
+* scripts 配下のコード品質改善とドキュメント最新化 ([1e8d9fe](https://github.com/lurest-inc/github-projects-ops-kit/commit/1e8d9fe36cff3635fb42bbe747729c8b24773309))
+* Workflow 番号体系を整理し⑥ Ruleset を挿入（⑥→⑦、⑦→⑧） ([d39d280](https://github.com/lurest-inc/github-projects-ops-kit/commit/d39d28065c7237e285fdf068b8930602117065cd))
+
 ## [1.3.0](https://github.com/lurest-inc/github-projects-ops-kit/compare/v1.2.0...v1.3.0) (2026-03-31)
 
 
