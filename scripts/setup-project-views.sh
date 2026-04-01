@@ -167,23 +167,23 @@ done <<< "${PARSED_VIEWS}"
 
 print_summary "作成" "${CREATED_COUNT} 件" "スキップ" "${SKIPPED_COUNT} 件（既存）" "失敗" "${FAILED_COUNT} 件"
 
-if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  {
-    echo "## View 作成完了"
-    echo ""
-    echo "| 項目 | 値 |"
-    echo "|------|-----|"
-    echo "| 作成 | ${CREATED_COUNT} 件 |"
-    echo "| スキップ | ${SKIPPED_COUNT} 件（既存） |"
-    echo "| 失敗 | ${FAILED_COUNT} 件 |"
-    echo ""
-    echo "### View 一覧"
-    echo ""
-    echo "| View 名 | レイアウト | フィルタ |"
-    echo "|---------|-----------|---------|"
-    echo "${VIEW_DEFINITIONS}" | jq -r '.[] | "| \(.name) | \(.layout) | \(.filter // "-") |"'
-  } >> "${GITHUB_STEP_SUMMARY}"
-fi
+{
+  cat <<MD
+## View 作成完了
+
+| 項目 | 値 |
+|------|-----|
+| 作成 | ${CREATED_COUNT} 件 |
+| スキップ | ${SKIPPED_COUNT} 件（既存） |
+| 失敗 | ${FAILED_COUNT} 件 |
+
+### View 一覧
+
+| View 名 | レイアウト | フィルタ |
+|---------|-----------|---------|
+MD
+  echo "${VIEW_DEFINITIONS}" | jq -r '.[] | "| \(.name) | \(.layout) | \(.filter // "-") |"'
+} | write_workflow_summary
 
 if [[ "${FAILED_COUNT}" -gt 0 ]]; then
   echo ""

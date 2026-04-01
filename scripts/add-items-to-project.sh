@@ -23,12 +23,8 @@ source "${SCRIPT_DIR}/lib/common.sh"
 validate_common_project_env
 validate_target_repo_env
 
-ITEM_TYPE="${ITEM_TYPE:-all}"
-ITEM_STATE="${ITEM_STATE:-open}"
+validate_item_filters
 ITEM_LABEL="${ITEM_LABEL:-}"
-
-validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
-validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
 
 # ステータス自動付与ルール: open → Backlog、closed/merged → Done
 INITIAL_STATUS="Backlog"
@@ -282,13 +278,16 @@ GRAPHQL
 echo ""
 echo "Project #${PROJECT_NUMBER} の既存 Item を取得しています..."
 EXISTING_ITEMS=$(get_existing_project_items)
+declare -A EXISTING_ITEMS_MAP=()
+EXISTING_COUNT=0
 if [[ -n "${EXISTING_ITEMS}" ]]; then
-  EXISTING_COUNT=$(echo "${EXISTING_ITEMS}" | wc -l | tr -d ' ')
-  echo "  既存 Item 数: ${EXISTING_COUNT}"
-else
-  EXISTING_COUNT=0
-  echo "  既存 Item 数: 0"
+  while IFS= read -r _url; do
+    [[ -z "${_url}" ]] && continue
+    EXISTING_ITEMS_MAP["${_url}"]=1
+    EXISTING_COUNT=$((EXISTING_COUNT + 1))
+  done <<< "${EXISTING_ITEMS}"
 fi
+echo "  既存 Item 数: ${EXISTING_COUNT}"
 
 # --- Item 取得・追加（共通関数） ---
 
@@ -328,7 +327,7 @@ fetch_and_add_items() {
     while IFS=$'\t' read -r url state; do
       [[ -z "${url}" ]] && continue
 
-      if [[ -n "${EXISTING_ITEMS}" ]] && echo "${EXISTING_ITEMS}" | grep -Fxq "${url}"; then
+      if [[ -n "${EXISTING_ITEMS_MAP["${url}"]:-}" ]]; then
         echo "  スキップ（追加済み）: ${url}" >&2
         skipped=$((skipped + 1))
         continue
@@ -401,29 +400,31 @@ print_summary \
   "PR" "追加: ${PR_ADDED}, スキップ: ${PR_SKIPPED}, 失敗: ${PR_FAILED}" \
   "合計" "追加: ${TOTAL_ADDED}, スキップ: ${TOTAL_SKIPPED}, 失敗: ${TOTAL_FAILED}"
 
-if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  {
-    echo "## Project Item 一括追加 完了"
-    echo ""
-    echo "| 項目 | 値 |"
-    echo "|------|-----|"
-    echo "| Target Repo | \`${TARGET_REPO}\` |"
-    echo "| Repo Link | ${LINK_STATUS} |"
-    echo "| State Filter | ${ITEM_STATE} |"
-    echo "| Status | open → Backlog / closed・merged → Done |"
-    if [[ -n "${ITEM_LABEL}" ]]; then
-      echo "| Label Filter | ${ITEM_LABEL} |"
-    fi
-    echo "| Issue 追加 | ${ISSUE_ADDED} 件 |"
-    echo "| Issue スキップ | ${ISSUE_SKIPPED} 件 |"
-    echo "| Issue 失敗 | ${ISSUE_FAILED} 件 |"
-    echo "| PR 追加 | ${PR_ADDED} 件 |"
-    echo "| PR スキップ | ${PR_SKIPPED} 件 |"
-    echo "| PR 失敗 | ${PR_FAILED} 件 |"
-    echo "| **合計追加** | **${TOTAL_ADDED} 件** |"
-    echo "| **合計失敗** | **${TOTAL_FAILED} 件** |"
-  } >> "${GITHUB_STEP_SUMMARY}"
-fi
+{
+  cat <<MD
+## Project Item 一括追加 完了
+
+| 項目 | 値 |
+|------|-----|
+| Target Repo | \`${TARGET_REPO}\` |
+| Repo Link | ${LINK_STATUS} |
+| State Filter | ${ITEM_STATE} |
+| Status | open → Backlog / closed・merged → Done |
+MD
+  if [[ -n "${ITEM_LABEL}" ]]; then
+    echo "| Label Filter | ${ITEM_LABEL} |"
+  fi
+  cat <<MD
+| Issue 追加 | ${ISSUE_ADDED} 件 |
+| Issue スキップ | ${ISSUE_SKIPPED} 件 |
+| Issue 失敗 | ${ISSUE_FAILED} 件 |
+| PR 追加 | ${PR_ADDED} 件 |
+| PR スキップ | ${PR_SKIPPED} 件 |
+| PR 失敗 | ${PR_FAILED} 件 |
+| **合計追加** | **${TOTAL_ADDED} 件** |
+| **合計失敗** | **${TOTAL_FAILED} 件** |
+MD
+} | write_workflow_summary
 
 echo ""
 if [[ "${TOTAL_FAILED}" -gt 0 ]]; then

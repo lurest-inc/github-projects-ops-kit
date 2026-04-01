@@ -173,7 +173,7 @@ flowchart TD
 | 重複チェック | 既存 Label 名リストと定義済み Label 名を `grep -Fqx` で完全一致比較 | — |
 | Label 作成 | 重複していない Label を `gh label create` で作成 | `gh label create -R` |
 | エラーハンドリング | 作成失敗時はエラーカウントを記録して次の Label へ続行 | — |
-| サマリー出力 | 作成/スキップ/失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `print_summary`, `GITHUB_STEP_SUMMARY` |
+| サマリー出力 | 作成/スキップ/失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `print_summary`, `write_workflow_summary` |
 
 ### 実行結果サマリーの出力形式
 

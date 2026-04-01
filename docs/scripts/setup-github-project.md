@@ -74,7 +74,7 @@ flowchart TD
 | 情報抽出 | 作成結果の JSON から `id`・`number`・`url` を取得 | `jq -c '.data.createProjectV2.projectV2'` + `jq -r '@tsv'` |
 | Visibility 設定 | 作成した `Project` の公開範囲を指定値に変更 | GraphQL `updateProjectV2(input: {projectId, public})` |
 | Visibility 検証 | レスポンス JSON の `public` が期待値と一致するか確認 | `jq '.public'` |
-| サマリー出力 | `GITHUB_OUTPUT` へ後続ステップ連携用の値を設定、`GITHUB_STEP_SUMMARY` にテーブル出力 | — |
+| サマリー出力 | `GITHUB_OUTPUT` へ後続ステップ連携用の値を設定、`GITHUB_STEP_SUMMARY` にテーブル出力 | `write_workflow_summary` |
 
 ## 📚 API リファレンス
 

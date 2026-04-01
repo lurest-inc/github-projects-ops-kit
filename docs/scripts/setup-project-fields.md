@@ -99,7 +99,7 @@ flowchart TD
 | 既存 Field 取得 | GraphQL クエリで `Project` ID と全 Field（名前・データ型・選択肢）を一括取得 | `gh api graphql` — `projectV2.fields(first: 100)` |
 | 重複チェック | 既存 Field 名リストと定義済み Field 名を `grep -Fqx` で完全一致比較 | — |
 | Field 作成 | データ型に応じて Field を作成（`SINGLE_SELECT` の場合は `singleSelectOptions` で選択肢を付与） | `gh api graphql` — `createProjectV2Field` mutation |
-| サマリー出力 | 作成・スキップ・失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
+| サマリー出力 | 作成・スキップ・失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `print_summary`, `write_workflow_summary` |
 
 ## 📚 API リファレンス
 

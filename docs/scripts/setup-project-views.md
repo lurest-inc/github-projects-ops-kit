@@ -115,7 +115,7 @@ flowchart TD
 | `View` 定義の事前解析 | ループ前に全 `View` 定義を1回の `jq` で TSV に変換し、ループ内の `jq` 呼び出しを削減 | `jq -r '.[] \| [...] \| @tsv'` |
 | 重複チェック | 既存 `View` 名リストと定義済み `View` 名を `grep -Fqx` で完全一致比較 | — |
 | `View` 作成 | REST API で `View` を作成。`name`・`layout` に加え、任意で `filter`・`visible_fields` を送信 | `gh api {path} --method POST` |
-| サマリー出力 | 作成・スキップ・失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | — |
+| サマリー出力 | 作成・スキップ・失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `print_summary`, `write_workflow_summary` |
 
 ## 📚 API リファレンス
 

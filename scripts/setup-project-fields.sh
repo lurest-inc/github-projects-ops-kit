@@ -164,23 +164,23 @@ done <<< "${PARSED_FIELDS}"
 
 print_summary "作成" "${CREATED_COUNT} 件" "スキップ" "${SKIPPED_COUNT} 件（既存）" "失敗" "${FAILED_COUNT} 件"
 
-if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  {
-    echo "## Field 設定完了"
-    echo ""
-    echo "| 項目 | 値 |"
-    echo "|------|-----|"
-    echo "| 作成 | ${CREATED_COUNT} 件 |"
-    echo "| スキップ | ${SKIPPED_COUNT} 件（既存） |"
-    echo "| 失敗 | ${FAILED_COUNT} 件 |"
-    echo ""
-    echo "### Field 一覧"
-    echo ""
-    echo "| フィールド名 | データ型 | 選択肢 |"
-    echo "|-------------|---------|--------|"
-    echo "${FIELD_DEFINITIONS}" | jq -r '.[] | "| \(.name) | \(.dataType) | \(if .options then (.options | join(", ")) else "-" end) |"'
-  } >> "${GITHUB_STEP_SUMMARY}"
-fi
+{
+  cat <<MD
+## Field 設定完了
+
+| 項目 | 値 |
+|------|-----|
+| 作成 | ${CREATED_COUNT} 件 |
+| スキップ | ${SKIPPED_COUNT} 件（既存） |
+| 失敗 | ${FAILED_COUNT} 件 |
+
+### Field 一覧
+
+| フィールド名 | データ型 | 選択肢 |
+|-------------|---------|--------|
+MD
+  echo "${FIELD_DEFINITIONS}" | jq -r '.[] | "| \(.name) | \(.dataType) | \(if .options then (.options | join(", ")) else "-" end) |"'
+} | write_workflow_summary
 
 if [[ "${FAILED_COUNT}" -gt 0 ]]; then
   echo ""

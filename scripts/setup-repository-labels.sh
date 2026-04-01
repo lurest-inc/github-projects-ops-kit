@@ -117,17 +117,15 @@ done <<< "${PARSED_LABELS}"
 
 # --- サマリー出力 ---
 
-if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-  {
-    echo "## ラベル一括作成完了"
-    echo ""
-    echo "| 項目 | 件数 |"
-    echo "|------|------|"
-    echo "| 作成 | ${CREATED_COUNT} |"
-    echo "| スキップ | ${SKIPPED_COUNT} |"
-    echo "| 失敗 | ${FAILED_COUNT} |"
-  } >> "${GITHUB_STEP_SUMMARY}"
-fi
+write_workflow_summary <<MD
+## ラベル一括作成完了
+
+| 項目 | 件数 |
+|------|------|
+| 作成 | ${CREATED_COUNT} |
+| スキップ | ${SKIPPED_COUNT} |
+| 失敗 | ${FAILED_COUNT} |
+MD
 
 print_summary "Repository" "${TARGET_REPO}" "作成" "${CREATED_COUNT} 件" "スキップ" "${SKIPPED_COUNT} 件" "失敗" "${FAILED_COUNT} 件"
 

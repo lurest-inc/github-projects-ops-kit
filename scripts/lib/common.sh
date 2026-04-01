@@ -225,23 +225,23 @@ create_files_via_pr() {
 output_repo_files_summary() {
   local summary_title="$1"
 
-  if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-    {
-      echo "## ${summary_title}"
+  {
+    cat <<MD
+## ${summary_title}
+
+| 項目 | 件数 |
+|------|------|
+| 作成 | ${CREATED_COUNT} |
+| スキップ | ${SKIPPED_COUNT} |
+| 失敗 | ${FAILED_COUNT} |
+MD
+    if [[ -n "${PR_URL:-}" ]] && [[ "${PR_URL}" == http* ]]; then
       echo ""
-      echo "| 項目 | 件数 |"
-      echo "|------|------|"
-      echo "| 作成 | ${CREATED_COUNT} |"
-      echo "| スキップ | ${SKIPPED_COUNT} |"
-      echo "| 失敗 | ${FAILED_COUNT} |"
-      if [[ -n "${PR_URL:-}" ]] && [[ "${PR_URL}" == http* ]]; then
-        echo ""
-        echo "### 作成された PR"
-        echo ""
-        echo "- ${PR_URL}"
-      fi
-    } >> "${GITHUB_STEP_SUMMARY}"
-  fi
+      echo "### 作成された PR"
+      echo ""
+      echo "- ${PR_URL}"
+    fi
+  } | write_workflow_summary
 
   print_summary "Repository" "${TARGET_REPO}" "作成" "${CREATED_COUNT} 件" "スキップ" "${SKIPPED_COUNT} 件" "失敗" "${FAILED_COUNT} 件"
 
@@ -524,6 +524,16 @@ JQ_MD_ESCAPE='def md_escape: gsub("\\\\"; "\\\\") | gsub("`"; "\\`") | gsub("\\*
 # 使用例: echo "${DATA}" | jq "${JQ_STATUS_ORDER}"'sort_by(status_order(.status))'
 JQ_STATUS_ORDER='def status_order(s): if s == "Backlog" then 0 elif s == "Todo" then 1 elif s == "In Progress" then 2 elif s == "In Review" then 3 elif s == "Done" then 4 else 5 end;'
 
+# ITEM_TYPE / ITEM_STATE のバリデーションを行う
+# デフォルト値の設定と validate_enum を一括実行する
+# 使用例: validate_item_filters
+validate_item_filters() {
+  ITEM_TYPE="${ITEM_TYPE:-all}"
+  ITEM_STATE="${ITEM_STATE:-open}"
+  validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
+  validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
+}
+
 # ITEM_TYPE フィルタ用ヘルパー関数
 # ITEM_TYPE 環境変数の値に応じて Issue / PR を含めるかどうかを判定する
 should_include_issues() { [[ "${ITEM_TYPE}" == "all" || "${ITEM_TYPE}" == "issues" ]]; }
@@ -572,6 +582,24 @@ build_output_filename() {
   local file_ext
   file_ext=$(get_file_extension "${OUTPUT_FORMAT}")
   echo "${prefix}-${PROJECT_NUMBER}-${suffix}.${file_ext}"
+}
+
+# GitHub Actions の Workflow Summary にコンテンツを追記する
+# GITHUB_STEP_SUMMARY が未設定の場合は何もしない
+# 引数: 標準入力から Markdown コンテンツを受け取る
+# 使用例:
+#   write_workflow_summary <<'MD'
+#   ## タイトル
+#   | 項目 | 値 |
+#   |------|-----|
+#   | 作成 | 3 件 |
+#   MD
+write_workflow_summary() {
+  if [[ -z "${GITHUB_STEP_SUMMARY:-}" ]]; then
+    cat > /dev/null
+    return
+  fi
+  cat >> "${GITHUB_STEP_SUMMARY}"
 }
 
 # レポート結果を Workflow Summary に追記する
@@ -664,12 +692,10 @@ validate_analysis_env() {
 
   validate_common_project_env
 
-  ITEM_TYPE="${ITEM_TYPE:-all}"
   ITEM_STATE="${ITEM_STATE:-all}"
   OUTPUT_FORMAT="${OUTPUT_FORMAT:-${default_format}}"
 
-  validate_enum "ITEM_TYPE" "${ITEM_TYPE}" "all" "issues" "prs"
-  validate_enum "ITEM_STATE" "${ITEM_STATE}" "open" "closed" "all"
+  validate_item_filters
   validate_enum "OUTPUT_FORMAT" "${OUTPUT_FORMAT}" "markdown" "csv" "tsv" "json"
 }
 
@@ -826,17 +852,15 @@ create_repos_batch() {
 
   # --- サマリー出力 ---
 
-  if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
-    {
-      echo "## ${type_label_ja}特殊 Repository 一括作成完了"
-      echo ""
-      echo "| 項目 | 件数 |"
-      echo "|------|------|"
-      echo "| 作成 | ${created_count} |"
-      echo "| スキップ | ${skipped_count} |"
-      echo "| 失敗 | ${failed_count} |"
-    } >> "${GITHUB_STEP_SUMMARY}"
-  fi
+  write_workflow_summary <<MD
+## ${type_label_ja}特殊 Repository 一括作成完了
+
+| 項目 | 件数 |
+|------|------|
+| 作成 | ${created_count} |
+| スキップ | ${skipped_count} |
+| 失敗 | ${failed_count} |
+MD
 
   print_summary "Owner" "${PROJECT_OWNER}" "タイプ" "${owner_type_label}" "作成" "${created_count} 件" "スキップ" "${skipped_count} 件" "失敗" "${failed_count} 件"
 
