@@ -312,8 +312,11 @@ validate_project_number() {
 # 形式チェック（require_env）とは別に、実際に API を呼び出してトークンが有効か確認する
 # 使用例: validate_gh_token
 validate_gh_token() {
-  if ! gh auth status &>/dev/null; then
-    echo "::error::GH_TOKEN の認証に失敗しました（HTTP 401: Bad credentials）。"
+  local auth_error
+  if ! auth_error=$(gh api user --jq '.login' 2>&1); then
+    local safe_error
+    safe_error=$(sanitize_for_workflow_command "${auth_error}")
+    echo "::error::GH_TOKEN の認証に失敗しました: ${safe_error}"
     echo "::error::PROJECT_PAT が期限切れまたは無効になっている可能性があります。"
     echo "::error::GitHub Settings → Developer settings → Personal access tokens でトークンを再発行し、Repository Secrets の PROJECT_PAT を更新してください。"
     exit 1
