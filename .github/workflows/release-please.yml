@@ -34,7 +34,7 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       (github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'chore: release'))
     steps:
-      - uses: googleapis/release-please-action@v4.4.0
+      - uses: googleapis/release-please-action@v5.0.0
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
         with:
           token: ${{ secrets.PROJECT_PAT }}
