@@ -87,7 +87,7 @@ jobs:
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
 
       - name: サマリーレポート生成
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
@@ -95,7 +95,7 @@ jobs:
 
       - name: アーティファクトをアップロード
         if: always()
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: summary-report-${{ inputs.project_number }}
           path: report-*-summary.*
@@ -117,7 +117,7 @@ jobs:
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
 
       - name: 工数集計レポート生成
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
@@ -125,7 +125,7 @@ jobs:
 
       - name: アーティファクトをアップロード
         if: always()
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: effort-report-${{ inputs.project_number }}
           path: report-*-effort.*
@@ -147,7 +147,7 @@ jobs:
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
 
       - name: 滞留 Item 検知
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
@@ -155,7 +155,7 @@ jobs:
 
       - name: アーティファクトをアップロード
         if: always()
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: stale-items-report
           path: stale-items-report.*
@@ -177,7 +177,7 @@ jobs:
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
 
       - name: ベロシティレポート生成
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
@@ -185,7 +185,7 @@ jobs:
 
       - name: アーティファクトをアップロード
         if: always()
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: velocity-report-${{ inputs.project_number }}
           path: report-*-velocity.*
@@ -207,7 +207,7 @@ jobs:
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
 
       - name: Project Item をエクスポート
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
@@ -215,7 +215,7 @@ jobs:
 
       - name: アーティファクトをアップロード
         if: always()
-        uses: actions/upload-artifact@v7.0.0
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: export-items-${{ inputs.project_number }}
           path: export-*
@@ -228,7 +228,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
 
       - name: 失敗サマリーを出力
         uses: ./.github/actions/workflow-summary
@@ -245,7 +245,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.0
 
       - name: 成功サマリーを出力
         uses: ./.github/actions/workflow-summary
