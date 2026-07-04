@@ -41,7 +41,7 @@ scripts/
 
 ## アーキテクチャ上の重要ポイント
 
-- `scripts/lib/common.sh` は全スクリプトが `source` する共通ライブラリ。環境変数チェック (`require_env`)、コマンド存在確認 (`require_command`)、ワークフローコマンドインジェクション防止 (`sanitize_for_workflow_command`) 等を提供
+- `scripts/lib/common.sh` は全スクリプトが `source` する共通ライブラリ。環境変数チェック (`require_env`)、コマンド存在確認 (`require_command`)、トークン認証チェック (`validate_gh_token`)、ワークフローコマンドインジェクション防止 (`sanitize_for_workflow_command`) 等を提供
 - `scripts/config/` 配下の JSON ファイルがプロジェクトのフィールド定義・ステータス・ラベル等の設定を保持。スクリプトはこれらを `jq` で読み取って GitHub API を呼び出す
 - ワークフローは番号付きで実行順序を示す (01 → 02 → ... → 08)
 - すべてのワークフローは `PROJECT_PAT` シークレット (GitHub Personal Access Token) を必要とする

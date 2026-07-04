@@ -43,6 +43,7 @@ validate_target_repo_env() {
   fi
   require_command "gh" "GitHub CLI (gh) が必要です。PATH を確認してください。"
   require_command "jq" "JSON の解析に必要です。"
+  validate_gh_token
 }
 
 # リポジトリのデフォルトブランチ名と SHA を取得する
@@ -307,6 +308,21 @@ validate_project_number() {
   fi
 }
 
+# GH_TOKEN の有効性を検証する（認証チェック）
+# 形式チェック（require_env）とは別に、実際に API を呼び出してトークンが有効か確認する
+# 使用例: validate_gh_token
+validate_gh_token() {
+  local auth_error
+  if ! auth_error=$(gh api user --jq '.login' 2>&1); then
+    local safe_error
+    safe_error=$(sanitize_for_workflow_command "${auth_error}")
+    echo "::error::GH_TOKEN の認証に失敗しました: ${safe_error}"
+    echo "::error::PROJECT_PAT が期限切れまたは無効になっている可能性があります。"
+    echo "::error::GitHub Settings → Developer settings → Personal access tokens でトークンを再発行し、Repository Secrets の PROJECT_PAT を更新してください。"
+    exit 1
+  fi
+}
+
 # オーナータイプ判定
 # 成功時: OWNER_TYPE, OWNER_QUERY_FIELD, OWNER_NODE_ID をグローバルに設定
 detect_owner_type() {
@@ -512,6 +528,7 @@ validate_common_project_env() {
   validate_project_number
   require_command "gh" "GitHub CLI (gh) が必要です。PATH を確認してください。"
   require_command "jq" "JSON の解析に必要です。"
+  validate_gh_token
   detect_owner_type
 }
 

@@ -108,7 +108,7 @@ flowchart TD
 
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
-| 環境変数バリデーション | `validate_target_repo_env` で `GH_TOKEN`, `TARGET_REPO` を一括検証 | `common.sh` |
+| 環境変数バリデーション | `validate_target_repo_env` で `GH_TOKEN`, `TARGET_REPO` を一括検証し、`validate_gh_token` でトークンの有効性を確認 | `common.sh` |
 | 設定ファイル読み込み | `load_config_file` で Scaffold 定義 JSON を読み込み | `common.sh` |
 | デフォルトブランチ取得 | `get_default_branch_info` でブランチ名と SHA を一括取得 | `common.sh` → `GET /repos/{owner}/{repo}`, `GET /repos/{owner}/{repo}/git/ref/heads/{branch}` |
 | 既存ファイルチェック | `check_existing_repo_files` で対象ファイルごとに Contents API で存在確認。存在すればスキップ | `common.sh` → `GET /repos/{owner}/{repo}/contents/{path}` |

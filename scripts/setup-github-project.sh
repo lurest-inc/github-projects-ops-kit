@@ -22,6 +22,7 @@ require_env "PROJECT_OWNER"
 require_env "PROJECT_TITLE"
 require_command "gh" "GitHub CLI (gh) が必要です。"
 require_command "jq" "Project 情報の抽出に必要です。"
+validate_gh_token
 
 PROJECT_VISIBILITY="${PROJECT_VISIBILITY:-PRIVATE}"
 validate_enum "PROJECT_VISIBILITY" "${PROJECT_VISIBILITY}" "PUBLIC" "PRIVATE"
