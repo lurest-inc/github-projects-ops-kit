@@ -67,7 +67,7 @@ flowchart TD
 
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
-| バリデーション | `GH_TOKEN`・`PROJECT_OWNER`・`PROJECT_TITLE` の存在確認、`PROJECT_VISIBILITY` の値チェック | `require_env`・`require_command` |
+| バリデーション | `GH_TOKEN`・`PROJECT_OWNER`・`PROJECT_TITLE` の存在確認、`PROJECT_VISIBILITY` の値チェック、トークン認証チェック | `require_env`・`require_command`・`validate_gh_token` |
 | オーナータイプ判定 | GitHub REST API でオーナーの `.type` と `.node_id` を取得し、`User` / `Organization` を判別 | `gh api users/{owner} --jq '{type, node_id}'` |
 | 重複チェック | 同一 Owner 配下に同名タイトルの `Project` が存在するか確認し、存在する場合は警告を出して正常終了（ページネーションで全件走査） | GraphQL `projectsV2(first: 100)` + `pageInfo`・`jq 'select(.title == ...)'` |
 | `Project` 作成 | GraphQL mutation で `Project` を作成 | GraphQL `createProjectV2(input: {ownerId, title})` |

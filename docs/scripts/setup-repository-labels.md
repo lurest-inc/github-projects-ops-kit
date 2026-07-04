@@ -164,7 +164,7 @@ flowchart TD
 
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
-| 環境変数バリデーション | `require_env` で `GH_TOKEN`, `TARGET_REPO` を検証 | `common.sh` |
+| 環境変数バリデーション | `validate_target_repo_env` で `GH_TOKEN`, `TARGET_REPO` を一括検証し、`validate_gh_token` でトークンの有効性を確認 | `common.sh` |
 | コマンド存在チェック | `require_command` で `gh`, `jq` の存在を確認 | `common.sh` |
 | Label 定義ファイル読み込み | `scripts/config/repo-label-definitions.json` を読み込み | `jq` |
 | JSON バリデーション | 必須フィールドの存在チェック、`color` の HEX 形式チェック | `jq` |

@@ -151,7 +151,7 @@ flowchart TD
 
 | ステップ | 処理内容 | 使用コマンド / API |
 |---------|---------|-------------------|
-| 環境変数バリデーション | `require_env` で `GH_TOKEN`, `PROJECT_OWNER` を検証 | `common.sh` |
+| 環境変数バリデーション | `require_env` で `GH_TOKEN`, `PROJECT_OWNER` を検証し、`validate_gh_token` でトークンの有効性を確認 | `common.sh` |
 | コマンド存在チェック | `require_command` で `gh`, `jq` の存在を確認 | `common.sh` |
 | オーナータイプ判定 | `detect_owner_type` で `Organization` / `User` を判別 | `gh api users/{owner}` |
 | 定義ファイル選択 | オーナータイプに応じて `special-repo-definitions-user.json` または `special-repo-definitions-org.json` を選択 | — |
