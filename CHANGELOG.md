@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.5.0](https://github.com/lurest-inc/github-projects-ops-kit/compare/v1.4.0...v1.5.0) (2026-07-04)
+
+
+### 新機能
+
+* AI エージェント設定ディレクトリおよび .mcp.json を追加 ([aabd176](https://github.com/lurest-inc/github-projects-ops-kit/commit/aabd1765e618ac2450bfd3fb617ffbe9a31c67a6))
+* AI エージェント設定ディレクトリおよび .mcp.json を追加 ([eb35fef](https://github.com/lurest-inc/github-projects-ops-kit/commit/eb35fef2943a327684878031df75fc1b8934913a)), closes [#485](https://github.com/lurest-inc/github-projects-ops-kit/issues/485)
+* Claude Code スキル定義を .agents/skills/ へ移行し symlink で連携 ([12878cd](https://github.com/lurest-inc/github-projects-ops-kit/commit/12878cd72d17366450d21ab1e5cc4c3594457aba))
+* Claude Code スキル定義を .agents/skills/ へ移行し symlink で連携 ([cbd6300](https://github.com/lurest-inc/github-projects-ops-kit/commit/cbd63009470f3f688d1f97e255ab96a0cac1ddd9))
+* **docs:** ルートページに OGP 画像を設定 ([27fa284](https://github.com/lurest-inc/github-projects-ops-kit/commit/27fa284914b74293d9805434175894cba05f5102))
+* **docs:** ルートページに OGP 画像を設定 ([c7c7656](https://github.com/lurest-inc/github-projects-ops-kit/commit/c7c76569457490baf2a4d1ce8ff43407096102ae)), closes [#478](https://github.com/lurest-inc/github-projects-ops-kit/issues/478)
+
+
+### バグ修正
+
+* PROJECT_PAT の期限切れを早期検出する validate_gh_token を追加 ([533d0bc](https://github.com/lurest-inc/github-projects-ops-kit/commit/533d0bca3ca503fd5d8dc16ce7ddc58049f65f23))
+* PROJECT_PAT の期限切れを早期検出する validate_gh_token を追加 ([da10d82](https://github.com/lurest-inc/github-projects-ops-kit/commit/da10d82c59881a68ce26f939698e31cf093f6dbd)), closes [#481](https://github.com/lurest-inc/github-projects-ops-kit/issues/481)
+* validate_gh_token を gh api user ベースに変更し実際のエラーを出力 ([36d2830](https://github.com/lurest-inc/github-projects-ops-kit/commit/36d2830104c7b71aff6c5905879eca580a96360c))
+
+
+### ドキュメント
+
+* validate_gh_token の追加に伴うドキュメント更新 ([89b8468](https://github.com/lurest-inc/github-projects-ops-kit/commit/89b84687d830aefd35a66354b9e76af261e2bee5))
+
+
+### その他の変更
+
+* GitHub Actions の uses バージョンを最新化 ([5e27238](https://github.com/lurest-inc/github-projects-ops-kit/commit/5e2723828bf6af419badf581d3f0c04bd543db19))
+* GitHub Actions の uses バージョンを最新化 ([4572364](https://github.com/lurest-inc/github-projects-ops-kit/commit/45723648f1a6acbc1a3aead9848dfe16056f1560)), closes [#483](https://github.com/lurest-inc/github-projects-ops-kit/issues/483)
+* 旧スキル定義ファイルと不要な .gitkeep を削除 ([9940677](https://github.com/lurest-inc/github-projects-ops-kit/commit/994067743f0bbdf314e628db139bb8514922f8ef))
+
 ## [1.4.0](https://github.com/lurest-inc/github-projects-ops-kit/compare/v1.3.0...v1.4.0) (2026-04-01)
 
 
