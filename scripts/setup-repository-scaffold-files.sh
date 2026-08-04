@@ -25,6 +25,12 @@ validate_target_repo_env
 SCAFFOLD_FILE_DEFINITIONS=$(load_config_file "${SCRIPT_DIR}/config/repo-scaffold-definitions.json" "Scaffold 定義ファイル")
 
 mapfile -t SCAFFOLD_FILES < <(echo "${SCAFFOLD_FILE_DEFINITIONS}" | jq -r '.[].path')
+
+while IFS=$'\t' read -r _path _content; do
+  if [[ -n "${_content}" ]]; then
+    FILE_CONTENT_MAP["${_path}"]="${_content}"
+  fi
+done < <(echo "${SCAFFOLD_FILE_DEFINITIONS}" | jq -r '.[] | select(.content != null) | [.path, .content] | @tsv')
 FILE_COUNT=${#SCAFFOLD_FILES[@]}
 
 if [[ "${FILE_COUNT}" -eq 0 ]]; then
