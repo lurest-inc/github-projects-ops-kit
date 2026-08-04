@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.6.0](https://github.com/lurest-inc/github-projects-ops-kit/compare/v1.5.0...v1.6.0) (2026-08-04)
+
+
+### 新機能
+
+* scaffold 定義に 11 ファイルを追加し、ファイルごとのコンテンツ指定に対応 [[#496](https://github.com/lurest-inc/github-projects-ops-kit/issues/496)] ([ff17afd](https://github.com/lurest-inc/github-projects-ops-kit/commit/ff17afdc7ad4c6ebf5a78834fd57fa7ad3764cf0))
+* scaffold 定義に 11 ファイルを追加し、ファイルごとのコンテンツ指定に対応 [[#496](https://github.com/lurest-inc/github-projects-ops-kit/issues/496)] ([ad6984e](https://github.com/lurest-inc/github-projects-ops-kit/commit/ad6984e0f9f3eae4725832d424464887ae044a84))
+
+
+### ドキュメント
+
+* scaffold ファイル追加に伴いワークフロー・スクリプトドキュメントを更新 [[#496](https://github.com/lurest-inc/github-projects-ops-kit/issues/496)] ([d9fbe1b](https://github.com/lurest-inc/github-projects-ops-kit/commit/d9fbe1b7a3b2961b2c7a7ce2ccb8e69aa8b8ecf6))
+
+
+### その他の変更
+
+* .claude/settings.json を最新設定に更新 [[#493](https://github.com/lurest-inc/github-projects-ops-kit/issues/493)] ([ef6a6c6](https://github.com/lurest-inc/github-projects-ops-kit/commit/ef6a6c62bcf3ff75ddbe3ba9cfd1104e07046a40))
+* .claude/settings.json を最新設定に更新 [[#493](https://github.com/lurest-inc/github-projects-ops-kit/issues/493)] ([0908b80](https://github.com/lurest-inc/github-projects-ops-kit/commit/0908b80f5411ffaabcd5dc806fce39d015e5748f))
+* actions/checkout を v7.0.1 に更新 [[#492](https://github.com/lurest-inc/github-projects-ops-kit/issues/492)] ([f33cbe0](https://github.com/lurest-inc/github-projects-ops-kit/commit/f33cbe02583c7d6aa68bcecbdfa974ebc7adad06))
+* actions/checkout を v7.0.1 に更新 [[#492](https://github.com/lurest-inc/github-projects-ops-kit/issues/492)] ([b8be825](https://github.com/lurest-inc/github-projects-ops-kit/commit/b8be8255808b47b5013c638bf012c12aa83e8efd))
+* permissions.allow に Bash(node:*) と Bash(python3:*) を追加 ([fa65890](https://github.com/lurest-inc/github-projects-ops-kit/commit/fa6589038458e43003d95493f22015d2ede4ced7))
+* permissions.allow に Bash(node:*) と Bash(python3:*) を追加 [[#490](https://github.com/lurest-inc/github-projects-ops-kit/issues/490)] ([956800b](https://github.com/lurest-inc/github-projects-ops-kit/commit/956800b93a1bf4d1af0248a7f826c91cf59341da))
+
 ## [1.5.0](https://github.com/lurest-inc/github-projects-ops-kit/compare/v1.4.0...v1.5.0) (2026-07-04)
 
 
