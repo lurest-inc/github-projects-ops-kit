@@ -42,7 +42,8 @@
   "permissions": {
     "allow": [
       "Bash(node:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(npx:*)"
     ],
     "ask": [
       "Bash(git rm:*)",
