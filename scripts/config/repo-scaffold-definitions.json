@@ -1,11 +1,24 @@
 [
   {
+    "path": ".agents/skills/.gitignore",
+    "description": "Claude Code カスタムスキル用 gitignore"
+  },
+  {
+    "path": ".agents/skills/.gitkeep",
+    "description": "Claude Code カスタムスキルディレクトリの保持"
+  },
+  {
     "path": ".claude/.gitignore",
     "description": "Claude Code 用 gitignore"
   },
   {
     "path": ".claude/.gitkeep",
     "description": "Claude Code 設定ディレクトリの保持"
+  },
+  {
+    "path": ".claude/settings.json",
+    "description": "Claude Code プロジェクト設定",
+    "content": "{}"
   },
   {
     "path": ".cline/.gitignore",
@@ -56,6 +69,21 @@
     "description": "VS Code 設定ディレクトリの保持"
   },
   {
+    "path": ".vscode/extensions.json",
+    "description": "VS Code 推奨拡張機能定義",
+    "content": "{}"
+  },
+  {
+    "path": ".vscode/launch.json",
+    "description": "VS Code デバッグ構成",
+    "content": "{}"
+  },
+  {
+    "path": ".vscode/settings.json",
+    "description": "VS Code エディタ設定",
+    "content": "{}"
+  },
+  {
     "path": ".windsurf/.gitignore",
     "description": "Windsurf 用 gitignore"
   },
@@ -64,8 +92,29 @@
     "description": "Windsurf 設定ディレクトリの保持"
   },
   {
+    "path": ".editorconfig",
+    "description": "エディタ横断フォーマット設定"
+  },
+  {
+    "path": ".gitattributes",
+    "description": "Git 属性設定"
+  },
+  {
     "path": ".gitignore",
     "description": "プロジェクト用 gitignore"
+  },
+  {
+    "path": ".mcp.json",
+    "description": "MCP サーバー設定",
+    "content": "{}"
+  },
+  {
+    "path": "AGENTS.md",
+    "description": "AI コーディングアシスタント向けプロジェクト説明"
+  },
+  {
+    "path": "DESIGN.md",
+    "description": "設計方針・アーキテクチャドキュメント"
   },
   {
     "path": "README.md",

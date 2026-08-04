@@ -8,6 +8,10 @@
 
 REST_API_VERSION="2022-11-28"
 
+# ファイルパスごとの初期コンテンツを保持する連想配列
+# 呼び出し元スクリプトが設定する。未設定のパスは改行のみ（空ファイル）で作成される
+declare -A FILE_CONTENT_MAP=()
+
 # 設定ファイルを読み込み、存在チェックを行う
 # 使用例: DEFINITIONS=$(load_config_file "${SCRIPT_DIR}/config/repo-label-definitions.json" "ラベル定義ファイル")
 load_config_file() {
@@ -109,7 +113,8 @@ check_existing_repo_files() {
   done
 }
 
-# 作業ブランチを作成し、空ファイルを登録して PR を作成する
+# 作業ブランチを作成し、ファイルを登録して PR を作成する
+# FILE_CONTENT_MAP に初期コンテンツが設定されている場合はその内容で、未設定の場合は空（改行のみ）で作成する
 # 引数:
 #   $1 - target_repo: 対象 Repository（owner/repo 形式）
 #   $2 - work_branch: 作業ブランチ名
@@ -159,7 +164,11 @@ create_files_via_pr() {
     echo "  [${file_index}/${#FILES_TO_CREATE[@]}] ${file_path}"
 
     local content_base64
-    content_base64=$(printf '\n' | base64)
+    if [[ -n "${FILE_CONTENT_MAP[$file_path]+x}" ]]; then
+      content_base64=$(printf '%s\n' "${FILE_CONTENT_MAP[$file_path]}" | base64 -w0)
+    else
+      content_base64=$(printf '\n' | base64 -w0)
+    fi
 
     if gh api "repos/${target_repo}/contents/${file_path}" \
       -H "X-GitHub-Api-Version: ${REST_API_VERSION}" \
