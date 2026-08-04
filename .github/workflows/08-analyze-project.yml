@@ -87,7 +87,7 @@ jobs:
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       - name: サマリーレポート生成
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
@@ -117,7 +117,7 @@ jobs:
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       - name: 工数集計レポート生成
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
@@ -147,7 +147,7 @@ jobs:
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       - name: 滞留 Item 検知
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
@@ -177,7 +177,7 @@ jobs:
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       - name: ベロシティレポート生成
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
@@ -207,7 +207,7 @@ jobs:
       PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       - name: Project Item をエクスポート
         if: ${{ startsWith(env.PROJECT_PAT, 'ghp_') || startsWith(env.PROJECT_PAT, 'github_pat_') }}
@@ -228,7 +228,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       - name: 失敗サマリーを出力
         uses: ./.github/actions/workflow-summary
@@ -245,7 +245,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
 
       - name: 成功サマリーを出力
         uses: ./.github/actions/workflow-summary
