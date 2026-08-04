@@ -1,7 +1,8 @@
 # 📜 setup-repository-scaffold-files.sh
 
-指定 Repository に対して、開発に必要な Scaffold ファイルを空ファイルとして一括登録するスクリプトです。
+指定 Repository に対して、開発に必要な Scaffold ファイルを一括登録するスクリプトです。
 作業ブランチを作成し、Contents API でファイルを登録した後、デフォルトブランチへの PR を作成します。
+JSON 定義に `content` フィールドが指定されたファイルはその内容で、未指定のファイルは空ファイル（改行のみ）で作成されます。
 既にファイルが存在する場合はスキップします（上書き禁止）。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -32,29 +33,40 @@
 
 ## 📋 対象ファイル
 
-以下の Scaffold ファイルを空ファイルとして登録します。
+以下の Scaffold ファイルを登録します。
 対象ファイルは `scripts/config/repo-scaffold-definitions.json` で定義されており、ユーザーがスクリプトを直接編集せずにカスタマイズできます。
 
-| ファイル | パス | 説明 |
-|----------|------|------|
-| `.gitignore` | `.claude/.gitignore` | Claude Code 用 gitignore |
-| `.gitkeep` | `.claude/.gitkeep` | Claude Code 設定ディレクトリの保持 |
-| `.gitignore` | `.cline/.gitignore` | Cline 用 gitignore |
-| `.gitkeep` | `.cline/.gitkeep` | Cline 設定ディレクトリの保持 |
-| `.gitignore` | `.codex/.gitignore` | OpenAI Codex CLI 用 gitignore |
-| `.gitkeep` | `.codex/.gitkeep` | OpenAI Codex CLI 設定ディレクトリの保持 |
-| `.gitignore` | `.cursor/.gitignore` | Cursor 用 gitignore |
-| `.gitkeep` | `.cursor/.gitkeep` | Cursor 設定ディレクトリの保持 |
-| `.gitignore` | `.gemini/.gitignore` | Gemini 用 gitignore |
-| `.gitkeep` | `.gemini/.gitkeep` | Gemini 設定ディレクトリの保持 |
-| `copilot-instructions.md` | `.github/copilot-instructions.md` | GitHub Copilot カスタム指示ファイル |
-| `release.yml` | `.github/release.yml` | リリースノート自動生成設定 |
-| `.gitkeep` | `.idea/.gitkeep` | JetBrains IDE 設定ディレクトリの保持 |
-| `.gitkeep` | `.vscode/.gitkeep` | VS Code 設定ディレクトリの保持 |
-| `.gitignore` | `.windsurf/.gitignore` | Windsurf 用 gitignore |
-| `.gitkeep` | `.windsurf/.gitkeep` | Windsurf 設定ディレクトリの保持 |
-| `.gitignore` | `.gitignore` | プロジェクト用 gitignore |
-| `README.md` | `README.md` | プロジェクト README |
+| ファイル | パス | 説明 | 初期コンテンツ |
+|----------|------|------|:-:|
+| `.gitignore` | `.agents/skills/.gitignore` | Claude Code カスタムスキル用 gitignore | 空 |
+| `.gitkeep` | `.agents/skills/.gitkeep` | Claude Code カスタムスキルディレクトリの保持 | 空 |
+| `.gitignore` | `.claude/.gitignore` | Claude Code 用 gitignore | 空 |
+| `.gitkeep` | `.claude/.gitkeep` | Claude Code 設定ディレクトリの保持 | 空 |
+| `settings.json` | `.claude/settings.json` | Claude Code プロジェクト設定 | `{}` |
+| `.gitignore` | `.cline/.gitignore` | Cline 用 gitignore | 空 |
+| `.gitkeep` | `.cline/.gitkeep` | Cline 設定ディレクトリの保持 | 空 |
+| `.gitignore` | `.codex/.gitignore` | OpenAI Codex CLI 用 gitignore | 空 |
+| `.gitkeep` | `.codex/.gitkeep` | OpenAI Codex CLI 設定ディレクトリの保持 | 空 |
+| `.gitignore` | `.cursor/.gitignore` | Cursor 用 gitignore | 空 |
+| `.gitkeep` | `.cursor/.gitkeep` | Cursor 設定ディレクトリの保持 | 空 |
+| `.gitignore` | `.gemini/.gitignore` | Gemini 用 gitignore | 空 |
+| `.gitkeep` | `.gemini/.gitkeep` | Gemini 設定ディレクトリの保持 | 空 |
+| `copilot-instructions.md` | `.github/copilot-instructions.md` | GitHub Copilot カスタム指示ファイル | 空 |
+| `release.yml` | `.github/release.yml` | リリースノート自動生成設定 | 空 |
+| `.gitkeep` | `.idea/.gitkeep` | JetBrains IDE 設定ディレクトリの保持 | 空 |
+| `.gitkeep` | `.vscode/.gitkeep` | VS Code 設定ディレクトリの保持 | 空 |
+| `extensions.json` | `.vscode/extensions.json` | VS Code 推奨拡張機能定義 | `{}` |
+| `launch.json` | `.vscode/launch.json` | VS Code デバッグ構成 | `{}` |
+| `settings.json` | `.vscode/settings.json` | VS Code エディタ設定 | `{}` |
+| `.gitignore` | `.windsurf/.gitignore` | Windsurf 用 gitignore | 空 |
+| `.gitkeep` | `.windsurf/.gitkeep` | Windsurf 設定ディレクトリの保持 | 空 |
+| `.editorconfig` | `.editorconfig` | エディタ横断フォーマット設定 | 空 |
+| `.gitattributes` | `.gitattributes` | Git 属性設定 | 空 |
+| `.gitignore` | `.gitignore` | プロジェクト用 gitignore | 空 |
+| `.mcp.json` | `.mcp.json` | MCP サーバー設定 | `{}` |
+| `AGENTS.md` | `AGENTS.md` | AI コーディングアシスタント向けプロジェクト説明 | 空 |
+| `DESIGN.md` | `DESIGN.md` | 設計方針・アーキテクチャドキュメント | 空 |
+| `README.md` | `README.md` | プロジェクト README | 空 |
 
 ### 設定ファイルのカスタマイズ
 
@@ -65,6 +77,11 @@
   {
     "path": ".vscode/.gitkeep",
     "description": "VS Code 設定ディレクトリの保持"
+  },
+  {
+    "path": ".vscode/settings.json",
+    "description": "VS Code エディタ設定",
+    "content": "{}"
   }
 ]
 ```
@@ -73,6 +90,7 @@
 |------------|------|:----:|
 | `path` | Repository 内のファイルパス | ✅ |
 | `description` | ファイルの説明 | — |
+| `content` | ファイルの初期コンテンツ（未指定の場合は空ファイル） | — |
 
 ## 📊 処理フロー
 
@@ -91,7 +109,7 @@ flowchart TD
     G -- "Yes" --> J["作業ブランチ作成\n（git/refs API）"]
     J --> K["ファイルをループ処理"]
 
-    K --> L["Contents API で\n空ファイル作成"]
+    K --> L["Contents API で\nファイル作成"]
     L --> M["結果を記録\n（作成 / 失敗）"]
 
     M --> N{"次のファイル\nあり?"}
@@ -112,7 +130,7 @@ flowchart TD
 | 設定ファイル読み込み | `load_config_file` で Scaffold 定義 JSON を読み込み | `common.sh` |
 | デフォルトブランチ取得 | `get_default_branch_info` でブランチ名と SHA を一括取得 | `common.sh` → `GET /repos/{owner}/{repo}`, `GET /repos/{owner}/{repo}/git/ref/heads/{branch}` |
 | 既存ファイルチェック | `check_existing_repo_files` で対象ファイルごとに Contents API で存在確認。存在すればスキップ | `common.sh` → `GET /repos/{owner}/{repo}/contents/{path}` |
-| ファイル登録 & PR 作成 | `create_files_via_pr` で作業ブランチ作成、空ファイル登録、PR 作成を一括実行 | `common.sh` → `POST /repos/{owner}/{repo}/git/refs`, `PUT /repos/{owner}/{repo}/contents/{path}`, `gh pr create` |
+| ファイル登録 & PR 作成 | `create_files_via_pr` で作業ブランチ作成、ファイル登録、PR 作成を一括実行。`FILE_CONTENT_MAP` に初期コンテンツが設定されている場合はその内容で、未設定の場合は空（改行のみ）で作成 | `common.sh` → `POST /repos/{owner}/{repo}/git/refs`, `PUT /repos/{owner}/{repo}/contents/{path}`, `gh pr create` |
 | サマリー出力 | `output_repo_files_summary` で作成/スキップ/失敗の件数をコンソールと `GITHUB_STEP_SUMMARY` に出力 | `common.sh` |
 
 ### 実行結果サマリーの出力形式
@@ -165,7 +183,7 @@ Fine-grained PAT の場合は、対象 Repository に対する **Contents** と 
 |---------|------|------|
 | REST API (Core) | 5,000 リクエスト/時 | 認証済みユーザーの場合 |
 
-対象ファイル 18 件に対して、既存チェック (18) + ブランチ作成 (1) + ファイル作成 (最大 18) + PR 作成 (1) = 最大 38 リクエストを消費します。
+対象ファイル 29 件に対して、既存チェック (29) + ブランチ作成 (1) + ファイル作成 (最大 29) + PR 作成 (1) = 最大 60 リクエストを消費します。
 レート制限の影響はありません。
 
 ## 🔄 使用 Workflow

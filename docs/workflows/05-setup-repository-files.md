@@ -73,26 +73,37 @@ JSON ファイルを編集することで、スクリプトを変更せずに登
 対象ファイルは [`scripts/config/repo-scaffold-definitions.json`](../../scripts/config/repo-scaffold-definitions.json) で定義されています。
 JSON ファイルを編集することで、スクリプトを変更せずに登録対象をカスタマイズできます。
 
-| ファイル | パス |
-|----------|------|
-| `.gitignore` | `.claude/.gitignore` |
-| `.gitkeep` | `.claude/.gitkeep` |
-| `.gitignore` | `.cline/.gitignore` |
-| `.gitkeep` | `.cline/.gitkeep` |
-| `.gitignore` | `.codex/.gitignore` |
-| `.gitkeep` | `.codex/.gitkeep` |
-| `.gitignore` | `.cursor/.gitignore` |
-| `.gitkeep` | `.cursor/.gitkeep` |
-| `.gitignore` | `.gemini/.gitignore` |
-| `.gitkeep` | `.gemini/.gitkeep` |
-| `copilot-instructions.md` | `.github/copilot-instructions.md` |
-| `release.yml` | `.github/release.yml` |
-| `.gitkeep` | `.idea/.gitkeep` |
-| `.gitkeep` | `.vscode/.gitkeep` |
-| `.gitignore` | `.windsurf/.gitignore` |
-| `.gitkeep` | `.windsurf/.gitkeep` |
-| `.gitignore` | `.gitignore` |
-| `README.md` | `README.md` |
+| ファイル | パス | 初期コンテンツ |
+|----------|------|:-:|
+| `.gitignore` | `.agents/skills/.gitignore` | 空 |
+| `.gitkeep` | `.agents/skills/.gitkeep` | 空 |
+| `.gitignore` | `.claude/.gitignore` | 空 |
+| `.gitkeep` | `.claude/.gitkeep` | 空 |
+| `settings.json` | `.claude/settings.json` | `{}` |
+| `.gitignore` | `.cline/.gitignore` | 空 |
+| `.gitkeep` | `.cline/.gitkeep` | 空 |
+| `.gitignore` | `.codex/.gitignore` | 空 |
+| `.gitkeep` | `.codex/.gitkeep` | 空 |
+| `.gitignore` | `.cursor/.gitignore` | 空 |
+| `.gitkeep` | `.cursor/.gitkeep` | 空 |
+| `.gitignore` | `.gemini/.gitignore` | 空 |
+| `.gitkeep` | `.gemini/.gitkeep` | 空 |
+| `copilot-instructions.md` | `.github/copilot-instructions.md` | 空 |
+| `release.yml` | `.github/release.yml` | 空 |
+| `.gitkeep` | `.idea/.gitkeep` | 空 |
+| `.gitkeep` | `.vscode/.gitkeep` | 空 |
+| `extensions.json` | `.vscode/extensions.json` | `{}` |
+| `launch.json` | `.vscode/launch.json` | `{}` |
+| `settings.json` | `.vscode/settings.json` | `{}` |
+| `.gitignore` | `.windsurf/.gitignore` | 空 |
+| `.gitkeep` | `.windsurf/.gitkeep` | 空 |
+| `.editorconfig` | `.editorconfig` | 空 |
+| `.gitattributes` | `.gitattributes` | 空 |
+| `.gitignore` | `.gitignore` | 空 |
+| `.mcp.json` | `.mcp.json` | `{}` |
+| `AGENTS.md` | `AGENTS.md` | 空 |
+| `DESIGN.md` | `DESIGN.md` | 空 |
+| `README.md` | `README.md` | 空 |
 
 ## 📊 処理フロー
 
