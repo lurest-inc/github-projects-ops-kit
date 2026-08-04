@@ -34,7 +34,8 @@
   "model": "claude-opus-4-6",
   "permissions": {
     "allow": [
-      
+      "Bash(node:*)",
+      "Bash(python3:*)"
     ],
     "ask": [
       "Bash(git rm:*)",
