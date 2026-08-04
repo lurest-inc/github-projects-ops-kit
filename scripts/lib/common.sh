@@ -164,10 +164,10 @@ create_files_via_pr() {
     echo "  [${file_index}/${#FILES_TO_CREATE[@]}] ${file_path}"
 
     local content_base64
-    if [[ -n "${FILE_CONTENT_MAP[${file_path}]+x}" ]]; then
-      content_base64=$(printf '%s\n' "${FILE_CONTENT_MAP[${file_path}]}" | base64)
+    if [[ -n "${FILE_CONTENT_MAP[$file_path]+x}" ]]; then
+      content_base64=$(printf '%s\n' "${FILE_CONTENT_MAP[$file_path]}" | base64 -w0)
     else
-      content_base64=$(printf '\n' | base64)
+      content_base64=$(printf '\n' | base64 -w0)
     fi
 
     if gh api "repos/${target_repo}/contents/${file_path}" \
