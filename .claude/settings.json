@@ -1,7 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "alwaysThinkingEnabled": true,
+  "attribution": {
+    "commit": "Generated with Claude Code",
+    "pr": "Generated with Claude Code"
+  },
+  "autoMemoryEnabled": true,
+  "autoScrollEnabled": true,
+  "awaySummaryEnabled": true,
   "cleanupPeriodDays": 30,
+  "enableAllProjectMcpServers": true,
   "enabledPlugins": {},
   "env": {
     "CLAUDE_CODE_ENABLE_TELEMETRY": "false",
@@ -29,9 +37,8 @@
       }
     ]
   },
-  "includeCoAuthoredBy": true,
   "language": "japanese",
-  "model": "claude-opus-4-6",
+  "model": "claude-opus-5",
   "permissions": {
     "allow": [
       "Bash(node:*)",
@@ -44,12 +51,16 @@
     ],
     "defaultMode": "default",
     "deny": [
-      
+
     ]
   },
   "plansDirectory": ".claude/plans/",
   "promptSuggestionEnabled": true,
   "respectGitignore": true,
   "spinnerTipsEnabled": false,
-  "teammateMode": "tmux"
+  "teammateMode": "tmux",
+  "voice": {
+    "enabled": true,
+    "mode": "tap"
+  }
 }
