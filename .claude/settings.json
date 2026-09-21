@@ -51,9 +51,7 @@
       "Bash(rm:*)"
     ],
     "defaultMode": "default",
-    "deny": [
-
-    ]
+    "deny": []
   },
   "plansDirectory": ".claude/plans/",
   "promptSuggestionEnabled": true,
