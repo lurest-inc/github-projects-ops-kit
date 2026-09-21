@@ -12,7 +12,7 @@
   "enableAllProjectMcpServers": true,
   "enabledPlugins": {},
   "env": {
-    "CLAUDE_CODE_ENABLE_TELEMETRY": "false",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "hooks": {
@@ -43,17 +43,81 @@
     "allow": [
       "Bash(node:*)",
       "Bash(python3:*)",
-      "Bash(npx:*)"
+      "Bash(npx:*)",
+      "Bash(sed:*)",
+      "Bash(echo:*)",
+      "Bash(awk:*)",
+      "Bash(cut:*)",
+      "Bash(tr:*)",
+      "Bash(xargs:*)",
+      "Bash(nl:*)",
+      "Bash(column:*)",
+      "Bash(comm:*)",
+      "Bash(join:*)",
+      "Bash(pwd)",
+      "Bash(cd:*)",
+      "Bash(which:*)",
+      "Bash(type:*)",
+      "Bash(command -v:*)",
+      "Bash(date:*)",
+      "Bash(env)",
+      "Bash(printenv:*)",
+      "Bash(true)",
+      "Bash(false)",
+      "Bash(test:*)",
+      "Bash(du:*)",
+      "Bash(df:*)",
+      "Bash(readlink:*)",
+      "Bash(md5:*)",
+      "Bash(shasum:*)",
+      "Bash(bash -n:*)",
+      "Bash(shellcheck:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)",
+      "Bash(git fetch:*)",
+      "Bash(git remote:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git ls-remote:*)",
+      "Bash(git describe:*)",
+      "Bash(git blame:*)",
+      "Bash(git shortlog:*)",
+      "Bash(git merge-base:*)",
+      "Bash(git for-each-ref:*)",
+      "Bash(git show-ref:*)",
+      "Bash(git worktree list:*)",
+      "Bash(git stash list:*)",
+      "Bash(git config --get:*)",
+      "Bash(git config --list:*)",
+      "Bash(git count-objects:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh label list:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh workflow list:*)",
+      "Bash(gh release list:*)",
+      "Bash(gh release view:*)",
+      "Bash(bun run:*)",
+      "Bash(bun install:*)",
+      "Bash(bun test:*)",
+      "Bash(bunx:*)"
     ],
     "ask": [
       "Bash(git rm:*)",
       "Bash(mv:*)",
       "Bash(rm:*)"
     ],
-    "defaultMode": "default",
-    "deny": [
-
-    ]
+    "defaultMode": "auto",
+    "deny": []
   },
   "plansDirectory": ".claude/plans/",
   "promptSuggestionEnabled": true,
@@ -63,5 +127,32 @@
   "voice": {
     "enabled": true,
     "mode": "tap"
-  }
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "excludedCommands": [
+      "git",
+      "gh",
+      "bun",
+      "node",
+      "npm",
+      "npx",
+      "claude",
+      "docker"
+    ],
+    "network": {
+      "allowLocalBinding": true,
+      "allowedDomains": [
+        "github.com",
+        "api.github.com",
+        "*.githubusercontent.com",
+        "registry.npmjs.org",
+        "npm.pkg.github.com",
+        "json.schemastore.org"
+      ]
+    }
+  },
+  "terminalProgressBarEnabled": true,
+  "useAutoModeDuringPlan": true
 }
