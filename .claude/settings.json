@@ -108,14 +108,30 @@
       "Bash(bun run:*)",
       "Bash(bun install:*)",
       "Bash(bun test:*)",
-      "Bash(bunx:*)"
+      "Bash(bunx:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(ls:*)",
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(find:*)",
+      "Bash(sort:*)",
+      "Bash(uniq:*)",
+      "Bash(diff:*)",
+      "Bash(stat:*)",
+      "Bash(basename:*)",
+      "Bash(dirname:*)",
+      "Bash(realpath:*)",
+      "Bash(file:*)",
+      "Bash(seq:*)"
     ],
     "ask": [
       "Bash(git rm:*)",
       "Bash(mv:*)",
       "Bash(rm:*)"
     ],
-    "defaultMode": "auto",
     "deny": []
   },
   "plansDirectory": ".claude/plans/",
@@ -148,7 +164,9 @@
         "*.githubusercontent.com",
         "registry.npmjs.org",
         "npm.pkg.github.com",
-        "json.schemastore.org"
+        "json.schemastore.org",
+        "www.schemastore.org",
+        "code.claude.com"
       ]
     }
   },
